@@ -1,0 +1,2 @@
+Error: The element 'Obciazenia' in namespace 'http://crd.gov.pl/wzor/2025/04/03/04031/' has incomplete content. List of possible elements expected: 'Powod' in namespace 'http://crd.gov.pl/wzor/2025/04/03/04031/'.
+Error: The element 'Odliczenia' in namespace 'http://crd.gov.pl/wzor/2025/04/03/04031/' has incomplete content. List of possible elements expected: 'Powod' in namespace 'http://crd.gov.pl/wzor/2025/04/03/04031/'.
