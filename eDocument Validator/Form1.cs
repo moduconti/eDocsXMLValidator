@@ -102,6 +102,7 @@ namespace eDocument_Validator
                         }
                         else
                         {
+                            resultBox.AppendText("-" + Environment.NewLine);
                             continue;
                         }
 

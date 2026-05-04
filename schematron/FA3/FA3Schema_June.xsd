@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:etd="http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2022/01/05/eD/DefinicjeTypy/" xmlns:tns="http://crd.gov.pl/wzor/2025/04/03/04031/" targetNamespace="http://crd.gov.pl/wzor/2025/04/03/04031/" elementFormDefault="qualified" attributeFormDefault="unqualified" xml:lang="pl">
+<?xml version="1.0" encoding="UTF-8"?><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:etd="http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2022/01/05/eD/DefinicjeTypy/" xmlns:tns="http://crd.gov.pl/wzor/2025/06/25/13775/" targetNamespace="http://crd.gov.pl/wzor/2025/06/25/13775/" elementFormDefault="qualified" attributeFormDefault="unqualified" xml:lang="pl">
 	<xsd:import namespace="http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2022/01/05/eD/DefinicjeTypy/" schemaLocation="http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2022/01/05/eD/DefinicjeTypy/StrukturyDanych_v10-0E.xsd"/>
 	<xsd:simpleType name="TKodyKrajowUE">
 		<xsd:annotation>
@@ -1101,7 +1100,7 @@
 				</xsd:annotation>
 				<xsd:simpleType>
 					<xsd:restriction base="etd:TDataCzas">
-						<xsd:minInclusive value="2022-01-01T00:00:00Z"/>
+						<xsd:minInclusive value="2025-09-01T00:00:00Z"/>
 						<xsd:maxInclusive value="2050-01-01T23:59:59Z"/>
 					</xsd:restriction>
 				</xsd:simpleType>
