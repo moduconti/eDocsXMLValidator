@@ -78,27 +78,39 @@ namespace eDocument_Validator
 
                     string[] files = Directory.GetFiles(formatFolder);
 
+                    // Schematron (.xsl/.xslt) files are self-contained and validated
+                    // one at a time. XSD schemas are NOT self-contained: a folder holds
+                    // one (or more) root schemas plus dependency/code-list fragments that
+                    // only define types. Validating against each .xsd individually makes
+                    // the document fail every fragment that doesn't declare its root
+                    // element, so all .xsd files are loaded into a single schema set and
+                    // the document is validated against it once (below).
+                    string[] xsdFiles = files
+                        .Where(f => string.Equals(Path.GetExtension(f), ".xsd", StringComparison.OrdinalIgnoreCase))
+                        .ToArray();
+
                     foreach (string file in files)
                     {
+                        string extension = Path.GetExtension(file).ToLowerInvariant();
+
+                        // XSD files are handled together after this loop.
+                        if (extension == ".xsd")
+                        {
+                            continue;
+                        }
+
                         resultBox.AppendText("Validating with: " + Path.GetFileName(file) + Environment.NewLine);
 
-                        List<string> xsdErrors = new List<string>();
                         List<string> failedAsserts = new List<string>();
                         List<string> errorElements = new List<string>();
                         string validationResult = null;
 
-                        if ((Path.GetExtension(file) == ".xsl") || (Path.GetExtension(file) == ".xslt"))
+                        if ((extension == ".xsl") || (extension == ".xslt"))
                         {
                             validationResult = ValidateXmlWithSchematron(Path.GetFullPath(file), pathBox.Text);
 
                             failedAsserts = ExtractFailedAsserts(validationResult);
                             errorElements = ExtractErrorElements(validationResult);
-                        }
-                        else if (Path.GetExtension(file) == ".xsd")
-                        {
-                            validationResult = ValidateXmlWithXsdFile(Path.GetFullPath(file), pathBox.Text);
-
-                            xsdErrors = ExtractXsdErrorElements(validationResult);
                         }
                         else
                         {
@@ -110,7 +122,7 @@ namespace eDocument_Validator
                         File.WriteAllText(resultFolder + @"\" + Path.GetFileNameWithoutExtension(file) + ".txt", validationResult);
 
 
-                        if ((failedAsserts.Count == 0) && (errorElements.Count == 0) && (xsdErrors.Count == 0))
+                        if ((failedAsserts.Count == 0) && (errorElements.Count == 0))
                         {
                             resultBox.AppendText("Validation successfull" + Environment.NewLine + Environment.NewLine);
                             continue;
@@ -124,12 +136,33 @@ namespace eDocument_Validator
                         {
                             resultBox.AppendText(error + Environment.NewLine + Environment.NewLine);
                         }
-                        foreach (string xsdError in xsdErrors)
-                        {
-                            resultBox.AppendText(xsdError + Environment.NewLine + Environment.NewLine);
-                        }
 
                         resultBox.AppendText(Environment.NewLine);
+                    }
+
+                    // Validate against the XSD schema(s) as a single set (one pass).
+                    if (xsdFiles.Length > 0)
+                    {
+                        resultBox.AppendText("Validating with XSD schema(s): "
+                            + string.Join(", ", xsdFiles.Select(Path.GetFileName)) + Environment.NewLine);
+
+                        string validationResult = ValidateXmlWithXsdFiles(xsdFiles, pathBox.Text);
+                        List<string> xsdErrors = ExtractXsdErrorElements(validationResult);
+
+                        File.WriteAllText(resultFolder + @"\xsd_validation.txt", validationResult);
+
+                        if (xsdErrors.Count == 0)
+                        {
+                            resultBox.AppendText("Validation successfull" + Environment.NewLine + Environment.NewLine);
+                        }
+                        else
+                        {
+                            foreach (string xsdError in xsdErrors)
+                            {
+                                resultBox.AppendText(xsdError + Environment.NewLine + Environment.NewLine);
+                            }
+                            resultBox.AppendText(Environment.NewLine);
+                        }
                     }
 
                 }
@@ -156,11 +189,42 @@ namespace eDocument_Validator
                 .ToList();
         }
 
-        private static string ValidateXmlWithXsdFile(string xsdPath, string xmlDocumentPath)
+        /// <summary>
+        /// Validates an XML document against a set of XSD schemas. All schema files
+        /// in a folder (root schema plus any dependency / code-list fragments) are
+        /// loaded into a single <see cref="XmlSchemaSet"/> and the document is
+        /// validated once. This is required because the fragments only define types
+        /// and do not declare the document's root element - validating against each
+        /// one individually would report spurious "could not find schema information"
+        /// errors. With everything loaded, validation uses whichever schema declares
+        /// the document's root element and resolves the rest as dependencies.
+        /// </summary>
+        private static string ValidateXmlWithXsdFiles(IEnumerable<string> xsdPaths, string xmlDocumentPath)
         {
             string validationErrors = "";
+
             XmlSchemaSet schemas = new XmlSchemaSet();
-            schemas.Add(null, xsdPath);
+            // Surface genuine schema-loading errors instead of throwing; ignore benign
+            // warnings (e.g. an unresolved namespace-only import in an unused fragment).
+            schemas.ValidationEventHandler += (sender, e) =>
+            {
+                if (e.Severity == XmlSeverityType.Error)
+                {
+                    validationErrors += $"Error (schema): {e.Message}{Environment.NewLine}";
+                }
+            };
+
+            foreach (string xsdPath in xsdPaths)
+            {
+                try
+                {
+                    schemas.Add(null, xsdPath);
+                }
+                catch (Exception ex)
+                {
+                    validationErrors += $"Error (schema): Could not load '{Path.GetFileName(xsdPath)}': {ex.Message}{Environment.NewLine}";
+                }
+            }
 
             XmlReaderSettings settings = new XmlReaderSettings();
             settings.ValidationType = ValidationType.Schema;

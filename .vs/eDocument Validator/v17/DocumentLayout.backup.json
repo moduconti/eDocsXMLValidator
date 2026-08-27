@@ -7,11 +7,11 @@
       "RelativeMoniker": "D:0:0:{08C97152-CE89-4DFF-8AC6-F6E97934F160}|eDocument Validator\\eDocument Validator.csproj|solutionrelative:edocument validator\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{08C97152-CE89-4DFF-8AC6-F6E97934F160}|eDocument Validator\\eDocument Validator.csproj|C:\\Users\\modu\\Documents\\AL\\AI Projects\\eDocsXMLValidator\\edocument validator\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{08C97152-CE89-4DFF-8AC6-F6E97934F160}|eDocument Validator\\eDocument Validator.csproj|c:\\users\\modu\\documents\\al\\ai projects\\edocsxmlvalidator\\edocument validator\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{08C97152-CE89-4DFF-8AC6-F6E97934F160}|eDocument Validator\\eDocument Validator.csproj|solutionrelative:edocument validator\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{08C97152-CE89-4DFF-8AC6-F6E97934F160}|eDocument Validator\\eDocument Validator.csproj|C:\\Users\\modu\\Documents\\AL\\AI Projects\\eDocsXMLValidator\\edocument validator\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{08C97152-CE89-4DFF-8AC6-F6E97934F160}|eDocument Validator\\eDocument Validator.csproj|c:\\users\\modu\\documents\\al\\ai projects\\edocsxmlvalidator\\edocument validator\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{08C97152-CE89-4DFF-8AC6-F6E97934F160}|eDocument Validator\\eDocument Validator.csproj|solutionrelative:edocument validator\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -32,7 +32,7 @@
               "RelativeDocumentMoniker": "eDocument Validator\\Form1.cs",
               "ToolTip": "C:\\Users\\modu\\Documents\\AL\\AI Projects\\eDocsXMLValidator\\eDocument Validator\\Form1.cs",
               "RelativeToolTip": "eDocument Validator\\Form1.cs",
-              "ViewState": "AgIAAKQAAAAAAAAAAADgv04AAABDAAAAAAAAAA==",
+              "ViewState": "AgIAAEcAAAAAAAAAAADgv2kAAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-10T12:16:40.618Z",
               "EditorCaption": ""
@@ -47,7 +47,8 @@
               "RelativeToolTip": "eDocument Validator\\Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-10T12:16:36.219Z"
+              "WhenOpened": "2026-02-10T12:16:36.219Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -58,7 +59,8 @@
               "ToolTip": "C:\\Users\\modu\\Documents\\AL\\AI Projects\\eDocsXMLValidator\\eDocument Validator\\Form1.cs [Design]",
               "RelativeToolTip": "eDocument Validator\\Form1.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-10T12:16:35.005Z"
+              "WhenOpened": "2026-02-10T12:16:35.005Z",
+              "EditorCaption": " [Design]"
             }
           ]
         }
