@@ -12,6 +12,7 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -60,6 +61,36 @@
     <Reference Include="saxon-he-api-10.9, Version=10.9.0.0, Culture=neutral, PublicKeyToken=e1fdd002d5083fe6, processorArchitecture=MSIL">
       <HintPath>..\packages\Saxon-HE.10.9.0\lib\net35\saxon-he-api-10.9.dll</HintPath>
     </Reference>
+    <Reference Include="UglyToad.PdfPig">
+      <HintPath>..\packages\PdfPig.0.1.16\lib\net471\UglyToad.PdfPig.dll</HintPath>
+    </Reference>
+    <Reference Include="UglyToad.PdfPig.Core">
+      <HintPath>..\packages\PdfPig.0.1.16\lib\net471\UglyToad.PdfPig.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="UglyToad.PdfPig.Fonts">
+      <HintPath>..\packages\PdfPig.0.1.16\lib\net471\UglyToad.PdfPig.Fonts.dll</HintPath>
+    </Reference>
+    <Reference Include="UglyToad.PdfPig.Tokenization">
+      <HintPath>..\packages\PdfPig.0.1.16\lib\net471\UglyToad.PdfPig.Tokenization.dll</HintPath>
+    </Reference>
+    <Reference Include="UglyToad.PdfPig.Tokens">
+      <HintPath>..\packages\PdfPig.0.1.16\lib\net471\UglyToad.PdfPig.Tokens.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.HashCode">
+      <HintPath>..\packages\Microsoft.Bcl.HashCode.6.0.0\lib\net462\Microsoft.Bcl.HashCode.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Buffers">
+      <HintPath>..\packages\System.Buffers.4.6.0\lib\net462\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory">
+      <HintPath>..\packages\System.Memory.4.6.0\lib\net462\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics.Vectors">
+      <HintPath>..\packages\System.Numerics.Vectors.4.6.0\lib\net462\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.1.0\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Configuration.ConfigurationManager, Version=9.0.0.7, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -77,16 +108,52 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
+    <Compile Include="ApplicationFolders.cs" />
+    <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Forms\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Theme.cs" />
+    <Compile Include="Forms\ValidationReportView.cs" />
+    <Compile Include="Forms\WindowTitleBar.cs" />
+    <Compile Include="Validation\DocumentValidator.cs" />
+    <Compile Include="Validation\SchematronCompiler.cs" />
+    <Compile Include="Validation\SchematronReportReader.cs" />
+    <Compile Include="Validation\SchematronValidator.cs" />
+    <Compile Include="Validation\ValidationFormat.cs" />
+    <Compile Include="Validation\ValidationGroup.cs" />
+    <Compile Include="Validation\ValidationMessage.cs" />
+    <Compile Include="Validation\ValidationReport.cs" />
+    <Compile Include="Validation\ValidationReportWriter.cs" />
+    <Compile Include="Validation\ValidationSeverity.cs" />
+    <Compile Include="Validation\XsdValidator.cs" />
+    <Compile Include="Hybrid\HybridSpecs.cs" />
+    <Compile Include="Hybrid\HybridValidationResult.cs" />
+    <Compile Include="Hybrid\HybridValidator.cs" />
+    <Compile Include="Hybrid\PdfContainer.cs" />
+    <Compile Include="Hybrid\VeraPdfRunner.cs" />
+    <Compile Include="Hybrid\XmpMetadataView.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <!-- The ISO Schematron compiler stylesheets (MIT licence, Rick Jelliffe /
+         Academia Sinica). They are carried inside the program so that a .sch file
+         can be compiled on any machine without installing anything. -->
+    <EmbeddedResource Include="Validation\IsoSchematron\iso_dsdl_include.xsl">
+      <LogicalName>eDocument_Validator.Validation.IsoSchematron.iso_dsdl_include.xsl</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Validation\IsoSchematron\iso_abstract_expand.xsl">
+      <LogicalName>eDocument_Validator.Validation.IsoSchematron.iso_abstract_expand.xsl</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Validation\IsoSchematron\iso_svrl_for_xslt2.xsl">
+      <LogicalName>eDocument_Validator.Validation.IsoSchematron.iso_svrl_for_xslt2.xsl</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Validation\IsoSchematron\iso_schematron_skeleton_for_saxon.xsl">
+      <LogicalName>eDocument_Validator.Validation.IsoSchematron.iso_schematron_skeleton_for_saxon.xsl</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -110,6 +177,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="app.manifest" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<svrl:schematron-output xmlns:ccts="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2"
+                        xmlns:error="https://doi.org/10.5281/zenodo.1495494#error"
+                        xmlns:qdt="urn:un:unece:uncefact:data:standard:QualifiedDataType:100"
+                        xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100"
+                        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+                        xmlns:rsm="urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100"
+                        xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                        xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494"
+                        xmlns:schxslt-api="https://doi.org/10.5281/zenodo.1495494#api"
+                        xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                        xmlns:u="utils"
+                        xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100"
+                        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                        title="Schematron Version 2.5.0 - XRechnung 3.0.2 compatible - CII">
+   <svrl:ns-prefix-in-attribute-values prefix="rsm"
+                                       uri="urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100"/>
+   <svrl:ns-prefix-in-attribute-values prefix="ccts"
+                                       uri="urn:un:unece:uncefact:documentation:standard:CoreComponentsTechnicalSpecification:2"/>
+   <svrl:ns-prefix-in-attribute-values prefix="udt"
+                                       uri="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100"/>
+   <svrl:ns-prefix-in-attribute-values prefix="qdt"
+                                       uri="urn:un:unece:uncefact:data:standard:QualifiedDataType:100"/>
+   <svrl:ns-prefix-in-attribute-values prefix="ram"
+                                       uri="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100"/>
+   <svrl:ns-prefix-in-attribute-values prefix="u" uri="utils"/>
+   <svrl:metadata xmlns:dct="http://purl.org/dc/terms/"
+                  xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+      <dct:creator>
+         <dct:Agent>
+            <skos:prefLabel>SAXON/HE 10.9</skos:prefLabel>
+         </dct:Agent>
+      </dct:creator>
+      <dct:created>2026-08-28T13:24:45.348+03:00</dct:created>
+      <dct:source>
+         <rdf:Description xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <dct:creator>
+               <dct:Agent>
+                  <skos:prefLabel>SchXslt/1.10.1 SAXON/HE 12.8</skos:prefLabel>
+                  <schxslt.compile.typed-variables xmlns="https://doi.org/10.5281/zenodo.1495494#">true</schxslt.compile.typed-variables>
+               </dct:Agent>
+            </dct:creator>
+            <dct:created>2026-02-04T10:57:48.804707566Z</dct:created>
+         </rdf:Description>
+      </dct:source>
+   </svrl:metadata>
+   <svrl:active-pattern name="variable-pattern"
+                        id="variable-pattern"
+                        documents="file:///C:/Users/modu/Documents/AL/AI%20Projects/eDocsXMLValidator/results/xrechnung.xml"/>
+   <svrl:active-pattern name="peppol-cii-pattern-1"
+                        id="peppol-cii-pattern-1"
+                        documents="file:///C:/Users/modu/Documents/AL/AI%20Projects/eDocsXMLValidator/results/xrechnung.xml"/>
+   <svrl:fired-rule context="rsm:ExchangedDocumentContext"/>
+   <svrl:fired-rule context="ram:IncludedSupplyChainTradeLineItem"/>
+   <svrl:fired-rule context="ram:NetPriceProductTradePrice | ram:GrossPriceProductTradePrice"/>
+   <svrl:fired-rule context="ram:SellerTradeParty"/>
+   <svrl:fired-rule context="ram:BuyerTradeParty"/>
+   <svrl:fired-rule context="ram:ApplicableHeaderTradeSettlement"/>
+   <svrl:active-pattern name="peppol-cii-pattern-0-a"
+                        id="peppol-cii-pattern-0-a"
+                        documents="file:///C:/Users/modu/Documents/AL/AI%20Projects/eDocsXMLValidator/results/xrechnung.xml"/>
+   <svrl:active-pattern name="peppol-cii-pattern-0-b"
+                        id="peppol-cii-pattern-0-b"
+                        documents="file:///C:/Users/modu/Documents/AL/AI%20Projects/eDocsXMLValidator/results/xrechnung.xml"/>
+   <svrl:active-pattern name="cii-pattern"
+                        id="cii-pattern"
+                        documents="file:///C:/Users/modu/Documents/AL/AI%20Projects/eDocsXMLValidator/results/xrechnung.xml"/>
+   <svrl:fired-rule context="/rsm:CrossIndustryInvoice"/>
+   <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:ExchangedDocumentContext"/>
+   <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction"/>
+   <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem"/>
+   <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty"/>
+   <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:DefinedTradeContact"/>
+   <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:SellerTradeParty/ram:PostalTradeAddress"/>
+   <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeAgreement/ram:BuyerTradeParty/ram:PostalTradeAddress"/>
+   <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty/ram:PostalTradeAddress"/>
+   <svrl:fired-rule context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax"/>
+   <svrl:active-pattern name="cii-extension-pattern"
+                        id="cii-extension-pattern"
+                        documents="file:///C:/Users/modu/Documents/AL/AI%20Projects/eDocsXMLValidator/results/xrechnung.xml"/>
+   <svrl:active-pattern name="cii-cvd-pattern"
+                        id="cii-cvd-pattern"
+                        documents="file:///C:/Users/modu/Documents/AL/AI%20Projects/eDocsXMLValidator/results/xrechnung.xml"/>
+</svrl:schematron-output>

@@ -1,0 +1,89 @@
+﻿Validation report
+=================
+Document    C:\Users\modu\Downloads\Facture 103302.pdf
+Checked     2026-08-28 13:24:45
+Format      ZUGFeRD
+Standard    Factur-X 1.0.x (also used by ZUGFeRD 2.1 and later)
+Attachment  xrechnung.xml
+Profile     XRECHNUNG
+Guideline   urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0
+Extracted   xrechnung.xml
+
+Result      The document is valid, with 4 warnings.
+
+PDF container
+-------------
+No problems found.
+
+[INFORMATION] PDF-01: PDF opened successfully (version 1.7, 2 page(s)).
+[INFORMATION] PDF-02: The document is not encrypted.
+[INFORMATION] PDF-03: The PDF header declares version 1.7 or later.
+[INFORMATION] PDF-04: The document catalogue carries an XMP metadata stream.
+[INFORMATION] PDF-05: A PDF/A output intent with an embedded ICC profile is present (Custom).
+[INFORMATION] PDF-06: The document catalogue has an /Names /EmbeddedFiles name tree.
+[INFORMATION] PDF-07: The document catalogue has an /AF array with 1 entry/entries.
+[INFORMATION] PDF-08: The document contains no JavaScript name tree.
+[INFORMATION] PDF-09: The document is tagged (/MarkInfo /Marked true), as PDF/A-3a requires.
+
+Embedded XML attachment
+-----------------------
+4 warnings
+
+[WARNING] EF-04: The key under which the attachment is registered in the embedded-files name tree differs from its file name.
+    found    name tree key = xrechnung_xml, file name = xrechnung.xml
+[WARNING] EF-05: The file specification has no /Desc entry. The specifications ask for a human-readable description of the attachment.
+[WARNING] EF-07: The embedded file stream declares a media type other than the one the specification requires. A receiver that selects attachments by media type will not recognise this one as the invoice.
+    expected text/xml
+    found    application/octet-bitstream
+[WARNING] EF-09: /Params /Size does not match the length of the decoded attachment.
+    expected 5706 bytes
+    found    1491 bytes
+[INFORMATION] EF-01: Found the invoice attachment: xrechnung.xml
+[INFORMATION] EF-02: The file specification declares /Type /Filespec.
+[INFORMATION] EF-03: /F and /UF are both present and agree.
+[INFORMATION] EF-06: /AFRelationship is /Data, as Factur-X 1.0 and ZUGFeRD 2.1 and later require.
+[INFORMATION] EF-09: The embedded file stream carries /Params /ModDate D:20260828092611+00'00'.
+[INFORMATION] EF-08: The attachment is referenced from the document catalogue /AF array.
+[INFORMATION] EF-11: The attachment is well-formed XML (5706 bytes).
+
+XMP metadata
+------------
+No problems found.
+
+[INFORMATION] XMP-01: The XMP packet parsed successfully.
+[INFORMATION] XMP-02: pdfaid:part is 3, the PDF/A part Factur-X and ZUGFeRD require.
+[INFORMATION] XMP-03: pdfaid:conformance is A, so the file claims PDF/A-3a.
+[INFORMATION] XMP-04: The XMP declares Factur-X 1.0.x (also used by ZUGFeRD 2.1 and later) through the namespace urn:factur-x:pdfa:CrossIndustryDocument:invoice:1p0# (prefix fx).
+[INFORMATION] XMP-05: A PDF/A extension schema is declared for the hybrid-invoice namespace: Factur-X PDFA Extension Schema
+[INFORMATION] XMP-07: The extension schema describes all four required properties.
+[INFORMATION] XMP-08: DocumentType is INVOICE.
+[INFORMATION] XMP-09: DocumentFileName is xrechnung.xml.
+[INFORMATION] XMP-10: Version is 3.0.
+[INFORMATION] XMP-11: ConformanceLevel is XRECHNUNG.
+
+PDF / XMP / XML consistency
+---------------------------
+No problems found.
+
+[INFORMATION] REL-02: The embedded XML is a CrossIndustryInvoice in the expected UN/CEFACT namespace.
+[INFORMATION] REL-03: The guideline identifier corresponds to the XRECHNUNG profile.
+[INFORMATION] REL-04: The profile in the XMP matches the guideline in the XML (XRECHNUNG).
+[INFORMATION] REL-01: The file name in the XMP matches the attachment: xrechnung.xml
+[INFORMATION] REL-07: The attachment uses a file name this profile expects: xrechnung.xml
+[INFORMATION] REL-05: The document type in the XMP matches the embedded document (type code 380).
+[INFORMATION] REL-06: Embedded invoice: 103302, issued 20270601
+
+EN16931-CII-validation(KoSIT)
+-----------------------------
+Schematron rules from EN16931-CII-validation(KoSIT).xsl
+No problems found.
+
+[INFORMATION] SCHEMATRON-00: All rules in this file passed.
+
+XRechnung-CII-validation(KoSIT)
+-------------------------------
+Schematron rules from XRechnung-CII-validation(KoSIT).xsl
+No problems found.
+
+[INFORMATION] SCHEMATRON-00: All rules in this file passed.
+

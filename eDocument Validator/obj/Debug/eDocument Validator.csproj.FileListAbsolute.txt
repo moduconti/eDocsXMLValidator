@@ -46,3 +46,73 @@ C:\Users\modu\Documents\AL\AI Projects\eDocuments schematron validator\eDocument
 C:\Users\modu\Documents\AL\AI Projects\eDocuments schematron validator\eDocuments schematron validator\eDocument Validator\obj\Debug\eDocumen.15787AB0.Up2Date
 C:\Users\modu\Documents\AL\AI Projects\eDocuments schematron validator\eDocuments schematron validator\eDocument Validator\obj\Debug\eDocument Validator.exe
 C:\Users\modu\Documents\AL\AI Projects\eDocuments schematron validator\eDocuments schematron validator\eDocument Validator\obj\Debug\eDocument Validator.pdb
+C:\Users\modu\Desktop\XMLValidatorV2\eDocuments schematron validator\eDocument Validator\bin\Debug\eDocument Validator.exe.config
+C:\Users\modu\Desktop\XMLValidatorV2\eDocuments schematron validator\eDocument Validator\bin\Debug\eDocument Validator.exe
+C:\Users\modu\Desktop\XMLValidatorV2\eDocuments schematron validator\eDocument Validator\bin\Debug\IKVM.OpenJDK.Charsets.dll
+C:\Users\modu\Desktop\XMLValidatorV2\eDocuments schematron validator\eDocument Validator\bin\Debug\IKVM.OpenJDK.Core.dll
+C:\Users\modu\Desktop\XMLValidatorV2\eDocuments schematron validator\eDocument Validator\bin\Debug\IKVM.OpenJDK.Localedata.dll
+C:\Users\modu\Desktop\XMLValidatorV2\eDocuments schematron validator\eDocument Validator\bin\Debug\IKVM.OpenJDK.Text.dll
+C:\Users\modu\Desktop\XMLValidatorV2\eDocuments schematron validator\eDocument Validator\bin\Debug\IKVM.OpenJDK.Util.dll
+C:\Users\modu\Desktop\XMLValidatorV2\eDocuments schematron validator\eDocument Validator\bin\Debug\IKVM.OpenJDK.XML.API.dll
+C:\Users\modu\Desktop\XMLValidatorV2\eDocuments schematron validator\eDocument Validator\bin\Debug\IKVM.Runtime.dll
+C:\Users\modu\Desktop\XMLValidatorV2\eDocuments schematron validator\eDocument Validator\bin\Debug\saxon-he-10.9.dll
+C:\Users\modu\Desktop\XMLValidatorV2\eDocuments schematron validator\eDocument Validator\bin\Debug\saxon-he-api-10.9.dll
+C:\Users\modu\Desktop\XMLValidatorV2\eDocuments schematron validator\eDocument Validator\bin\Debug\System.Configuration.ConfigurationManager.dll
+C:\Users\modu\Desktop\XMLValidatorV2\eDocuments schematron validator\eDocument Validator\bin\Debug\saxon-he-api-10.9.xml
+C:\Users\modu\Desktop\XMLValidatorV2\eDocuments schematron validator\eDocument Validator\bin\Debug\System.Configuration.ConfigurationManager.xml
+C:\Users\modu\Desktop\XMLValidatorV2\eDocuments schematron validator\eDocument Validator\obj\Debug\eDocument Validator.csproj.AssemblyReference.cache
+C:\Users\modu\Desktop\XMLValidatorV2\eDocuments schematron validator\eDocument Validator\obj\Debug\eDocument Validator.exe.config
+C:\Users\modu\Desktop\XMLValidatorV2\eDocuments schematron validator\eDocument Validator\obj\Debug\eDocument_Validator.Form1.resources
+C:\Users\modu\Desktop\XMLValidatorV2\eDocuments schematron validator\eDocument Validator\obj\Debug\eDocument_Validator.Properties.Resources.resources
+C:\Users\modu\Desktop\XMLValidatorV2\eDocuments schematron validator\eDocument Validator\obj\Debug\eDocument Validator.csproj.GenerateResource.cache
+C:\Users\modu\Desktop\XMLValidatorV2\eDocuments schematron validator\eDocument Validator\obj\Debug\eDocument Validator.csproj.CoreCompileInputs.cache
+C:\Users\modu\Desktop\XMLValidatorV2\eDocuments schematron validator\eDocument Validator\obj\Debug\eDocumen.15787AB0.Up2Date
+C:\Users\modu\Desktop\XMLValidatorV2\eDocuments schematron validator\eDocument Validator\obj\Debug\eDocument Validator.exe
+C:\Users\modu\Desktop\XMLValidatorV2\eDocuments schematron validator\eDocument Validator\obj\Debug\eDocument Validator.pdb
+C:\Users\modu\Desktop\XMLValidatorV2\eDocuments schematron validator\eDocument Validator\bin\Debug\eDocument Validator.pdb
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\eDocument Validator.exe.config
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\eDocument Validator.exe
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\eDocument Validator.pdb
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\IKVM.OpenJDK.Charsets.dll
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\IKVM.OpenJDK.Core.dll
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\IKVM.OpenJDK.Localedata.dll
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\IKVM.OpenJDK.Text.dll
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\IKVM.OpenJDK.Util.dll
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\IKVM.OpenJDK.XML.API.dll
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\IKVM.Runtime.dll
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\Microsoft.Bcl.HashCode.dll
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\saxon-he-10.9.dll
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\saxon-he-api-10.9.dll
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\System.Buffers.dll
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\System.Configuration.ConfigurationManager.dll
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\System.Memory.dll
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\System.Numerics.Vectors.dll
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\UglyToad.PdfPig.Core.dll
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\UglyToad.PdfPig.dll
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\UglyToad.PdfPig.Fonts.dll
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\UglyToad.PdfPig.Tokenization.dll
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\UglyToad.PdfPig.Tokens.dll
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\saxon-he-api-10.9.xml
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\UglyToad.PdfPig.xml
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\UglyToad.PdfPig.Core.xml
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\UglyToad.PdfPig.Fonts.xml
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\UglyToad.PdfPig.Tokenization.xml
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\UglyToad.PdfPig.Tokens.xml
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\Microsoft.Bcl.HashCode.xml
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\System.Buffers.xml
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\System.Memory.xml
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\System.Numerics.Vectors.xml
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\bin\Debug\System.Configuration.ConfigurationManager.xml
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\obj\Debug\eDocument Validator.csproj.AssemblyReference.cache
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\obj\Debug\eDocument_Validator.Properties.Resources.resources
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\obj\Debug\eDocument Validator.csproj.GenerateResource.cache
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\obj\Debug\eDocument Validator.csproj.CoreCompileInputs.cache
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\obj\Debug\eDocumen.15787AB0.Up2Date
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\obj\Debug\eDocument Validator.exe
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\obj\Debug\eDocument Validator.pdb
+C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\obj\Debug\eDocument_Validator.Forms.MainForm.resources
+C:\Users\modu\AppData\Local\Temp\claude\C--Users-modu-Documents-AL-AI-Projects-eDocsXMLValidator\6854413a-6788-45cc-98ad-2f27a1d9a4dc\scratchpad\buildcheck\eDocument Validator.exe.config
+C:\Users\modu\AppData\Local\Temp\claude\C--Users-modu-Documents-AL-AI-Projects-eDocsXMLValidator\6854413a-6788-45cc-98ad-2f27a1d9a4dc\scratchpad\buildcheck\eDocument Validator.exe
+C:\Users\modu\AppData\Local\Temp\claude\C--Users-modu-Documents-AL-AI-Projects-eDocsXMLValidator\6854413a-6788-45cc-98ad-2f27a1d9a4dc\scratchpad\buildcheck\eDocument Validator.pdb
