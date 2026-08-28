@@ -1,0 +1,6 @@
+# Optional PDF/A conformance tooling. Roughly 200 MB of third-party binaries
+# (a Java runtime and veraPDF) that tools\setup-verapdf.ps1 reproduces on
+# demand, so they are fetched rather than committed.
+tools/jre/
+tools/verapdf/
+tools/_download/

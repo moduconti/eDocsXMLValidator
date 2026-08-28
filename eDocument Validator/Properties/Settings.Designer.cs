@@ -26,5 +26,50 @@ namespace eDocument_Validator.Properties
                 return defaultInstance;
             }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UseDarkTheme
+        {
+            get
+            {
+                return ((bool)(this["UseDarkTheme"]));
+            }
+            set
+            {
+                this["UseDarkTheme"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowWarnings
+        {
+            get
+            {
+                return ((bool)(this["ShowWarnings"]));
+            }
+            set
+            {
+                this["ShowWarnings"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShowAllChecks
+        {
+            get
+            {
+                return ((bool)(this["ShowAllChecks"]));
+            }
+            set
+            {
+                this["ShowAllChecks"] = value;
+            }
+        }
     }
 }
