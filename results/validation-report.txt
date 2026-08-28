@@ -1,7 +1,7 @@
 ﻿Validation report
 =================
-Document    C:\Users\modu\Downloads\Facture 103299.pdf
-Checked     2026-08-28 09:04:27
+Document    C:\Users\modu\Downloads\Facture 103302.pdf
+Checked     2026-08-28 13:24:45
 Format      ZUGFeRD
 Standard    Factur-X 1.0.x (also used by ZUGFeRD 2.1 and later)
 Attachment  xrechnung.xml
@@ -9,13 +9,13 @@ Profile     XRECHNUNG
 Guideline   urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0
 Extracted   xrechnung.xml
 
-Result      The document is valid, with 5 warnings.
+Result      The document is valid, with 4 warnings.
 
 PDF container
 -------------
 No problems found.
 
-[INFORMATION] PDF-01: PDF opened successfully (version 1.7, 7 page(s)).
+[INFORMATION] PDF-01: PDF opened successfully (version 1.7, 2 page(s)).
 [INFORMATION] PDF-02: The document is not encrypted.
 [INFORMATION] PDF-03: The PDF header declares version 1.7 or later.
 [INFORMATION] PDF-04: The document catalogue carries an XMP metadata stream.
@@ -36,15 +36,15 @@ Embedded XML attachment
     expected text/xml
     found    application/octet-bitstream
 [WARNING] EF-09: /Params /Size does not match the length of the decoded attachment.
-    expected 5742 bytes
-    found    1515 bytes
+    expected 5706 bytes
+    found    1491 bytes
 [INFORMATION] EF-01: Found the invoice attachment: xrechnung.xml
 [INFORMATION] EF-02: The file specification declares /Type /Filespec.
 [INFORMATION] EF-03: /F and /UF are both present and agree.
 [INFORMATION] EF-06: /AFRelationship is /Data, as Factur-X 1.0 and ZUGFeRD 2.1 and later require.
-[INFORMATION] EF-09: The embedded file stream carries /Params /ModDate D:20260827115341+00'00'.
+[INFORMATION] EF-09: The embedded file stream carries /Params /ModDate D:20260828092611+00'00'.
 [INFORMATION] EF-08: The attachment is referenced from the document catalogue /AF array.
-[INFORMATION] EF-11: The attachment is well-formed XML (5742 bytes).
+[INFORMATION] EF-11: The attachment is well-formed XML (5706 bytes).
 
 XMP metadata
 ------------
@@ -63,17 +63,15 @@ No problems found.
 
 PDF / XMP / XML consistency
 ---------------------------
-1 warning
+No problems found.
 
-[WARNING] REL-01: The attachment does not use the file name this specification reserves. ZUGFeRD 2.1 and later accept both names, but the reserved name is preferred.
-    expected factur-x.xml
-    found    xrechnung.xml
-[INFORMATION] REL-01: The file name in the XMP matches the attachment: xrechnung.xml
 [INFORMATION] REL-02: The embedded XML is a CrossIndustryInvoice in the expected UN/CEFACT namespace.
 [INFORMATION] REL-03: The guideline identifier corresponds to the XRECHNUNG profile.
 [INFORMATION] REL-04: The profile in the XMP matches the guideline in the XML (XRECHNUNG).
+[INFORMATION] REL-01: The file name in the XMP matches the attachment: xrechnung.xml
+[INFORMATION] REL-07: The attachment uses a file name this profile expects: xrechnung.xml
 [INFORMATION] REL-05: The document type in the XMP matches the embedded document (type code 380).
-[INFORMATION] REL-06: Embedded invoice: 103299, issued 20260827
+[INFORMATION] REL-06: Embedded invoice: 103302, issued 20270601
 
 EN16931-CII-validation(KoSIT)
 -----------------------------

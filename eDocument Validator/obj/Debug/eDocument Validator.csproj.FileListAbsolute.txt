@@ -113,3 +113,6 @@ C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\obj
 C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\obj\Debug\eDocument Validator.exe
 C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\obj\Debug\eDocument Validator.pdb
 C:\Users\modu\Documents\AL\AI Projects\eDocsXMLValidator\eDocument Validator\obj\Debug\eDocument_Validator.Forms.MainForm.resources
+C:\Users\modu\AppData\Local\Temp\claude\C--Users-modu-Documents-AL-AI-Projects-eDocsXMLValidator\6854413a-6788-45cc-98ad-2f27a1d9a4dc\scratchpad\buildcheck\eDocument Validator.exe.config
+C:\Users\modu\AppData\Local\Temp\claude\C--Users-modu-Documents-AL-AI-Projects-eDocsXMLValidator\6854413a-6788-45cc-98ad-2f27a1d9a4dc\scratchpad\buildcheck\eDocument Validator.exe
+C:\Users\modu\AppData\Local\Temp\claude\C--Users-modu-Documents-AL-AI-Projects-eDocsXMLValidator\6854413a-6788-45cc-98ad-2f27a1d9a4dc\scratchpad\buildcheck\eDocument Validator.pdb

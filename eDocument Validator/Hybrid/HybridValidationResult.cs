@@ -35,6 +35,13 @@ namespace eDocument_Validator.Hybrid
         /// <summary>Guideline identifier found inside the embedded CII document.</summary>
         public string GuidelineId { get; set; }
 
+        /// <summary>
+        /// Profile that <see cref="GuidelineId"/> corresponds to. Used when the XMP
+        /// metadata declares no profile of its own, so that the checks depending on
+        /// the profile still have something to work from.
+        /// </summary>
+        public string ConformanceLevelFromXml { get; set; }
+
         /// <summary>Name of the attachment that holds the invoice.</summary>
         public string AttachmentName { get; set; }
 

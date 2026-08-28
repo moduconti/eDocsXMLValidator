@@ -83,40 +83,61 @@ namespace eDocument_Validator.Hybrid
 
         // --- Attachment file names -------------------------------------------
 
-        /// <summary>The file name each flavour is required to use for its XML attachment.</summary>
-        public static string ExpectedAttachmentName(HybridFlavour flavour)
-        {
-            switch (flavour)
-            {
-                case HybridFlavour.FacturX:
-                    return "factur-x.xml";
-                case HybridFlavour.ZugferdV2:
-                    return "zugferd-invoice.xml";
-                case HybridFlavour.ZugferdV1:
-                    return "ZUGFeRD-invoice.xml";
-                case HybridFlavour.OrderX:
-                    return "order-x.xml";
-                default:
-                    return "factur-x.xml";
-            }
-        }
-
         /// <summary>
         /// Every attachment name that identifies a hybrid-invoice payload, used to
-        /// find the XML inside a PDF before the flavour is known. ZUGFeRD 2.1 and
-        /// later recommend "factur-x.xml" but still tolerate "zugferd-invoice.xml",
-        /// so both are accepted for either flavour; the name is cross-checked
-        /// against the XMP metadata separately.
+        /// find the XML inside a PDF before the profile is known. This is the list
+        /// the reference implementation of ZUGFeRD recognises.
         /// </summary>
         public static readonly string[] CandidateAttachmentNames =
         {
             "factur-x.xml",
             "zugferd-invoice.xml",
             "ZUGFeRD-invoice.xml",
-            "order-x.xml",
             "xrechnung.xml",
-            "cii.xml"
+            "order-x.xml",
+            "cida.xml"
         };
+
+        /// <summary>
+        /// The attachment names that are correct for a document, which depends on
+        /// both the specification it follows and the profile inside it.
+        /// <para>
+        /// The XRECHNUNG profile is the reason this is not a single name. An
+        /// XRechnung invoice carried in a PDF is named "xrechnung.xml" by the
+        /// German reference tools and by the official ZUGFeRD test files, while
+        /// "factur-x.xml" is also accepted. Reporting either of those as wrong
+        /// would be a false alarm.
+        /// </para>
+        /// </summary>
+        public static string[] AcceptedAttachmentNames(HybridFlavour flavour, string conformanceLevel)
+        {
+            bool isXRechnung = conformanceLevel != null
+                && conformanceLevel.Trim().Equals("XRECHNUNG", StringComparison.OrdinalIgnoreCase);
+
+            switch (flavour)
+            {
+                case HybridFlavour.OrderX:
+                    return new[] { "order-x.xml" };
+
+                case HybridFlavour.ZugferdV1:
+                    return new[] { "ZUGFeRD-invoice.xml" };
+
+                case HybridFlavour.ZugferdV2:
+                    return isXRechnung
+                        ? new[] { "zugferd-invoice.xml", "factur-x.xml", "xrechnung.xml" }
+                        : new[] { "zugferd-invoice.xml", "factur-x.xml" };
+
+                case HybridFlavour.FacturX:
+                    return isXRechnung
+                        ? new[] { "factur-x.xml", "xrechnung.xml" }
+                        : new[] { "factur-x.xml" };
+
+                default:
+                    // The specification could not be identified, so any of the
+                    // recognised names is as good as another.
+                    return CandidateAttachmentNames;
+            }
+        }
 
         // --- Conformance levels -----------------------------------------------
 

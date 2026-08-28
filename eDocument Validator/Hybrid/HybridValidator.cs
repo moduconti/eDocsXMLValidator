@@ -262,13 +262,13 @@ namespace eDocument_Validator.Hybrid
             {
                 ValidationMessage issue = section.Error("EF-01",
                     "No attachment uses a file name reserved for hybrid invoices. Validating the only XML attachment found instead.");
-                issue.Expected = string.Join(" or ", HybridSpecs.CandidateAttachmentNames.Take(4));
+                issue.Expected = string.Join(", ", HybridSpecs.CandidateAttachmentNames);
                 issue.Found = xmlLike[0].EffectiveName;
                 return xmlLike[0];
             }
 
             ValidationMessage notFound = section.Error("EF-01", "No embedded XML invoice could be identified.");
-            notFound.Expected = string.Join(" or ", HybridSpecs.CandidateAttachmentNames.Take(4));
+            notFound.Expected = string.Join(", ", HybridSpecs.CandidateAttachmentNames);
             notFound.Found = string.Join(", ", container.EmbeddedFiles.Select(f => f.EffectiveName ?? "(unnamed)"));
             return null;
         }
@@ -740,10 +740,9 @@ namespace eDocument_Validator.Hybrid
                 return;
             }
 
-            CheckDeclaredFileName(attachment, xmp, result, section);
-
             if (attachment.Content == null)
             {
+                CheckDeclaredFileName(attachment, result, section);
                 section.Warning("REL-01", "The attachment content is unavailable, so it cannot be compared with the metadata.");
                 return;
             }
@@ -755,17 +754,24 @@ namespace eDocument_Validator.Hybrid
             }
             catch (Exception ex)
             {
+                CheckDeclaredFileName(attachment, result, section);
                 section.Error("REL-02", "The embedded XML could not be parsed, so it cannot be compared with the metadata: " + ex.Message);
                 return;
             }
 
             CheckInvoiceRootElement(invoice, result, section);
+
+            // The guideline is read before the file name is judged, because which
+            // names are correct depends on the profile the invoice follows.
             CheckGuidelineAgainstXmp(invoice, result, section);
+
+            CheckDeclaredFileName(attachment, result, section);
+
             CheckDocumentTypeAgainstTypeCode(invoice, xmp, result, section);
             ReportInvoiceIdentity(invoice, section);
         }
 
-        private static void CheckDeclaredFileName(PdfEmbeddedFile attachment, XmpMetadataView xmp, HybridValidationResult result, ValidationGroup section)
+        private static void CheckDeclaredFileName(PdfEmbeddedFile attachment, HybridValidationResult result, ValidationGroup section)
         {
             string declaredName = result.DeclaredDocumentFileName;
 
@@ -788,33 +794,26 @@ namespace eDocument_Validator.Hybrid
                 issue.Found = declaredName;
             }
 
-            // The reserved-name check does not depend on the XMP, so it still runs
-            // when the flavour could not be determined; in that case any of the
-            // reserved names is acceptable.
-            bool usesReservedName = HybridSpecs.CandidateAttachmentNames
-                .Take(4)
+            // Which names are correct depends on the specification and on the
+            // profile: an XRechnung invoice inside a PDF is normally called
+            // xrechnung.xml, while other profiles use factur-x.xml.
+            string profile = result.DeclaredConformanceLevel ?? result.ConformanceLevelFromXml;
+            string[] acceptedNames = HybridSpecs.AcceptedAttachmentNames(result.Flavour, profile);
+
+            bool nameIsAccepted = acceptedNames
                 .Any(n => string.Equals(n, attachment.EffectiveName, StringComparison.OrdinalIgnoreCase));
 
-            if (result.Flavour == HybridFlavour.Unknown)
+            if (nameIsAccepted)
             {
-                if (!usesReservedName)
-                {
-                    ValidationMessage issue = section.Warning("REL-01",
-                        "The attachment does not use any of the file names the hybrid-invoice specifications reserve.");
-                    issue.Expected = string.Join(" or ", HybridSpecs.CandidateAttachmentNames.Take(4));
-                    issue.Found = attachment.EffectiveName;
-                }
+                section.Info("REL-07", "The attachment uses a file name this profile expects: " + attachment.EffectiveName);
                 return;
             }
 
-            string expectedForFlavour = HybridSpecs.ExpectedAttachmentName(result.Flavour);
-            if (!string.Equals(attachment.EffectiveName, expectedForFlavour, StringComparison.OrdinalIgnoreCase))
-            {
-                ValidationMessage issue = section.Warning("REL-01",
-                    "The attachment does not use the file name this specification reserves. ZUGFeRD 2.1 and later accept both names, but the reserved name is preferred.");
-                issue.Expected = expectedForFlavour;
-                issue.Found = attachment.EffectiveName;
-            }
+            ValidationMessage wrongName = section.Warning("REL-07",
+                "The attachment does not use a file name that this profile expects. Software that looks for the "
+                + "invoice by name may not find it.");
+            wrongName.Expected = string.Join(" or ", acceptedNames);
+            wrongName.Found = attachment.EffectiveName;
         }
 
         private static void CheckInvoiceRootElement(XDocument invoice, HybridValidationResult result, ValidationGroup section)
@@ -862,6 +861,7 @@ namespace eDocument_Validator.Hybrid
 
             bool exactMatch;
             string fromXml = HybridSpecs.ConformanceForGuideline(result.GuidelineId, out exactMatch);
+            result.ConformanceLevelFromXml = fromXml;
 
             if (fromXml == null)
             {
