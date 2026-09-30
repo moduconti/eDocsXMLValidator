@@ -226,7 +226,7 @@
 
    <!--RULE -->
    <xsl:template match="//ram:DesignatedProductClassification"
-                 priority="1059"
+                 priority="1066"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:DesignatedProductClassification"/>
@@ -249,7 +249,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:AdditionalReferencedDocument"
-                 priority="1058"
+                 priority="1065"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:AdditionalReferencedDocument"/>
@@ -272,16 +272,16 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:ApplicableTradeSettlementFinancialCard"
-                 priority="1057"
+                 priority="1064"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:ApplicableTradeSettlementFinancialCard"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="string-length(ram:ID)&lt;=10"/>
+         <xsl:when test="string-length(normalize-space(ram:ID)) &lt;= 10"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="string-length(ram:ID)&lt;=10">
+                                test="string-length(normalize-space(ram:ID)) &lt;= 10">
                <xsl:attribute name="id">BR-51</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
@@ -295,16 +295,16 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:SpecifiedTradeSettlementPaymentMeans[ram:TypeCode='30' or ram:TypeCode='58']/ram:PayeePartyCreditorFinancialAccount"
-                 priority="1056"
+                 priority="1063"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:SpecifiedTradeSettlementPaymentMeans[ram:TypeCode='30' or ram:TypeCode='58']/ram:PayeePartyCreditorFinancialAccount"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(ram:IBANID) or (ram:ProprietaryID)"/>
+         <xsl:when test="normalize-space(ram:IBANID) != '' or normalize-space(ram:ProprietaryID) != ''"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(ram:IBANID) or (ram:ProprietaryID)">
+                                test="normalize-space(ram:IBANID) != '' or normalize-space(ram:ProprietaryID) != ''">
                <xsl:attribute name="id">BR-50</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
@@ -333,7 +333,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery"
-                 priority="1055"
+                 priority="1062"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeDelivery"/>
@@ -356,7 +356,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge/ram:ChargeIndicator[udt:Indicator='false']"
-                 priority="1054"
+                 priority="1061"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge/ram:ChargeIndicator[udt:Indicator='false']"/>
@@ -435,10 +435,10 @@
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="string-length(substring-after(../ram:ActualAmount,'.'))&lt;=2"/>
+         <xsl:when test="string-length(substring-after(../ram:ActualAmount[1],'.'))&lt;=2"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="string-length(substring-after(../ram:ActualAmount,'.'))&lt;=2">
+                                test="string-length(substring-after(../ram:ActualAmount[1],'.'))&lt;=2">
                <xsl:attribute name="id">BR-DEC-01</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
@@ -467,7 +467,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge/ram:ChargeIndicator[udt:Indicator='true']"
-                 priority="1053"
+                 priority="1060"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge/ram:ChargeIndicator[udt:Indicator='true']"/>
@@ -506,12 +506,12 @@
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                 test="(../ram:Reason) or (../ram:ReasonCode)">
-               <xsl:attribute name="id">BR-38</xsl:attribute>
+               <xsl:attribute name="id">BR-FREXT-BR-38</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>[BR-38]-Each Document level charge (BG-21) shall have a Document level charge reason (BT-104) or a Document level charge reason code (BT-105).</svrl:text>
+               <svrl:text>[BR-FREXT-BR-38/BR-FREXT-CO-22]-Each Document level charge (BG-21) shall have a Document level  charge  reason  (BT-104)  or  a  Document  level  charge reason code (BT-105) or a Document level non VAT Tax reason code (BT-177)..</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -531,25 +531,10 @@
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(../ram:Reason) or (../ram:ReasonCode)"/>
+         <xsl:when test="string-length(substring-after(../ram:ActualAmount[1],'.'))&lt;=2"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(../ram:Reason) or (../ram:ReasonCode)">
-               <xsl:attribute name="id">BR-CO-22</xsl:attribute>
-               <xsl:attribute name="flag">fatal</xsl:attribute>
-               <xsl:attribute name="location">
-                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
-               </xsl:attribute>
-               <svrl:text>[BR-CO-22]-Each Document level charge (BG-21) shall contain a Document level charge reason (BT-104) or a Document level charge reason code (BT-105), or both.</svrl:text>
-            </svrl:failed-assert>
-         </xsl:otherwise>
-      </xsl:choose>
-      <!--ASSERT -->
-      <xsl:choose>
-         <xsl:when test="string-length(substring-after(../ram:ActualAmount,'.'))&lt;=2"/>
-         <xsl:otherwise>
-            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="string-length(substring-after(../ram:ActualAmount,'.'))&lt;=2">
+                                test="string-length(substring-after(../ram:ActualAmount[1],'.'))&lt;=2">
                <xsl:attribute name="id">BR-DEC-05</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
@@ -578,7 +563,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:SpecifiedTradeSettlementHeaderMonetarySummation"
-                 priority="1052"
+                 priority="1059"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:SpecifiedTradeSettlementHeaderMonetarySummation"/>
@@ -656,26 +641,26 @@
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="for $calculatedAmount in xs:decimal(round(sum(../../ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode)&#xD;&#xA; or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount) * xs:decimal(100)) div xs:decimal(100)),&#xD;&#xA;            $totalAmount in xs:decimal(ram:LineTotalAmount),&#xD;&#xA;            $nbLineItems in xs:decimal(count(../../ram:IncludedSupplyChainTradeLineItem)),&#xD;&#xA;            $tolerance in xs:decimal(0.01),&#xD;&#xA;            $maxTolerance in $nbLineItems * $tolerance,&#xD;&#xA;            $diff in xs:decimal($totalAmount - $calculatedAmount),&#xD;&#xA;            $abs in xs:decimal(abs($diff))&#xD;&#xA;        return&#xD;&#xA;        $abs le $maxTolerance"/>
+         <xsl:when test="for $calculatedAmount in xs:decimal(round(sum(../../ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode)&#xD;&#xA; or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount/xs:decimal(.)) * xs:decimal(100)) div xs:decimal(100)),&#xD;&#xA;            $totalAmount in xs:decimal(ram:LineTotalAmount),&#xD;&#xA;            $nbLineItems in xs:decimal(count(../../ram:IncludedSupplyChainTradeLineItem)),&#xD;&#xA;            $tolerance in xs:decimal(0.01),&#xD;&#xA;            $maxTolerance in $nbLineItems * $tolerance,&#xD;&#xA;            $diff in xs:decimal($totalAmount - $calculatedAmount),&#xD;&#xA;            $abs in xs:decimal(abs($diff))&#xD;&#xA;        return&#xD;&#xA;        $abs le $maxTolerance"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="for $calculatedAmount in xs:decimal(round(sum(../../ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount) * xs:decimal(100)) div xs:decimal(100)), $totalAmount in xs:decimal(ram:LineTotalAmount), $nbLineItems in xs:decimal(count(../../ram:IncludedSupplyChainTradeLineItem)), $tolerance in xs:decimal(0.01), $maxTolerance in $nbLineItems * $tolerance, $diff in xs:decimal($totalAmount - $calculatedAmount), $abs in xs:decimal(abs($diff)) return $abs le $maxTolerance">
+                                test="for $calculatedAmount in xs:decimal(round(sum(../../ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount/xs:decimal(.)) * xs:decimal(100)) div xs:decimal(100)), $totalAmount in xs:decimal(ram:LineTotalAmount), $nbLineItems in xs:decimal(count(../../ram:IncludedSupplyChainTradeLineItem)), $tolerance in xs:decimal(0.01), $maxTolerance in $nbLineItems * $tolerance, $diff in xs:decimal($totalAmount - $calculatedAmount), $abs in xs:decimal(abs($diff)) return $abs le $maxTolerance">
                <xsl:attribute name="id">BR-FREXT-CO-10</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>
-        [BR-FREXT-CO-10]-Absolute Value of (Sum of Invoice line net amount (BT-106) - Σ Invoice line net amounts (BT-131))&lt;= 0,01 * Number of line net amounts (BT-131), where the VAT category code (BT-151, BT-95, BT-102, BT-X-273) is "Zero rated" (Z), but only for lines where the "Subtype of invoice item" (BT-X-8) has the value "Regular item (standard case)" (DETAIL) or is not specified.</svrl:text>
+        [BR-FREXT-CO-10]-Absolute Value of (Sum of Invoice line net amount (BT-106) - Σ Invoice line net amounts (BT-131))&lt;= 0,01 * Number of line net amounts (BT-131), only for lines where the "Subtype of invoice item" (BT-X-8) has the value "Regular item (standard case)" (DETAIL) or is not specified.</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(not(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']) and not (ram:AllowanceTotalAmount)) or&#xD;&#xA;(for $calculatedAmount in xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:ActualAmount)* 10 * 10 ) div 100),&#xD;&#xA;            $totalAmount in xs:decimal(ram:AllowanceTotalAmount),&#xD;&#xA;            $nbAllowanceItems in xs:decimal(count(../ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false'])),&#xD;&#xA;            $tolerance in xs:decimal(0.01),&#xD;&#xA;            $maxTolerance in $nbAllowanceItems * $tolerance,&#xD;&#xA;            $diff in xs:decimal($totalAmount - $calculatedAmount),&#xD;&#xA;            $abs in xs:decimal(abs($diff))&#xD;&#xA;        return&#xD;&#xA;        $abs le $maxTolerance)"/>
+         <xsl:when test="(not(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']) and not (ram:AllowanceTotalAmount)) or&#xD;&#xA;(for $calculatedAmount in xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:ActualAmount/xs:decimal(.))* 10 * 10 ) div 100),&#xD;&#xA;            $totalAmount in xs:decimal(ram:AllowanceTotalAmount),&#xD;&#xA;            $nbAllowanceItems in xs:decimal(count(../ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false'])),&#xD;&#xA;            $tolerance in xs:decimal(0.01),&#xD;&#xA;            $maxTolerance in $nbAllowanceItems * $tolerance,&#xD;&#xA;            $diff in xs:decimal($totalAmount - $calculatedAmount),&#xD;&#xA;            $abs in xs:decimal(abs($diff))&#xD;&#xA;        return&#xD;&#xA;        $abs le $maxTolerance)"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(not(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']) and not (ram:AllowanceTotalAmount)) or (for $calculatedAmount in xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:ActualAmount)* 10 * 10 ) div 100), $totalAmount in xs:decimal(ram:AllowanceTotalAmount), $nbAllowanceItems in xs:decimal(count(../ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false'])), $tolerance in xs:decimal(0.01), $maxTolerance in $nbAllowanceItems * $tolerance, $diff in xs:decimal($totalAmount - $calculatedAmount), $abs in xs:decimal(abs($diff)) return $abs le $maxTolerance)">
+                                test="(not(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']) and not (ram:AllowanceTotalAmount)) or (for $calculatedAmount in xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:ActualAmount/xs:decimal(.))* 10 * 10 ) div 100), $totalAmount in xs:decimal(ram:AllowanceTotalAmount), $nbAllowanceItems in xs:decimal(count(../ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false'])), $tolerance in xs:decimal(0.01), $maxTolerance in $nbAllowanceItems * $tolerance, $diff in xs:decimal($totalAmount - $calculatedAmount), $abs in xs:decimal(abs($diff)) return $abs le $maxTolerance)">
                <xsl:attribute name="id">BR-FREXT-CO-11</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
@@ -688,10 +673,10 @@
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(not(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true'])and not (ram:ChargeTotalAmount)) &#xD;&#xA;or&#xD;&#xA;(for $calculatedAmount in xs:decimal(xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:ActualAmount)* 100 ) div 100)+ xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge/ram:AppliedAmount)* 10 * 10 ) div 100)),&#xD;&#xA;            $totalAmount in xs:decimal(ram:ChargeTotalAmount),&#xD;&#xA;                        $nbChargeItems in xs:decimal(count(../ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']) + count(../ram:SpecifiedLogisticsServiceCharge)),&#xD;&#xA;            $tolerance in xs:decimal(0.01),&#xD;&#xA;            $maxTolerance in $nbChargeItems * $tolerance,&#xD;&#xA;            $diff in xs:decimal($totalAmount - $calculatedAmount),&#xD;&#xA;            $abs in xs:decimal(abs($diff))&#xD;&#xA;        return&#xD;&#xA;        $abs le $maxTolerance)"/>
+         <xsl:when test="(not(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true'])and not (ram:ChargeTotalAmount)) &#xD;&#xA;or&#xD;&#xA;(for $calculatedAmount in xs:decimal(xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:ActualAmount/xs:decimal(.))* 100 ) div 100)+ xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge/ram:AppliedAmount/xs:decimal(.))* 10 * 10 ) div 100)),&#xD;&#xA;            $totalAmount in xs:decimal(ram:ChargeTotalAmount),&#xD;&#xA;                        $nbChargeItems in xs:decimal(count(../ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']) + count(../ram:SpecifiedLogisticsServiceCharge)),&#xD;&#xA;            $tolerance in xs:decimal(0.01),&#xD;&#xA;            $maxTolerance in $nbChargeItems * $tolerance,&#xD;&#xA;            $diff in xs:decimal($totalAmount - $calculatedAmount),&#xD;&#xA;            $abs in xs:decimal(abs($diff))&#xD;&#xA;        return&#xD;&#xA;        $abs le $maxTolerance)"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(not(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true'])and not (ram:ChargeTotalAmount)) or (for $calculatedAmount in xs:decimal(xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:ActualAmount)* 100 ) div 100)+ xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge/ram:AppliedAmount)* 10 * 10 ) div 100)), $totalAmount in xs:decimal(ram:ChargeTotalAmount), $nbChargeItems in xs:decimal(count(../ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']) + count(../ram:SpecifiedLogisticsServiceCharge)), $tolerance in xs:decimal(0.01), $maxTolerance in $nbChargeItems * $tolerance, $diff in xs:decimal($totalAmount - $calculatedAmount), $abs in xs:decimal(abs($diff)) return $abs le $maxTolerance)">
+                                test="(not(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true'])and not (ram:ChargeTotalAmount)) or (for $calculatedAmount in xs:decimal(xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:ActualAmount/xs:decimal(.))* 100 ) div 100)+ xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge/ram:AppliedAmount/xs:decimal(.))* 10 * 10 ) div 100)), $totalAmount in xs:decimal(ram:ChargeTotalAmount), $nbChargeItems in xs:decimal(count(../ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']) + count(../ram:SpecifiedLogisticsServiceCharge)), $tolerance in xs:decimal(0.01), $maxTolerance in $nbChargeItems * $tolerance, $diff in xs:decimal($totalAmount - $calculatedAmount), $abs in xs:decimal(abs($diff)) return $abs le $maxTolerance)">
                <xsl:attribute name="id">BR-FREXT-CO-12</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
@@ -704,10 +689,10 @@
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="for $BT109 in xs:decimal(ram:TaxBasisTotalAmount),&#xD;&#xA;   $BT131Sum in xs:decimal(round(sum(../../ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode)&#xD;&#xA; or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount) * xs:decimal(100)) div xs:decimal(100)),&#xD;&#xA;   $BT92Sum in xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:ActualAmount)* 10 * 10 ) div 100),&#xD;&#xA;   $BT99Sum in xs:decimal(xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:ActualAmount)* 100 ) div 100)+ xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge/ram:AppliedAmount)* 10 * 10 ) div 100)),&#xD;&#xA;   $nbLineItems in xs:decimal(count(../../ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode)&#xD;&#xA; or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL'])),&#xD;&#xA;   $nbAllowanceItems in xs:decimal(count(../ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false'])),&#xD;&#xA;   $nbChargeItems in xs:decimal(count(../ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']) + count(../ram:SpecifiedLogisticsServiceCharge)),&#xD;&#xA;            $tolerance in xs:decimal(0.01),&#xD;&#xA;            $maxTolerance in $tolerance * ($nbLineItems + $nbAllowanceItems + $nbChargeItems),&#xD;&#xA;            $diff in xs:decimal($BT109 - $BT131Sum + $BT92Sum - $BT99Sum),&#xD;&#xA;            $abs in xs:decimal(abs($diff))&#xD;&#xA;        return&#xD;&#xA;        $abs le $maxTolerance"/>
+         <xsl:when test="for $BT109 in xs:decimal(ram:TaxBasisTotalAmount),&#xD;&#xA;   $BT131Sum in xs:decimal(round(sum(../../ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode)&#xD;&#xA; or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount/xs:decimal(.)) * xs:decimal(100)) div xs:decimal(100)),&#xD;&#xA;   $BT92Sum in xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:ActualAmount/xs:decimal(.))* 10 * 10 ) div 100),&#xD;&#xA;   $BT99Sum in xs:decimal(xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:ActualAmount/xs:decimal(.))* 100 ) div 100)+ xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge/ram:AppliedAmount/xs:decimal(.))* 10 * 10 ) div 100)),&#xD;&#xA;   $nbLineItems in xs:decimal(count(../../ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode)&#xD;&#xA; or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL'])),&#xD;&#xA;   $nbAllowanceItems in xs:decimal(count(../ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false'])),&#xD;&#xA;   $nbChargeItems in xs:decimal(count(../ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']) + count(../ram:SpecifiedLogisticsServiceCharge)),&#xD;&#xA;            $tolerance in xs:decimal(0.01),&#xD;&#xA;            $maxTolerance in $tolerance * ($nbLineItems + $nbAllowanceItems + $nbChargeItems),&#xD;&#xA;            $diff in xs:decimal($BT109 - $BT131Sum + $BT92Sum - $BT99Sum),&#xD;&#xA;            $abs in xs:decimal(abs($diff))&#xD;&#xA;        return&#xD;&#xA;        $abs le $maxTolerance"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="for $BT109 in xs:decimal(ram:TaxBasisTotalAmount), $BT131Sum in xs:decimal(round(sum(../../ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount) * xs:decimal(100)) div xs:decimal(100)), $BT92Sum in xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:ActualAmount)* 10 * 10 ) div 100), $BT99Sum in xs:decimal(xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:ActualAmount)* 100 ) div 100)+ xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge/ram:AppliedAmount)* 10 * 10 ) div 100)), $nbLineItems in xs:decimal(count(../../ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL'])), $nbAllowanceItems in xs:decimal(count(../ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false'])), $nbChargeItems in xs:decimal(count(../ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']) + count(../ram:SpecifiedLogisticsServiceCharge)), $tolerance in xs:decimal(0.01), $maxTolerance in $tolerance * ($nbLineItems + $nbAllowanceItems + $nbChargeItems), $diff in xs:decimal($BT109 - $BT131Sum + $BT92Sum - $BT99Sum), $abs in xs:decimal(abs($diff)) return $abs le $maxTolerance">
+                                test="for $BT109 in xs:decimal(ram:TaxBasisTotalAmount), $BT131Sum in xs:decimal(round(sum(../../ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount/xs:decimal(.)) * xs:decimal(100)) div xs:decimal(100)), $BT92Sum in xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false']/ram:ActualAmount/xs:decimal(.))* 10 * 10 ) div 100), $BT99Sum in xs:decimal(xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']/ram:ActualAmount/xs:decimal(.))* 100 ) div 100)+ xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge/ram:AppliedAmount/xs:decimal(.))* 10 * 10 ) div 100)), $nbLineItems in xs:decimal(count(../../ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL'])), $nbAllowanceItems in xs:decimal(count(../ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false'])), $nbChargeItems in xs:decimal(count(../ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']) + count(../ram:SpecifiedLogisticsServiceCharge)), $tolerance in xs:decimal(0.01), $maxTolerance in $tolerance * ($nbLineItems + $nbAllowanceItems + $nbChargeItems), $diff in xs:decimal($BT109 - $BT131Sum + $BT92Sum - $BT99Sum), $abs in xs:decimal(abs($diff)) return $abs le $maxTolerance">
                <xsl:attribute name="id">BR-FREXT-CO-13</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
@@ -720,10 +705,10 @@
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="for $Currency in ../ram:InvoiceCurrencyCode,&#xD;&#xA;   $BT109 in xs:decimal(ram:TaxBasisTotalAmount),&#xD;&#xA;   $BT110 in xs:decimal(ram:TaxTotalAmount[@currencyID=$Currency]),   &#xD;&#xA;   $BT112 in xs:decimal(ram:GrandTotalAmount),&#xD;&#xA;   $nbTaxTotalAmountInvoiceCurrency in count (ram:TaxTotalAmount[@currencyID=$Currency] ),&#xD;&#xA;   $nbLineItems in xs:decimal(count(../../ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode)&#xD;&#xA; or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL'])),&#xD;&#xA;   $nbAllowanceItems in xs:decimal(count(../ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false'])),&#xD;&#xA;   $nbChargeItems in xs:decimal(count(../ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']) + count(../ram:SpecifiedLogisticsServiceCharge)),&#xD;&#xA;   $tolerance in xs:decimal(0.01),&#xD;&#xA;   $maxTolerance in $tolerance * ($nbLineItems + $nbAllowanceItems + $nbChargeItems),&#xD;&#xA;   $diff in xs:decimal($BT112 - $BT110 - $BT109),&#xD;&#xA;   $abs in xs:decimal(abs($diff))&#xD;&#xA;return&#xD;&#xA;  ($abs le $maxTolerance and $nbTaxTotalAmountInvoiceCurrency eq 1) or&#xD;&#xA;  ($BT109 eq $BT112 and $nbTaxTotalAmountInvoiceCurrency ne 1)"/>
+         <xsl:when test="for $Currency in ../ram:InvoiceCurrencyCode,&#xD;&#xA;   $BT109 in xs:decimal(ram:TaxBasisTotalAmount[1]),&#xD;&#xA;   $BT110 in xs:decimal(ram:TaxTotalAmount[@currencyID=$Currency][1]),   &#xD;&#xA;   $BT112 in xs:decimal(ram:GrandTotalAmount[1]),&#xD;&#xA;   $nbTaxTotalAmountInvoiceCurrency in count (ram:TaxTotalAmount[@currencyID=$Currency] ),&#xD;&#xA;   $nbLineItems in xs:decimal(count(../../ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode)&#xD;&#xA; or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL'])),&#xD;&#xA;   $nbAllowanceItems in xs:decimal(count(../ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false'])),&#xD;&#xA;   $nbChargeItems in xs:decimal(count(../ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']) + count(../ram:SpecifiedLogisticsServiceCharge)),&#xD;&#xA;   $tolerance in xs:decimal(0.01),&#xD;&#xA;   $maxTolerance in $tolerance * ($nbLineItems + $nbAllowanceItems + $nbChargeItems),&#xD;&#xA;   $diff in xs:decimal($BT112 - $BT110 - $BT109),&#xD;&#xA;   $abs in xs:decimal(abs($diff))&#xD;&#xA;return&#xD;&#xA;  ($abs le $maxTolerance and $nbTaxTotalAmountInvoiceCurrency eq 1) or&#xD;&#xA;  ($BT109 eq $BT112 and $nbTaxTotalAmountInvoiceCurrency ne 1)"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="for $Currency in ../ram:InvoiceCurrencyCode, $BT109 in xs:decimal(ram:TaxBasisTotalAmount), $BT110 in xs:decimal(ram:TaxTotalAmount[@currencyID=$Currency]), $BT112 in xs:decimal(ram:GrandTotalAmount), $nbTaxTotalAmountInvoiceCurrency in count (ram:TaxTotalAmount[@currencyID=$Currency] ), $nbLineItems in xs:decimal(count(../../ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL'])), $nbAllowanceItems in xs:decimal(count(../ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false'])), $nbChargeItems in xs:decimal(count(../ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']) + count(../ram:SpecifiedLogisticsServiceCharge)), $tolerance in xs:decimal(0.01), $maxTolerance in $tolerance * ($nbLineItems + $nbAllowanceItems + $nbChargeItems), $diff in xs:decimal($BT112 - $BT110 - $BT109), $abs in xs:decimal(abs($diff)) return ($abs le $maxTolerance and $nbTaxTotalAmountInvoiceCurrency eq 1) or ($BT109 eq $BT112 and $nbTaxTotalAmountInvoiceCurrency ne 1)">
+                                test="for $Currency in ../ram:InvoiceCurrencyCode, $BT109 in xs:decimal(ram:TaxBasisTotalAmount[1]), $BT110 in xs:decimal(ram:TaxTotalAmount[@currencyID=$Currency][1]), $BT112 in xs:decimal(ram:GrandTotalAmount[1]), $nbTaxTotalAmountInvoiceCurrency in count (ram:TaxTotalAmount[@currencyID=$Currency] ), $nbLineItems in xs:decimal(count(../../ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL'])), $nbAllowanceItems in xs:decimal(count(../ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='false'])), $nbChargeItems in xs:decimal(count(../ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator='true']) + count(../ram:SpecifiedLogisticsServiceCharge)), $tolerance in xs:decimal(0.01), $maxTolerance in $tolerance * ($nbLineItems + $nbAllowanceItems + $nbChargeItems), $diff in xs:decimal($BT112 - $BT110 - $BT109), $abs in xs:decimal(abs($diff)) return ($abs le $maxTolerance and $nbTaxTotalAmountInvoiceCurrency eq 1) or ($BT109 eq $BT112 and $nbTaxTotalAmountInvoiceCurrency ne 1)">
                <xsl:attribute name="id">BR-FREXT-CO-15</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
@@ -736,10 +721,10 @@
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(xs:decimal(ram:DuePayableAmount) = xs:decimal(ram:GrandTotalAmount) - xs:decimal(ram:TotalPrepaidAmount) + xs:decimal(ram:RoundingAmount)) or      ((xs:decimal(ram:DuePayableAmount) = xs:decimal(ram:GrandTotalAmount) + xs:decimal(ram:RoundingAmount)) and not (xs:decimal(ram:TotalPrepaidAmount))) or      ((xs:decimal(ram:DuePayableAmount) = xs:decimal(ram:GrandTotalAmount) - xs:decimal(ram:TotalPrepaidAmount)) and not (xs:decimal(ram:RoundingAmount))) or      ((xs:decimal(ram:DuePayableAmount) = xs:decimal(ram:GrandTotalAmount)) and not (xs:decimal(ram:TotalPrepaidAmount)) and not (xs:decimal(ram:RoundingAmount)))"/>
+         <xsl:when test="(xs:decimal(ram:DuePayableAmount[1]) = xs:decimal(ram:GrandTotalAmount[1]) - xs:decimal(ram:TotalPrepaidAmount[1]) + xs:decimal(ram:RoundingAmount[1]))     or ((xs:decimal(ram:DuePayableAmount[1]) = xs:decimal(ram:GrandTotalAmount[1]) + xs:decimal(ram:RoundingAmount[1])) and not(ram:TotalPrepaidAmount))     or ((xs:decimal(ram:DuePayableAmount[1]) = xs:decimal(ram:GrandTotalAmount[1]) - xs:decimal(ram:TotalPrepaidAmount[1])) and not(ram:RoundingAmount))     or ((xs:decimal(ram:DuePayableAmount[1]) = xs:decimal(ram:GrandTotalAmount[1])) and not(ram:TotalPrepaidAmount) and not(ram:RoundingAmount))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(xs:decimal(ram:DuePayableAmount) = xs:decimal(ram:GrandTotalAmount) - xs:decimal(ram:TotalPrepaidAmount) + xs:decimal(ram:RoundingAmount)) or ((xs:decimal(ram:DuePayableAmount) = xs:decimal(ram:GrandTotalAmount) + xs:decimal(ram:RoundingAmount)) and not (xs:decimal(ram:TotalPrepaidAmount))) or ((xs:decimal(ram:DuePayableAmount) = xs:decimal(ram:GrandTotalAmount) - xs:decimal(ram:TotalPrepaidAmount)) and not (xs:decimal(ram:RoundingAmount))) or ((xs:decimal(ram:DuePayableAmount) = xs:decimal(ram:GrandTotalAmount)) and not (xs:decimal(ram:TotalPrepaidAmount)) and not (xs:decimal(ram:RoundingAmount)))">
+                                test="(xs:decimal(ram:DuePayableAmount[1]) = xs:decimal(ram:GrandTotalAmount[1]) - xs:decimal(ram:TotalPrepaidAmount[1]) + xs:decimal(ram:RoundingAmount[1])) or ((xs:decimal(ram:DuePayableAmount[1]) = xs:decimal(ram:GrandTotalAmount[1]) + xs:decimal(ram:RoundingAmount[1])) and not(ram:TotalPrepaidAmount)) or ((xs:decimal(ram:DuePayableAmount[1]) = xs:decimal(ram:GrandTotalAmount[1]) - xs:decimal(ram:TotalPrepaidAmount[1])) and not(ram:RoundingAmount)) or ((xs:decimal(ram:DuePayableAmount[1]) = xs:decimal(ram:GrandTotalAmount[1])) and not(ram:TotalPrepaidAmount) and not(ram:RoundingAmount))">
                <xsl:attribute name="id">BR-CO-16</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
@@ -902,7 +887,7 @@
       <xsl:apply-templates select="*" mode="M10"/>
    </xsl:template>
    <!--RULE -->
-   <xsl:template match="/rsm:CrossIndustryInvoice" priority="1051" mode="M10">
+   <xsl:template match="/rsm:CrossIndustryInvoice" priority="1058" mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="/rsm:CrossIndustryInvoice"/>
       <!--ASSERT -->
@@ -1117,10 +1102,10 @@
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(number(//ram:DuePayableAmount) &gt; 0 and ((//ram:SpecifiedTradePaymentTerms/ram:DueDateDateTime) or (//ram:SpecifiedTradePaymentTerms/ram:Description))) or not(number(//ram:DuePayableAmount)&gt;0)"/>
+         <xsl:when test="(xs:decimal(//ram:DuePayableAmount) &gt; 0 and ((//ram:SpecifiedTradePaymentTerms/ram:DueDateDateTime) or (//ram:SpecifiedTradePaymentTerms/ram:Description))) or not(xs:decimal(//ram:DuePayableAmount)&gt;0)"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(number(//ram:DuePayableAmount) &gt; 0 and ((//ram:SpecifiedTradePaymentTerms/ram:DueDateDateTime) or (//ram:SpecifiedTradePaymentTerms/ram:Description))) or not(number(//ram:DuePayableAmount)&gt;0)">
+                                test="(xs:decimal(//ram:DuePayableAmount) &gt; 0 and ((//ram:SpecifiedTradePaymentTerms/ram:DueDateDateTime) or (//ram:SpecifiedTradePaymentTerms/ram:Description))) or not(xs:decimal(//ram:DuePayableAmount)&gt;0)">
                <xsl:attribute name="id">BR-CO-25</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
@@ -1132,136 +1117,136 @@
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="((count(//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='S']) + count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='S'])) &gt;=2 or not (//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='S'])) and      ((count(//ram:CategoryTradeTax[ram:CategoryCode='S']) + count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='S'])) &gt;=2 or not (//ram:CategoryTradeTax[ram:CategoryCode='S']))"/>
+         <xsl:when test="(count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='S'])=0 and count(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='S'])=0 and count(//ram:CategoryTradeTax[ram:CategoryCode='S'])=0) or ( count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='S'])&gt;=1 and (exists(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='S']) or exists(//ram:CategoryTradeTax[ram:CategoryCode='S'])))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="((count(//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='S']) + count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='S'])) &gt;=2 or not (//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='S'])) and ((count(//ram:CategoryTradeTax[ram:CategoryCode='S']) + count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='S'])) &gt;=2 or not (//ram:CategoryTradeTax[ram:CategoryCode='S']))">
-               <xsl:attribute name="id">BR-S-01</xsl:attribute>
+                                test="(count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='S'])=0 and count(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='S'])=0 and count(//ram:CategoryTradeTax[ram:CategoryCode='S'])=0) or ( count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='S'])&gt;=1 and (exists(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='S']) or exists(//ram:CategoryTradeTax[ram:CategoryCode='S'])))">
+               <xsl:attribute name="id">BR-FREXT-S-01</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>[BR-S-01]-An Invoice that contains an Invoice line (BG-25), a Document level allowance (BG-20) or a Document level charge (BG-21) where the VAT category code (BT-151, BT-95 or BT-102) is "Standard rated" shall contain in the VAT breakdown (BG-23) at least one VAT category code (BT-118) equal with "Standard rated".</svrl:text>
+               <svrl:text>[BR-FREXT-S-01]-An Invoice that contains an Invoice line (BG-25) where the "Subtype of invoice line item" (EXT-FR-FE-163 / BT-X-8) has the value "DETAIL" or is not specified, a Document level allowance (BG-20) or a Document level charge or tax (BG-21) where the VAT category code (BT-151, BT-95 or BT-102) is “S” ("Standard rated") shall contain in the VAT breakdown (BG-23) at least one VAT category code (BT-118) equal with “S” ("Standard rated").</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='Z'])=0 and count(//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='Z'])=0 and count(//ram:CategoryTradeTax[ram:CategoryCode='Z'])=0) or ( count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='Z'])=1 and (exists(//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='Z']) or exists(//ram:CategoryTradeTax[ram:CategoryCode='Z'])))"/>
+         <xsl:when test="(count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='Z'])=0 and count(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='Z'])=0 and count(//ram:CategoryTradeTax[ram:CategoryCode='Z'])=0) or ( count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='Z'])&gt;=1 and (exists(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='Z']) or exists(//ram:CategoryTradeTax[ram:CategoryCode='Z'])))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='Z'])=0 and count(//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='Z'])=0 and count(//ram:CategoryTradeTax[ram:CategoryCode='Z'])=0) or ( count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='Z'])=1 and (exists(//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='Z']) or exists(//ram:CategoryTradeTax[ram:CategoryCode='Z'])))">
-               <xsl:attribute name="id">BR-Z-01</xsl:attribute>
+                                test="(count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='Z'])=0 and count(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='Z'])=0 and count(//ram:CategoryTradeTax[ram:CategoryCode='Z'])=0) or ( count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='Z'])&gt;=1 and (exists(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='Z']) or exists(//ram:CategoryTradeTax[ram:CategoryCode='Z'])))">
+               <xsl:attribute name="id">BR-FREXT-Z-01</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>[BR-Z-01]-An Invoice that contains an Invoice line (BG-25), a Document level allowance (BG-20) or a Document level charge (BG-21) where the VAT category code (BT-151, BT-95 or BT-102) is "Zero rated" shall contain in the VAT breakdown (BG-23) exactly one VAT category code (BT-118) equal with "Zero rated".</svrl:text>
+               <svrl:text>[BR-FREXT-Z-01]-An Invoice that contains an Invoice line (BG-25) where the "Subtype of invoice item" (BT-X-8) has the value "DETAIL" or is not specified, a Document level allowance (BG-20) or a Document level charge or tax (BG-21) where the VAT category code (BT-151, BT-95 or BT-102) is “Z” ("Zero Rated") shall contain in the VAT breakdown (BG-23) at least one VAT category code (BT-118) equal with “Z” ("Zero Rated").</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='E'])=0 and count(//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='E'])=0 and count(//ram:CategoryTradeTax[ram:CategoryCode='E'])=0) or ( count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='E'])=1 and (exists(//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='E']) or exists(//ram:CategoryTradeTax[ram:CategoryCode='E'])))"/>
+         <xsl:when test="(count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='E'])=0 and count(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='E'])=0 and count(//ram:CategoryTradeTax[ram:CategoryCode='E'])=0) or ( count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='E'])&gt;=1 and (exists(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='E']) or exists(//ram:CategoryTradeTax[ram:CategoryCode='E'])))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='E'])=0 and count(//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='E'])=0 and count(//ram:CategoryTradeTax[ram:CategoryCode='E'])=0) or ( count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='E'])=1 and (exists(//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='E']) or exists(//ram:CategoryTradeTax[ram:CategoryCode='E'])))">
-               <xsl:attribute name="id">BR-E-01</xsl:attribute>
+                                test="(count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='E'])=0 and count(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='E'])=0 and count(//ram:CategoryTradeTax[ram:CategoryCode='E'])=0) or ( count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='E'])&gt;=1 and (exists(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='E']) or exists(//ram:CategoryTradeTax[ram:CategoryCode='E'])))">
+               <xsl:attribute name="id">BR-FREXT-E-01</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>[BR-E-01]-An Invoice that contains an Invoice line (BG-25), a Document level allowance (BG-20) or a Document level charge (BG-21) where the VAT category code (BT-151, BT-95 or BT-102) is "Exempt from VAT" shall contain exactly one VAT breakdown (BG-23) with the VAT category code (BT-118) equal to "Exempt from VAT".</svrl:text>
+               <svrl:text>[BR-FREXT-E-01]-An Invoice that contains an Invoice line (BG-25) where the "Subtype of invoice line item" (EXT-FR-FE-163 / BT-X-8) has the value "DETAIL" or is not specified, a Document level allowance (BG-20) or a Document level charge or tax (BG-21) where the VAT category code (BT-151, BT-95 or BT-102) is "E" ("Exempt from VAT") shall contain in the VAT breakdown (BG-23) at least one VAT category code (BT-118) equal with "E" ("Exempt from VAT").</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='AE'])=0 and count(//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='AE'])=0 and count(//ram:CategoryTradeTax[ram:CategoryCode='AE'])=0) or ( count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='AE'])=1 and (exists(//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='AE']) or exists(//ram:CategoryTradeTax[ram:CategoryCode='AE'])))"/>
+         <xsl:when test="(count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='AE'])=0 and count(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='AE'])=0 and count(//ram:CategoryTradeTax[ram:CategoryCode='AE'])=0) or ( count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='AE'])&gt;=1 and (exists(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='AE']) or exists(//ram:CategoryTradeTax[ram:CategoryCode='AE'])))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='AE'])=0 and count(//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='AE'])=0 and count(//ram:CategoryTradeTax[ram:CategoryCode='AE'])=0) or ( count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='AE'])=1 and (exists(//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='AE']) or exists(//ram:CategoryTradeTax[ram:CategoryCode='AE'])))">
-               <xsl:attribute name="id">BR-AE-01</xsl:attribute>
+                                test="(count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='AE'])=0 and count(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='AE'])=0 and count(//ram:CategoryTradeTax[ram:CategoryCode='AE'])=0) or ( count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='AE'])&gt;=1 and (exists(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='AE']) or exists(//ram:CategoryTradeTax[ram:CategoryCode='AE'])))">
+               <xsl:attribute name="id">BR-FREXT-AE-01</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>[BR-AE-01]-An Invoice that contains an Invoice line (BG-25), a Document level allowance (BG-20) or a Document level charge (BG-21) where the VAT category code (BT-151, BT-95 or BT-102) is "Reverse charge" shall contain in the VAT breakdown (BG-23) exactly one VAT category code (BT-118) equal with "VAT reverse charge".</svrl:text>
+               <svrl:text>[BR-FREXT-AE-01]-An Invoice that contains an Invoice line (BG-25) where the "Subtype of invoice line item" (EXT-FR-FE-163 / BT-X-8) has the value "DETAIL" or is not specified, a Document level allowance (BG-20) or a Document level charge or tax (BG-21) where the VAT category code (BT-151, BT-95 or BT-102) is “AE” ("Reverse Charge") shall contain in the VAT breakdown (BG-23) at least one VAT category code (BT-118) equal with “AE” ("Reverse Charge").</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='K'])=0 and count(//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='K'])=0 and count(//ram:CategoryTradeTax[ram:CategoryCode='K'])=0) or ( count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='K'])=1 and (exists(//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='K']) or exists(//ram:CategoryTradeTax[ram:CategoryCode='K'])))"/>
+         <xsl:when test="(count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='K'])=0 and count(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='K'])=0 and count(//ram:CategoryTradeTax[ram:CategoryCode='K'])=0) or ( count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='K'])&gt;=1 and (exists(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='K']) or exists(//ram:CategoryTradeTax[ram:CategoryCode='K'])))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='K'])=0 and count(//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='K'])=0 and count(//ram:CategoryTradeTax[ram:CategoryCode='K'])=0) or ( count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='K'])=1 and (exists(//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='K']) or exists(//ram:CategoryTradeTax[ram:CategoryCode='K'])))">
-               <xsl:attribute name="id">BR-IC-01</xsl:attribute>
+                                test="(count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='K'])=0 and count(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='K'])=0 and count(//ram:CategoryTradeTax[ram:CategoryCode='K'])=0) or ( count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='K'])&gt;=1 and (exists(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='K']) or exists(//ram:CategoryTradeTax[ram:CategoryCode='K'])))">
+               <xsl:attribute name="id">BR-FREXT-IC-01</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>[BR-IC-01]-An Invoice that contains an Invoice line (BG-25), a Document level allowance (BG-20) or a Document level charge (BG-21) where the VAT category code (BT-151, BT-95 or BT-102) is "Intra-community supply" shall contain in the VAT breakdown (BG-23) exactly one VAT category code (BT-118) equal with "Intra-community supply".</svrl:text>
+               <svrl:text>[BR-FREXT-IC-01]-An Invoice that contains an Invoice line (BG-25) where the "Subtype of invoice line item" (BT-X-8) has the value "DETAIL" or is not specified, a Document level allowance (BG-20) or a Document level charge or tax (BG-21) where the VAT category code (BT-151, BT-95 or BT-102) is “K” ("Intra-community supply") shall contain in the VAT breakdown (BG-23) at least one VAT category code (BT-118) equal with “K” ("Intra-community supply").</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='G'])=0 and count(//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='G'])=0 and count(//ram:CategoryTradeTax[ram:CategoryCode='G'])=0) or ( count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='G'])=1 and (exists(//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='G']) or exists(//ram:CategoryTradeTax[ram:CategoryCode='G'])))"/>
+         <xsl:when test="(count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='G'])=0 and count(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='G'])=0 and count(//ram:CategoryTradeTax[ram:CategoryCode='G'])=0) or ( count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='G'])&gt;=1 and (exists(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='G']) or exists(//ram:CategoryTradeTax[ram:CategoryCode='G'])))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='G'])=0 and count(//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='G'])=0 and count(//ram:CategoryTradeTax[ram:CategoryCode='G'])=0) or ( count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='G'])=1 and (exists(//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='G']) or exists(//ram:CategoryTradeTax[ram:CategoryCode='G'])))">
-               <xsl:attribute name="id">BR-G-01</xsl:attribute>
+                                test="(count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='G'])=0 and count(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='G'])=0 and count(//ram:CategoryTradeTax[ram:CategoryCode='G'])=0) or ( count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='G'])&gt;=1 and (exists(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='G']) or exists(//ram:CategoryTradeTax[ram:CategoryCode='G'])))">
+               <xsl:attribute name="id">BR-FREXT-G-01</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>[BR-G-01]-An Invoice that contains an Invoice line (BG-25), a Document level allowance (BG-20) or a Document level charge (BG-21) where the VAT category code (BT-151, BT-95 or BT-102) is "Export outside the EU" shall contain in the VAT breakdown (BG-23) exactly one VAT category code (BT-118) equal with "Export outside the EU".</svrl:text>
+               <svrl:text>[BR-FREXT-G-01]-An Invoice that contains an Invoice line (BG-25) where the "Subtype of invoice line item" ( BT-X-8) has the value "DETAIL" or is not specified, a Document level allowance (BG-20) or a Document level charge or tax (BG-21) where the VAT category code (BT-151, BT-95 or BT-102) is “G” ("Export outside the EU") shall contain in the VAT breakdown (BG-23) at least one VAT category code (BT-118) equal with “G” ("Export outside the EU").</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="not(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='O']) or (      count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='O'])=1 and      (exists(//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='O']) or     exists(//ram:CategoryTradeTax[ram:CategoryCode='O'])))"/>
+         <xsl:when test="(count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='O'])=0 and count(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='O'])=0 and count(//ram:CategoryTradeTax[ram:CategoryCode='O'])=0) or ( count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='O'])&gt;=1 and (exists(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='O']) or exists(//ram:CategoryTradeTax[ram:CategoryCode='O'])))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="not(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='O']) or ( count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='O'])=1 and (exists(//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='O']) or exists(//ram:CategoryTradeTax[ram:CategoryCode='O'])))">
-               <xsl:attribute name="id">BR-O-01</xsl:attribute>
+                                test="(count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='O'])=0 and count(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='O'])=0 and count(//ram:CategoryTradeTax[ram:CategoryCode='O'])=0) or ( count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='O'])&gt;=1 and (exists(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='O']) or exists(//ram:CategoryTradeTax[ram:CategoryCode='O'])))">
+               <xsl:attribute name="id">BR-FREXT-O-01</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>[BR-O-01]-An Invoice that contains an Invoice line (BG-25), a Document level allowance (BG-20) or a Document level charge (BG-21) where the VAT category code (BT-151, BT-95 or BT-102) is "Not subject to VAT" shall contain exactly one VAT breakdown group (BG-23) with the VAT category code (BT-118) equal to "Not subject to VAT".</svrl:text>
+               <svrl:text>[BR-FREXT-O-01]-An Invoice that contains an Invoice line (BG-25) where the "Subtype of invoice line item" (BT-X-8) has the value "DETAIL" or is not specified, a Document level allowance (BG-20) or a Document level charge or tax (BG-21) where the VAT category code (BT-151, BT-95 or BT-102) is “O” ("Not subject to VAT") shall contain in the VAT breakdown (BG-23) at least one VAT category code (BT-118) equal with “O” ("Not subject to VAT").</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="((count(//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='L']) + count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='L'])) &gt;=2 or not (//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='L'])) and      ((count(//ram:CategoryTradeTax[ram:CategoryCode='L']) + count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='L'])) &gt;=2 or not (//ram:CategoryTradeTax[ram:CategoryCode='L']))"/>
+         <xsl:when test="(count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='L'])=0 and count(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='L'])=0 and count(//ram:CategoryTradeTax[ram:CategoryCode='L'])=0) or ( count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='L'])&gt;=1 and (exists(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='L']) or exists(//ram:CategoryTradeTax[ram:CategoryCode='L'])))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="((count(//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='L']) + count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='L'])) &gt;=2 or not (//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='L'])) and ((count(//ram:CategoryTradeTax[ram:CategoryCode='L']) + count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='L'])) &gt;=2 or not (//ram:CategoryTradeTax[ram:CategoryCode='L']))">
-               <xsl:attribute name="id">BR-AF-01</xsl:attribute>
+                                test="(count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='L'])=0 and count(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='L'])=0 and count(//ram:CategoryTradeTax[ram:CategoryCode='L'])=0) or ( count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='L'])&gt;=1 and (exists(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='L']) or exists(//ram:CategoryTradeTax[ram:CategoryCode='L'])))">
+               <xsl:attribute name="id">BR-FREXT-AF-01</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>[BR-AF-01]-An Invoice that contains an Invoice line (BG-25), a Document level allowance (BG-20) or a Document level charge (BG-21) where the VAT category code (BT-151, BT-95 or BT-102) is "IGIC" shall contain in the VAT breakdown (BG-23) at least one VAT category code (BT-118) equal with "IGIC".</svrl:text>
+               <svrl:text>[BR-FREXT-AF-01]-An Invoice that contains an Invoice line (BG-25) where the "Subtype of invoice line item" (BT-X-8) has the value "DETAIL" or is not specified, a Document level allowance (BG-20) or a Document level charge or tax (BG-21) where the VAT category code (BT-151, BT-95 or BT-102) is “L” ("Canary Islands tax") shall contain in the VAT breakdown (BG-23) at least one VAT category code (BT-118) equal with “L” ("Canary Islands tax").</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="((count(//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='M']) + count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='M'])) &gt;=2 or not (//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='M'])) and      ((count(//ram:CategoryTradeTax[ram:CategoryCode='M']) + count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='M'])) &gt;=2 or not (//ram:CategoryTradeTax[ram:CategoryCode='M']))"/>
+         <xsl:when test="(count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='M'])=0 and count(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='M'])=0 and count(//ram:CategoryTradeTax[ram:CategoryCode='M'])=0) or ( count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='M'])&gt;=1 and (exists(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='M']) or exists(//ram:CategoryTradeTax[ram:CategoryCode='M'])))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="((count(//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='M']) + count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='M'])) &gt;=2 or not (//ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='M'])) and ((count(//ram:CategoryTradeTax[ram:CategoryCode='M']) + count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='M'])) &gt;=2 or not (//ram:CategoryTradeTax[ram:CategoryCode='M']))">
-               <xsl:attribute name="id">BR-AG-01</xsl:attribute>
+                                test="(count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='M'])=0 and count(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='M'])=0 and count(//ram:CategoryTradeTax[ram:CategoryCode='M'])=0) or ( count(//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='M'])&gt;=1 and (exists(//ram:SpecifiedLineTradeSettlement[not(../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ../ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:ApplicableTradeTax[ram:CategoryCode='M']) or exists(//ram:CategoryTradeTax[ram:CategoryCode='M'])))">
+               <xsl:attribute name="id">BR-FREXT-AG-01</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>[BR-AG-01]-An Invoice that contains an Invoice line (BG-25), a Document level allowance (BG-20) or a Document level charge (BG-21) where the VAT category code (BT-151, BT-95 or BT-102) is "IPSI" shall contain in the VAT breakdown (BG-23) at least one VAT category code (BT-118) equal with "IPSI".</svrl:text>
+               <svrl:text>[BR-FREXT-AG-01]-An Invoice that contains an Invoice line (BG-25) where the "Subtype of invoice line item" (BT-X-8) has the value "DETAIL" or is not specified, a Document level allowance (BG-20) or a Document level charge or tax (BG-21) where the VAT category code (BT-151, BT-95 or BT-102) is “M” ("Ceuta and Mellita tax") shall contain in the VAT breakdown (BG-23) at least one VAT category code (BT-118) equal with “M” ("Ceuta and Mellita tax").</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -1299,7 +1284,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:IncludedSupplyChainTradeLineItem"
-                 priority="1050"
+                 priority="1057"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:IncludedSupplyChainTradeLineItem"/>
@@ -1330,21 +1315,6 @@
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>[BR-25]-Each Invoice line (BG-25) shall contain the Item name (BT-153).</svrl:text>
-            </svrl:failed-assert>
-         </xsl:otherwise>
-      </xsl:choose>
-      <!--ASSERT -->
-      <xsl:choose>
-         <xsl:when test="(ram:SpecifiedLineTradeAgreement/ram:GrossPriceProductTradePrice/ram:ChargeAmount &gt;= 0) or not(ram:SpecifiedLineTradeAgreement/ram:GrossPriceProductTradePrice/ram:ChargeAmount)"/>
-         <xsl:otherwise>
-            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(ram:SpecifiedLineTradeAgreement/ram:GrossPriceProductTradePrice/ram:ChargeAmount &gt;= 0) or not(ram:SpecifiedLineTradeAgreement/ram:GrossPriceProductTradePrice/ram:ChargeAmount)">
-               <xsl:attribute name="id">BR-28</xsl:attribute>
-               <xsl:attribute name="flag">fatal</xsl:attribute>
-               <xsl:attribute name="location">
-                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
-               </xsl:attribute>
-               <svrl:text>[BR-28]-The Item gross price (BT-148) shall NOT be negative.</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -1396,97 +1366,81 @@
       <xsl:apply-templates select="*" mode="M10"/>
    </xsl:template>
    <!--RULE -->
-   <xsl:template match="//ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode)&#xD;&#xA;   or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']"
-                 priority="1049"
+   <xsl:template match="//ram:IncludedSupplyChainTradeLineItem/ram:AssociatedDocumentLineDocument[not(ram:LineStatusReasonCode) or ram:LineStatusReasonCode = 'DETAIL']"
+                 priority="1056"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                       context="//ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode)&#xD;&#xA;   or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']"/>
+                       context="//ram:IncludedSupplyChainTradeLineItem/ram:AssociatedDocumentLineDocument[not(ram:LineStatusReasonCode) or ram:LineStatusReasonCode = 'DETAIL']"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(ram:SpecifiedLineTradeDelivery/ram:BilledQuantity)"/>
+         <xsl:when test="(../ram:SpecifiedLineTradeDelivery/ram:BilledQuantity)"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(ram:SpecifiedLineTradeDelivery/ram:BilledQuantity)">
-               <xsl:attribute name="id">BR-FREXT-22</xsl:attribute>
+                                test="(../ram:SpecifiedLineTradeDelivery/ram:BilledQuantity)">
+               <xsl:attribute name="id">BR-FREXT-BR-22</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>
-          [BR-FREXT-22]-Each invoice item "INVOICE LINE" (BG-25) must contain the quantity of goods or services invoiced in the relevant item as a line item "Invoiced quantity" (BT-129) if the "Subtype of invoice line item" (EXT-FR-FE-163 / BT-X-8) has the value "DETAIL" or is not specified..</svrl:text>
+        [BR-FREXT-BR-22]-Each invoice item "INVOICE LINE" (BG-25) must contain the quantity of goods or services invoiced in the relevant item as a line item "Invoiced quantity" (BT-129) if the "Subtype of invoice line item" (EXT-FR-FE-163 / BT-X-8) has the value "DETAIL" or is not specified..</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(ram:SpecifiedLineTradeDelivery/ram:BilledQuantity/@unitCode)"/>
+         <xsl:when test="(../ram:SpecifiedLineTradeDelivery/ram:BilledQuantity/@unitCode)"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(ram:SpecifiedLineTradeDelivery/ram:BilledQuantity/@unitCode)">
-               <xsl:attribute name="id">BR-FREXT-23</xsl:attribute>
+                                test="(../ram:SpecifiedLineTradeDelivery/ram:BilledQuantity/@unitCode)">
+               <xsl:attribute name="id">BR-FREXT-BR-23</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>
-          [BR-FREXT-23]-An Invoice line (BG-25) shall have an Invoiced quantity unit of measure code (BT-130) if the "Subtype of invoice line item" (EXT-FR-FE-163 / BT-X-8) has the value "DETAIL" or is not specified..</svrl:text>
+        [BR-FREXT-BR-23]-An Invoice line (BG-25) shall have an Invoiced quantity unit of measure code (BT-130) if the "Subtype of invoice line item" (EXT-FR-FE-163 / BT-X-8) has the value "DETAIL" or is not specified..</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount)"/>
+         <xsl:when test="(../ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount)"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount)">
-               <xsl:attribute name="id">BR-FREXT-24</xsl:attribute>
+                                test="(../ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeSettlementLineMonetarySummation/ram:LineTotalAmount)">
+               <xsl:attribute name="id">BR-FREXT-BR-24</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text> 
-          [BR-FREXT-24]-Each Invoice line (BG-25) shall have an Invoice line net amount (BT-131) if the "Subtype of invoice line item" (EXT-FR-FE-163 / BT-X-8) has the value "DETAIL" or is not specified.</svrl:text>
+        [BR-FREXT-BR-24]-Each Invoice line (BG-25) shall have an Invoice line net amount (BT-131) if the "Subtype of invoice line item" (EXT-FR-FE-163 / BT-X-8) has the value "DETAIL" or is not specified.</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(ram:SpecifiedLineTradeAgreement/ram:NetPriceProductTradePrice/ram:ChargeAmount)"/>
+         <xsl:when test="(../ram:SpecifiedLineTradeAgreement/ram:NetPriceProductTradePrice/ram:ChargeAmount)"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(ram:SpecifiedLineTradeAgreement/ram:NetPriceProductTradePrice/ram:ChargeAmount)">
-               <xsl:attribute name="id">BR-FREXT-26</xsl:attribute>
+                                test="(../ram:SpecifiedLineTradeAgreement/ram:NetPriceProductTradePrice/ram:ChargeAmount)">
+               <xsl:attribute name="id">BR-FREXT-BR-26</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>       
-          [BR-FREXT-26]-Each Invoice line (BG-25) shall contain the Item net price (BT-146) if the "Subtype of invoice line item" (EXT-FR-FE-163 / BT-X-8) has the value "DETAIL" or is not specified..</svrl:text>
+        [BR-FREXT-BR-26]-Each Invoice line (BG-25) shall contain the Item net price (BT-146) if the "Subtype of invoice line item" (EXT-FR-FE-163 / BT-X-8) has the value "DETAIL" or is not specified..</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(ram:SpecifiedLineTradeAgreement/ram:NetPriceProductTradePrice/ram:ChargeAmount) &gt;= 0"/>
+         <xsl:when test="(../ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[upper-case(ram:TypeCode) = 'VAT']/ram:CategoryCode)"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(ram:SpecifiedLineTradeAgreement/ram:NetPriceProductTradePrice/ram:ChargeAmount) &gt;= 0">
-               <xsl:attribute name="id">BR-FREXT-27</xsl:attribute>
-               <xsl:attribute name="flag">fatal</xsl:attribute>
-               <xsl:attribute name="location">
-                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
-               </xsl:attribute>
-               <svrl:text>
-          [BR-FREXT-27]-TIf the "Subtype of invoice item" (EXT-FR-FE-163 / BT-X-8) has the value "DETAIL" or is not specified, the "Item net price" (BT-146) shall be present and not negative. If the "Subtype of invoice item" (EXT-FR-FE-163 / BT-X-8) has any other value, the "Item net price" (BT-146) may be omitted. If present, it shall not be negative.</svrl:text>
-            </svrl:failed-assert>
-         </xsl:otherwise>
-      </xsl:choose>
-      <!--ASSERT -->
-      <xsl:choose>
-         <xsl:when test="(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[upper-case(ram:TypeCode) = 'VAT']/ram:CategoryCode)"/>
-         <xsl:otherwise>
-            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[upper-case(ram:TypeCode) = 'VAT']/ram:CategoryCode)">
+                                test="(../ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[upper-case(ram:TypeCode) = 'VAT']/ram:CategoryCode)">
                <xsl:attribute name="id">BR-FREXT-CO-04</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
@@ -1501,7 +1455,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeAllowanceCharge/ram:ChargeIndicator[udt:Indicator = 'false']"
-                 priority="1048"
+                 priority="1055"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeAllowanceCharge/ram:ChargeIndicator[udt:Indicator = 'false']"/>
@@ -1565,10 +1519,10 @@
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="string-length(substring-after(../ram:ActualAmount,'.'))&lt;=2"/>
+         <xsl:when test="string-length(substring-after(../ram:ActualAmount[1],'.'))&lt;=2"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="string-length(substring-after(../ram:ActualAmount,'.'))&lt;=2">
+                                test="string-length(substring-after(../ram:ActualAmount[1],'.'))&lt;=2">
                <xsl:attribute name="id">BR-DEC-24</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
@@ -1597,7 +1551,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeAllowanceCharge/ram:ChargeIndicator[udt:Indicator = 'true']"
-                 priority="1047"
+                 priority="1054"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:SpecifiedLineTradeSettlement/ram:SpecifiedTradeAllowanceCharge/ram:ChargeIndicator[udt:Indicator = 'true']"/>
@@ -1621,12 +1575,12 @@
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                 test="(../ram:Reason) or (../ram:ReasonCode)">
-               <xsl:attribute name="id">BR-44</xsl:attribute>
+               <xsl:attribute name="id">BR-FREXT-BR-44</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>[BR-44]-Each Invoice line charge (BG-28) shall have an Invoice line charge reason (BT-144) or an Invoice line charge reason code (BT-145).</svrl:text>
+               <svrl:text>[BR-FREXT-BR-44/BR-FREXT-CO-24]-Each Invoice line charge (BG-28) shall have an Invoice line charge  reason  (BT-144)  or  an  Invoice  line  charge  reason code (BT-145) or an Invoice line non VAT tax reason code (BT-193).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -1646,25 +1600,10 @@
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(../ram:Reason) or (../ram:ReasonCode)"/>
+         <xsl:when test="string-length(substring-after(../ram:ActualAmount[1],'.'))&lt;=2"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(../ram:Reason) or (../ram:ReasonCode)">
-               <xsl:attribute name="id">BR-CO-24</xsl:attribute>
-               <xsl:attribute name="flag">fatal</xsl:attribute>
-               <xsl:attribute name="location">
-                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
-               </xsl:attribute>
-               <svrl:text>[BR-CO-24]-Each Invoice line charge (BG-28) shall contain an Invoice line charge reason (BT-144) or an Invoice line charge reason code (BT-145), or both.</svrl:text>
-            </svrl:failed-assert>
-         </xsl:otherwise>
-      </xsl:choose>
-      <!--ASSERT -->
-      <xsl:choose>
-         <xsl:when test="string-length(substring-after(../ram:ActualAmount,'.'))&lt;=2"/>
-         <xsl:otherwise>
-            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="string-length(substring-after(../ram:ActualAmount,'.'))&lt;=2">
+                                test="string-length(substring-after(../ram:ActualAmount[1],'.'))&lt;=2">
                <xsl:attribute name="id">BR-DEC-27</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
@@ -1693,7 +1632,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:SpecifiedLineTradeSettlement/ram:BillingSpecifiedPeriod"
-                 priority="1046"
+                 priority="1053"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:SpecifiedLineTradeSettlement/ram:BillingSpecifiedPeriod"/>
@@ -1731,7 +1670,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:ApplicableHeaderTradeSettlement/ram:BillingSpecifiedPeriod"
-                 priority="1045"
+                 priority="1052"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:ApplicableHeaderTradeSettlement/ram:BillingSpecifiedPeriod"/>
@@ -1769,29 +1708,44 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:ApplicableProductCharacteristic"
-                 priority="1044"
+                 priority="1051"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:ApplicableProductCharacteristic"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(ram:Description) and (ram:Value)"/>
+         <xsl:when test="exists(ram:Description) or exists(ram:TypeCode)"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(ram:Description) and (ram:Value)">
-               <xsl:attribute name="id">BR-54</xsl:attribute>
+                                test="exists(ram:Description) or exists(ram:TypeCode)">
+               <xsl:attribute name="id">BR-FREXT-54-1</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>[BR-54]-Each Item attribute (BG-32) shall contain an Item attribute name (BT-160) and an Item attribute value (BT-161).</svrl:text>
+               <svrl:text>[BR-54-1]-Each Item attribute (BG-32) shall contain an Item attribute name (BT-160) or an Item attribute Code (EXT-FR-FE-159).</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="(exists(ram:Value) and not(exists(ram:ValueMeasure))) or (not(exists(ram:Value)) and (exists(ram:ValueMeasure[@unitCode!=''])))"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="(exists(ram:Value) and not(exists(ram:ValueMeasure))) or (not(exists(ram:Value)) and (exists(ram:ValueMeasure[@unitCode!=''])))">
+               <xsl:attribute name="id">BR-FREXT-54-2</xsl:attribute>
+               <xsl:attribute name="flag">fatal</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>[BR-54-2]-Each Item attribute (BG-32) shall contain an Item attribute Value (BT-161) or an Item ValueQuantity (EXT-FR-FE-160) with @unitCode (EXT-FR-FE-161) and not both.</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
       <xsl:apply-templates select="*" mode="M10"/>
    </xsl:template>
    <!--RULE -->
-   <xsl:template match="//ram:PayeeTradeParty" priority="1043" mode="M10">
+   <xsl:template match="//ram:PayeeTradeParty" priority="1050" mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="//ram:PayeeTradeParty"/>
       <!--ASSERT -->
       <xsl:choose>
@@ -1812,7 +1766,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:SpecifiedTradeSettlementPaymentMeans"
-                 priority="1042"
+                 priority="1049"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:SpecifiedTradeSettlementPaymentMeans"/>
@@ -1834,7 +1788,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:InvoiceReferencedDocument"
-                 priority="1041"
+                 priority="1048"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:InvoiceReferencedDocument"/>
@@ -1856,7 +1810,7 @@
       <xsl:apply-templates select="*" mode="M10"/>
    </xsl:template>
    <!--RULE -->
-   <xsl:template match="//ram:SellerTradeParty" priority="1040" mode="M10">
+   <xsl:template match="//ram:SellerTradeParty" priority="1047" mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:SellerTradeParty"/>
       <!--ASSERT -->
@@ -1878,15 +1832,16 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:SellerTaxRepresentativeTradeParty"
-                 priority="1039"
+                 priority="1046"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:SellerTaxRepresentativeTradeParty"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(ram:Name)"/>
+         <xsl:when test="normalize-space(ram:Name) != ''"/>
          <xsl:otherwise>
-            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl" test="(ram:Name)">
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="normalize-space(ram:Name) != ''">
                <xsl:attribute name="id">BR-18</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
@@ -1912,10 +1867,10 @@
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(ram:PostalTradeAddress/ram:CountryID)"/>
+         <xsl:when test="normalize-space(ram:PostalTradeAddress/ram:CountryID) != ''"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(ram:PostalTradeAddress/ram:CountryID)">
+                                test="normalize-space(ram:PostalTradeAddress/ram:CountryID) != ''">
                <xsl:attribute name="id">BR-20</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
@@ -1944,7 +1899,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxTotalAmount[@currencyID=/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:InvoiceCurrencyCode]"
-                 priority="1038"
+                 priority="1045"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:SpecifiedTradeSettlementHeaderMonetarySummation/ram:TaxTotalAmount[@currencyID=/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:InvoiceCurrencyCode]"/>
@@ -1967,7 +1922,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:SpecifiedTaxRegistration/ram:ID[@schemeID='VA']"
-                 priority="1037"
+                 priority="1044"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:SpecifiedTaxRegistration/ram:ID[@schemeID='VA']"/>
@@ -1989,20 +1944,20 @@
       <xsl:apply-templates select="*" mode="M10"/>
    </xsl:template>
    <!--RULE -->
-   <xsl:template match="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode[. = 'AE'][upper-case(../ram:TypeCode) = 'VAT']"
-                 priority="1036"
+   <xsl:template match="//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='AE'][upper-case(ram:TypeCode) = 'VAT']"
+                 priority="1043"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                       context="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode[. = 'AE'][upper-case(../ram:TypeCode) = 'VAT']"/>
-      <xsl:variable name="rate" select="xs:decimal(../ram:RateApplicablePercent)"/>
-      <xsl:variable name="exempReasonText" select="normalize-space(../ram:ExemptionReason)"/>
+                       context="//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='AE'][upper-case(ram:TypeCode) = 'VAT']"/>
+      <xsl:variable name="rate" select="xs:decimal(ram:RateApplicablePercent)"/>
+      <xsl:variable name="exempReasonText" select="normalize-space(ram:ExemptionReason)"/>
       <xsl:variable name="exempReasonCode"
-                    select="normalize-space(../ram:ExemptionReasonCode)"/>
-      <xsl:variable name="basisAmount" select="xs:decimal(../ram:BasisAmount)"/>
+                    select="normalize-space(ram:ExemptionReasonCode)"/>
+      <xsl:variable name="basisAmount" select="xs:decimal(ram:BasisAmount)"/>
       <xsl:variable name="calculatedAmountBT131"
-                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'AE' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'AE' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
       <xsl:variable name="calculatedAmountBT131ini"
-                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'AE' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate ]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'AE' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate ]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
       <xsl:variable name="allowancesAmountBT92"
                     select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=false() and ram:CategoryTradeTax/ram:CategoryCode='AE' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:CategoryTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:CategoryTradeTax/ram:ExemptionReason) = $exempReasonText]/xs:decimal(ram:ActualAmount)) * 100) div 100)"/>
       <xsl:variable name="allowancesAmountBT92ini"
@@ -2012,77 +1967,54 @@
       <xsl:variable name="chargesAmountBT99ini"
                     select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=true() and ram:CategoryTradeTax/ram:CategoryCode='AE' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]/xs:decimal(ram:ActualAmount)) * 100) div 100)"/>
       <xsl:variable name="nbLineItems"
-                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'AE' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[(not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL') and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'AE' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
       <xsl:variable name="nbLineItemsini"
-                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'AE' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate]))"/>
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[(not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL') and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'AE' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate]))"/>
       <xsl:variable name="nbAllowancesOrCharges"
                     select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:CategoryTradeTax/ram:CategoryCode='AE' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate  and normalize-space(ram:CategoryTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:CategoryTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
       <xsl:variable name="nbAllowancesOrChargesini"
                     select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:CategoryTradeTax/ram:CategoryCode='AE' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]))"/>
+      <xsl:variable name="logisticChargeAmount"
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='AE' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:AppliedTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:AppliedTradeTax/ram:ExemptionReason) = $exempReasonText]/xs:decimal(ram:AppliedAmount)) * 100) div 100)"/>
+      <xsl:variable name="logisticChargeAmountini"
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='AE' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]/xs:decimal(ram:AppliedAmount)) * 100) div 100)"/>
+      <xsl:variable name="nblogisticCharge"
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='AE' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:AppliedTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:AppliedTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
+      <xsl:variable name="nblogisticChargeini"
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='AE' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]))"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))"/>
+         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))">
-               <xsl:attribute name="id">BR-FREXT-AE-08</xsl:attribute>
+                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))">
+               <xsl:attribute name="id">BR-FXEXT-AE-08</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>
-        [BR-FREXT-AE-08] - Code : <xsl:text/>
-                  <xsl:value-of select="../ram:CategoryCode"/>
-                  <xsl:text/>, rate : <xsl:text/>
-                  <xsl:value-of select="$rate"/>
-                  <xsl:text/>, ExemptText : <xsl:text/>
-                  <xsl:value-of select="$exempReasonText"/>
-                  <xsl:text/>, Exemptcode : <xsl:text/>
-                  <xsl:value-of select="$exempReasonCode"/>
-                  <xsl:text/>, basisAmount : <xsl:text/>
-                  <xsl:value-of select="$basisAmount"/>
-                  <xsl:text/>, 
-        SumBT131 : <xsl:text/>
-                  <xsl:value-of select="$calculatedAmountBT131"/>
-                  <xsl:text/>, NBlines : <xsl:text/>
-                  <xsl:value-of select="$nbLineItems"/>
-                  <xsl:text/>, sumAllowBT-92 : <xsl:text/>
-                  <xsl:value-of select="$allowancesAmountBT92"/>
-                  <xsl:text/>, sumChargesBT-99 : <xsl:text/>
-                  <xsl:value-of select="$chargesAmountBT99"/>
-                  <xsl:text/>, NBAllowCharges : <xsl:text/>
-                  <xsl:value-of select="$nbAllowancesOrCharges"/>
-                  <xsl:text/>, 
-        SumBT131ini : <xsl:text/>
-                  <xsl:value-of select="$calculatedAmountBT131ini"/>
-                  <xsl:text/>, NBlinesini : <xsl:text/>
-                  <xsl:value-of select="$nbLineItemsini"/>
-                  <xsl:text/>, sumAllowBT-92ini : <xsl:text/>
-                  <xsl:value-of select="$allowancesAmountBT92ini"/>
-                  <xsl:text/>, sumChargesBT-99ini : <xsl:text/>
-                  <xsl:value-of select="$chargesAmountBT99ini"/>
-                  <xsl:text/>, NBAllowChargesini : <xsl:text/>
-                  <xsl:value-of select="$nbAllowancesOrChargesini"/>
-                  <xsl:text/>, 
-        [BR-FREXT-AE-08] - Dans une ventilation TVA (BG-23) où le code de catégorie TVA (BT-118) est "AE" (Autoliquidation), l’écart absolu entre le montant taxable (BT-116) et la somme des montants nets ligne (BT-131) + charges (BT-99) - remises (BT-92) doit être ≤ 0,01 € * nombre total d’éléments concernés.
+        [BR-FXEXT-AE-08] - In a VAT breakdown (BG-23) where VAT category code (BT-118) is equal to “AE” ("Reverse charge"), Absolute Value of (VAT category taxable amount (BT-116) - ∑ Invoice line net amounts (BT-131) + Σ Document level allowance amounts (BT-92) - Σ Document level charge amounts (BT-99) - Σ Logistics Service fee amounts (BT-x-272)) &lt;= 0,01 * ((Number of line net amounts (BT-131) + Number of Document level allowance amounts (BT-92) + Number of Document level charge amounts (BT-99) + Number of Logistics Service fee amounts (BT-X-272)), where the VAT category code (BT-151, BT-95, BT-102, BT-X-273) is "Reverse charge" (AE), but only for lines where the "Subtype of invoice item" (BT-X-8) has the value "DETAIL" or is not specified.  
+        or the same rule but also taking into account the exemption reasons in Text (BT-120) and Code (BT-121) in BG-23 and the exemption reasons on each line (BT-X-96 / BT-X-97), on Document level Allowances  (BT-173 / BT-174) and on Document Level Charges (BT-175 / BT-176) and on Service logistic charges (BT-X-591 / BT-X-592).
+        One of the two rules must be followed, bearing in mind that ultimately only the second one will have to be followed.
       </svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))"/>
+         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))">
-               <xsl:attribute name="id">BR-FREXT-AE-08ini</xsl:attribute>
+                                test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))">
+               <xsl:attribute name="id">BR-FXEXT-AE-08ini</xsl:attribute>
                <xsl:attribute name="flag">warning</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>
-        [BR-FREXT-AE-08] warning - Code : <xsl:text/>
-                  <xsl:value-of select="../ram:CategoryCode"/>
+        [BR-FXEXT-AE-08] warning - Code : <xsl:text/>
+                  <xsl:value-of select="ram:CategoryCode"/>
                   <xsl:text/>, rate : <xsl:text/>
                   <xsl:value-of select="$rate"/>
                   <xsl:text/>, ExemptText : <xsl:text/>
@@ -2103,25 +2035,25 @@
                   <xsl:text/>, NBAllowChargesini : <xsl:text/>
                   <xsl:value-of select="$nbAllowancesOrChargesini"/>
                   <xsl:text/>, 
-        [BR-FREXT-AE-08ini] - Sans raisons d'exemption - Dans une ventilation TVA (BG-23) où le code de catégorie TVA (BT-118) est "AE" (Exonéré de TVA), l’écart absolu entre le montant taxable (BT-116) et la somme des montants nets ligne (BT-131) + charges (BT-99) - remises (BT-92) doit être ≤ 0,01 € * nombre total d’éléments concernés.    
+        [BR-FXEXT-AE-08ini] - Without Exemption reason EN16931_2017 - In a VAT breakdown (BG-23) where VAT category code (BT-118) is equal to “AE” ("Reverse charge"), Absolute Value of (VAT category taxable amount (BT-116) - ∑ Invoice line net amounts (BT-131) + Σ Document level allowance amounts (BT-92) - Σ Document level charge amounts (BT-99) - Σ Logistics Service fee amounts (BT-x-272)) &lt;= 0,01 * ((Number of line net amounts (BT-131) + Number of Document level allowance amounts (BT-92) + Number of Document level charge amounts (BT-99) + Number of Logistics Service fee amounts (BT-X-272)), where the VAT category code (BT-151, BT-95, BT-102, BT-X-273) is "Reverse charge" (AE), but only for lines where the "Subtype of invoice item" (BT-X-8) has the value ""DETAIL" or is not specified.
       </svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges))"/>
+         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges))">
-               <xsl:attribute name="id">BR-FREXT-AE-08rev</xsl:attribute>
+                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge))">
+               <xsl:attribute name="id">BR-FXEXT-AE-08rev</xsl:attribute>
                <xsl:attribute name="flag">warning</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>
-        [BR-FREXT-AE-08rev] warning - Code : <xsl:text/>
-                  <xsl:value-of select="../ram:CategoryCode"/>
+        [BR-FXEXT-AE-08rev] warning - Code : <xsl:text/>
+                  <xsl:value-of select="ram:CategoryCode"/>
                   <xsl:text/>, rate : <xsl:text/>
                   <xsl:value-of select="$rate"/>
                   <xsl:text/>, ExemptText : <xsl:text/>
@@ -2142,11 +2074,21 @@
                   <xsl:text/>, NBAllowCharges : <xsl:text/>
                   <xsl:value-of select="$nbAllowancesOrCharges"/>
                   <xsl:text/>, 
-        [BR-FREXT-AE-08rev] - Avec raisons d'exemption - Dans une ventilation TVA (BG-23) où le code de catégorie TVA (BT-118) est "AE" (Exonéré de TVA), l’écart absolu entre le montant taxable (BT-116) et la somme des montants nets ligne (BT-131) + charges (BT-99) - remises (BT-92) doit être ≤ 0,01 € * nombre total d’éléments concernés.    
+        [BR-FXEXT-AE-08rev] - With Exemption reason EN16931_2026  - In a VAT breakdown (BG-23) where VAT category code (BT-118) is equal to “AE” ("Reverse charge"), Absolute Value of (VAT category taxable amount (BT-116) - ∑ Invoice line net amounts (BT-131) + Σ Document level allowance amounts (BT-92) - Σ Document level charge amounts (BT-99) - Σ Logistics Service fee amounts (BT-x-272)) &lt;= 0,01 * ((Number of line net amounts (BT-131) + Number of Document level allowance amounts (BT-92) + Number of Document level charge amounts (BT-99) + Number of Logistics Service fee amounts (BT-X-272)), where the VAT category code (BT-151, BT-95, BT-102, BT-X-273) is "Reverse charge" (AE),
+        and where applicable the VAT exemption reason and specification code (BT-195, BT-174 and BT-176 and BT-X-592) and the Exemption reason text (BT-194, BT-173 and BT-175 and BT-X-591) are identical with the VAT category VAT exemption reason and specification code (BT-121) and VAT exemption reason text (BT-120),
+        but only for lines where the "Subtype of invoice item" (BT-X-8) has the value "DETAIL" or is not specified.             
       </svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
+      <xsl:apply-templates select="*" mode="M10"/>
+   </xsl:template>
+   <!--RULE -->
+   <xsl:template match="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode[. = 'AE'][upper-case(../ram:TypeCode) = 'VAT']"
+                 priority="1042"
+                 mode="M10">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode[. = 'AE'][upper-case(../ram:TypeCode) = 'VAT']"/>
       <!--ASSERT -->
       <xsl:choose>
          <xsl:when test="../ram:CalculatedAmount = 0"/>
@@ -2181,7 +2123,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=false()]/ram:CategoryTradeTax[ram:CategoryCode = 'AE'][upper-case(ram:TypeCode) = 'VAT']"
-                 priority="1035"
+                 priority="1041"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=false()]/ram:CategoryTradeTax[ram:CategoryCode = 'AE'][upper-case(ram:TypeCode) = 'VAT']"/>
@@ -2219,7 +2161,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=true()]/ram:CategoryTradeTax[ram:CategoryCode = 'AE'][upper-case(ram:TypeCode) = 'VAT']"
-                 priority="1034"
+                 priority="1040"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=true()]/ram:CategoryTradeTax[ram:CategoryCode = 'AE'][upper-case(ram:TypeCode) = 'VAT']"/>
@@ -2257,7 +2199,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'AE'][upper-case(ram:TypeCode) = 'VAT']"
-                 priority="1033"
+                 priority="1039"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'AE'][upper-case(ram:TypeCode) = 'VAT']"/>
@@ -2294,20 +2236,20 @@
       <xsl:apply-templates select="*" mode="M10"/>
    </xsl:template>
    <!--RULE -->
-   <xsl:template match="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'L'][upper-case(ram:TypeCode) = 'VAT']"
-                 priority="1032"
+   <xsl:template match="//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='L'][upper-case(ram:TypeCode) = 'VAT']"
+                 priority="1038"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                       context="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'L'][upper-case(ram:TypeCode) = 'VAT']"/>
+                       context="//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='L'][upper-case(ram:TypeCode) = 'VAT']"/>
       <xsl:variable name="rate" select="xs:decimal(ram:RateApplicablePercent)"/>
       <xsl:variable name="exempReasonText" select="normalize-space(ram:ExemptionReason)"/>
       <xsl:variable name="exempReasonCode"
                     select="normalize-space(ram:ExemptionReasonCode)"/>
       <xsl:variable name="basisAmount" select="xs:decimal(ram:BasisAmount)"/>
       <xsl:variable name="calculatedAmountBT131"
-                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'L' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'L' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
       <xsl:variable name="calculatedAmountBT131ini"
-                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'L' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate ]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'L' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate ]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
       <xsl:variable name="allowancesAmountBT92"
                     select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=false() and ram:CategoryTradeTax/ram:CategoryCode='L' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:CategoryTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:CategoryTradeTax/ram:ExemptionReason) = $exempReasonText]/xs:decimal(ram:ActualAmount)) * 100) div 100)"/>
       <xsl:variable name="allowancesAmountBT92ini"
@@ -2317,29 +2259,37 @@
       <xsl:variable name="chargesAmountBT99ini"
                     select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=true() and ram:CategoryTradeTax/ram:CategoryCode='L' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]/xs:decimal(ram:ActualAmount)) * 100) div 100)"/>
       <xsl:variable name="nbLineItems"
-                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'L' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[(not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL') and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'L' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
       <xsl:variable name="nbLineItemsini"
-                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'L' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate]))"/>
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[(not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL') and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'L' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate]))"/>
       <xsl:variable name="nbAllowancesOrCharges"
                     select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:CategoryTradeTax/ram:CategoryCode='L' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate  and normalize-space(ram:CategoryTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:CategoryTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
       <xsl:variable name="nbAllowancesOrChargesini"
                     select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:CategoryTradeTax/ram:CategoryCode='L' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]))"/>
+      <xsl:variable name="logisticChargeAmount"
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='L' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:AppliedTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:AppliedTradeTax/ram:ExemptionReason) = $exempReasonText]/xs:decimal(ram:AppliedAmount)) * 100) div 100)"/>
+      <xsl:variable name="logisticChargeAmountini"
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='L' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]/xs:decimal(ram:AppliedAmount)) * 100) div 100)"/>
+      <xsl:variable name="nblogisticCharge"
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='L' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:AppliedTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:AppliedTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
+      <xsl:variable name="nblogisticChargeini"
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='L' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]))"/>
       <xsl:variable name="vATAmountBT117" select="xs:decimal(ram:CalculatedAmount)"/>
       <xsl:variable name="calculatedBT117"
                     select="xs:decimal(round($basisAmount * $rate div 100 * 100) div 100)"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))"/>
+         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))">
-               <xsl:attribute name="id">BR-FREXT-AF-08</xsl:attribute>
+                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))">
+               <xsl:attribute name="id">BR-FXEXT-AF-08</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>
-        [BR-FREXT-AF-08] - Code : <xsl:text/>
+        [BR-FXEXT-AF-08] - Code : <xsl:text/>
                   <xsl:value-of select="ram:CategoryCode"/>
                   <xsl:text/>, rate : <xsl:text/>
                   <xsl:value-of select="$rate"/>
@@ -2372,24 +2322,26 @@
                   <xsl:text/>, NBAllowChargesini : <xsl:text/>
                   <xsl:value-of select="$nbAllowancesOrChargesini"/>
                   <xsl:text/>, 
-        [BR-FREXT-AF-08] - Dans une ventilation TVA (BG-23) où le code de catégorie TVA (BT-118) est "L" (IGIC - taxe des Canaries), l’écart absolu entre le montant taxable (BT-116) et la somme des montants nets ligne (BT-131) + charges (BT-99) - remises (BT-92) doit être ≤ 0,01 € * nombre total d’éléments concernés.
+        [BR-FXEXT-AF-08] - In a VAT breakdown (BG-23) where VAT category code (BT-118) is equal to “L” ("Canary Islands tax"), Absolute Value of (VAT category taxable amount (BT-116) - ∑ Invoice line net amounts (BT-131) + Σ Document level allowance amounts (BT-92) - Σ Document level charge amounts (BT-99) - Σ Logistics Service fee amounts (BT-x-272)) &lt;= 0,01 * ((Number of line net amounts (BT-131) + Number of Document level allowance amounts (BT-92) + Number of Document level charge amounts (BT-99) + Number of Logistics Service fee amounts (BT-X-272)), where the VAT category code (BT-151, BT-95, BT-102, BT-X-273) is "Canary Islands tax" (L), but only for lines where the "Subtype of invoice item" (BT-X-8) has the value "DETAIL" or is not specified.          
+        or the same rule but also taking into account the exemption reasons in Text (BT-120) and Code (BT-121) in BG-23 and the exemption reasons on each line (BT-X-96 / BT-X-97), on Document level Allowances  (BT-173 / BT-174) and on Document Level Charges (BT-175 / BT-176) and on Service logistic charges (BT-X-591 / BT-X-592).
+        One of the two rules must be followed, bearing in mind that ultimately only the second one will have to be followed.
       </svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))"/>
+         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))">
-               <xsl:attribute name="id">BR-FREXT-AF-08ini</xsl:attribute>
+                                test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))">
+               <xsl:attribute name="id">BR-FXEXT-AF-08ini</xsl:attribute>
                <xsl:attribute name="flag">warning</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>
-        [BR-FREXT-AF-08ini] warning - Code : <xsl:text/>
+        [BR-FXEXT-AF-08ini] warning - Code : <xsl:text/>
                   <xsl:value-of select="ram:CategoryCode"/>
                   <xsl:text/>, rate : <xsl:text/>
                   <xsl:value-of select="$rate"/>
@@ -2411,24 +2363,24 @@
                   <xsl:text/>, NBAllowChargesini : <xsl:text/>
                   <xsl:value-of select="$nbAllowancesOrChargesini"/>
                   <xsl:text/>, 
-        [BR-FREXT-AF-08ini] - Sans raisons d'exemption - Dans une ventilation TVA (BG-23) où le code de catégorie TVA (BT-118) est "L" (Exonéré de TVA), l’écart absolu entre le montant taxable (BT-116) et la somme des montants nets ligne (BT-131) + charges (BT-99) - remises (BT-92) doit être ≤ 0,01 € * nombre total d’éléments concernés.    
+        [BR-FXEXT-AF-08ini] - Without Exemption reason EN16931_2017 - In a VAT breakdown (BG-23) where VAT category code (BT-118) is equal to “L” ("Canary Islands tax"), Absolute Value of (VAT category taxable amount (BT-116) - ∑ Invoice line net amounts (BT-131) + Σ Document level allowance amounts (BT-92) - Σ Document level charge amounts (BT-99) - Σ Logistics Service fee amounts (BT-x-272)) &lt;= 0,01 * ((Number of line net amounts (BT-131) + Number of Document level allowance amounts (BT-92) + Number of Document level charge amounts (BT-99) + Number of Logistics Service fee amounts (BT-X-272)), where the VAT category code (BT-151, BT-95, BT-102, BT-X-273) is "Canary Islands tax" (L), but only for lines where the "Subtype of invoice item" (BT-X-8) has the value "DETAIL" or is not specified.                       
       </svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges))"/>
+         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges))">
-               <xsl:attribute name="id">BR-FREXT-AF-08rev</xsl:attribute>
+                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge))">
+               <xsl:attribute name="id">BR-FXEXT-AF-08rev</xsl:attribute>
                <xsl:attribute name="flag">warning</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>
-        [BR-FREXT-AF-08rev] warning - Code : <xsl:text/>
+        [BR-FXEXT-AF-08rev] warning - Code : <xsl:text/>
                   <xsl:value-of select="ram:CategoryCode"/>
                   <xsl:text/>, rate : <xsl:text/>
                   <xsl:value-of select="$rate"/>
@@ -2450,11 +2402,21 @@
                   <xsl:text/>, NBAllowCharges : <xsl:text/>
                   <xsl:value-of select="$nbAllowancesOrCharges"/>
                   <xsl:text/>, 
-        [BR-FREXT-AF-08rev] - Avec raisons d'exemption - Dans une ventilation TVA (BG-23) où le code de catégorie TVA (BT-118) est "L" (Exonéré de TVA), l’écart absolu entre le montant taxable (BT-116) et la somme des montants nets ligne (BT-131) + charges (BT-99) - remises (BT-92) doit être ≤ 0,01 € * nombre total d’éléments concernés.    
+        [BR-FXEXT-AF-08rev] - With Exemption reason EN16931_2026  - In a VAT breakdown (BG-23) where VAT category code (BT-118) is equal to “L” ("Canary Islands tax"), Absolute Value of (VAT category taxable amount (BT-116) - ∑ Invoice line net amounts (BT-131) + Σ Document level allowance amounts (BT-92) - Σ Document level charge amounts (BT-99) - Σ Logistics Service fee amounts (BT-x-272)) &lt;= 0,01 * ((Number of line net amounts (BT-131) + Number of Document level allowance amounts (BT-92) + Number of Document level charge amounts (BT-99) + Number of Logistics Service fee amounts (BT-X-272)), where the VAT category code (BT-151, BT-95, BT-102, BT-X-273) is "Canary Islands tax" (L),
+        and where applicable the VAT exemption reason and specification code (BT-195, BT-174 and BT-176 and BT-X-592) and the Exemption reason text (BT-194, BT-173 and BT-175 and BT-X-591) are identical with the VAT category VAT exemption reason and specification code (BT-121) and VAT exemption reason text (BT-120),
+        but only for lines where the "Subtype of invoice item" (BT-X-8) has the value "DETAIL" or is not specified.                
       </svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
+      <xsl:apply-templates select="*" mode="M10"/>
+   </xsl:template>
+   <!--RULE -->
+   <xsl:template match="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'L'][upper-case(ram:TypeCode) = 'VAT']"
+                 priority="1037"
+                 mode="M10">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'L'][upper-case(ram:TypeCode) = 'VAT']"/>
       <!--ASSERT -->
       <xsl:choose>
          <xsl:when test="true()"/>
@@ -2469,26 +2431,11 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <!--ASSERT -->
-      <xsl:choose>
-         <xsl:when test="not(ram:ExemptionReason) and not (ram:ExemptionReasonCode)"/>
-         <xsl:otherwise>
-            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="not(ram:ExemptionReason) and not (ram:ExemptionReasonCode)">
-               <xsl:attribute name="id">BR-AF-10</xsl:attribute>
-               <xsl:attribute name="flag">fatal</xsl:attribute>
-               <xsl:attribute name="location">
-                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
-               </xsl:attribute>
-               <svrl:text>[BR-AF-10]-A VAT Breakdown (BG-23) with VAT Category code (BT-118) "IGIC" shall not have a VAT exemption reason code (BT-121) or VAT exemption reason text (BT-120).</svrl:text>
-            </svrl:failed-assert>
-         </xsl:otherwise>
-      </xsl:choose>
       <xsl:apply-templates select="*" mode="M10"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'L'][upper-case(ram:TypeCode) = 'VAT']"
-                 priority="1031"
+                 priority="1036"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'L'][upper-case(ram:TypeCode) = 'VAT']"/>
@@ -2526,7 +2473,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=false()]/ram:CategoryTradeTax[ram:CategoryCode = 'L'][upper-case(ram:TypeCode) = 'VAT']"
-                 priority="1030"
+                 priority="1035"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=false()]/ram:CategoryTradeTax[ram:CategoryCode = 'L'][upper-case(ram:TypeCode) = 'VAT']"/>
@@ -2564,7 +2511,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=true()]/ram:CategoryTradeTax[ram:CategoryCode = 'L'][upper-case(ram:TypeCode) = 'VAT']"
-                 priority="1029"
+                 priority="1034"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=true()]/ram:CategoryTradeTax[ram:CategoryCode = 'L'][upper-case(ram:TypeCode) = 'VAT']"/>
@@ -2601,20 +2548,20 @@
       <xsl:apply-templates select="*" mode="M10"/>
    </xsl:template>
    <!--RULE -->
-   <xsl:template match="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'M'][upper-case(ram:TypeCode) = 'VAT']"
-                 priority="1028"
+   <xsl:template match="//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='M'][upper-case(ram:TypeCode) = 'VAT']"
+                 priority="1033"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                       context="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'M'][upper-case(ram:TypeCode) = 'VAT']"/>
+                       context="//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='M'][upper-case(ram:TypeCode) = 'VAT']"/>
       <xsl:variable name="rate" select="xs:decimal(ram:RateApplicablePercent)"/>
       <xsl:variable name="exempReasonText" select="normalize-space(ram:ExemptionReason)"/>
       <xsl:variable name="exempReasonCode"
                     select="normalize-space(ram:ExemptionReasonCode)"/>
       <xsl:variable name="basisAmount" select="xs:decimal(ram:BasisAmount)"/>
       <xsl:variable name="calculatedAmountBT131"
-                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'M' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'M' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
       <xsl:variable name="calculatedAmountBT131ini"
-                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'M' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate ]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'M' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate ]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
       <xsl:variable name="allowancesAmountBT92"
                     select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=false() and ram:CategoryTradeTax/ram:CategoryCode='M' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:CategoryTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:CategoryTradeTax/ram:ExemptionReason) = $exempReasonText]/xs:decimal(ram:ActualAmount)) * 100) div 100)"/>
       <xsl:variable name="allowancesAmountBT92ini"
@@ -2624,29 +2571,37 @@
       <xsl:variable name="chargesAmountBT99ini"
                     select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=true() and ram:CategoryTradeTax/ram:CategoryCode='M' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]/xs:decimal(ram:ActualAmount)) * 100) div 100)"/>
       <xsl:variable name="nbLineItems"
-                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'M' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[(not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL') and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'M' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
       <xsl:variable name="nbLineItemsini"
-                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'M' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate]))"/>
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[(not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL') and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'M' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate]))"/>
       <xsl:variable name="nbAllowancesOrCharges"
                     select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:CategoryTradeTax/ram:CategoryCode='M' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate  and normalize-space(ram:CategoryTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:CategoryTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
       <xsl:variable name="nbAllowancesOrChargesini"
                     select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:CategoryTradeTax/ram:CategoryCode='M' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]))"/>
+      <xsl:variable name="logisticChargeAmount"
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='M' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:AppliedTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:AppliedTradeTax/ram:ExemptionReason) = $exempReasonText]/xs:decimal(ram:AppliedAmount)) * 100) div 100)"/>
+      <xsl:variable name="logisticChargeAmountini"
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='M' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]/xs:decimal(ram:AppliedAmount)) * 100) div 100)"/>
+      <xsl:variable name="nblogisticCharge"
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='M' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:AppliedTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:AppliedTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
+      <xsl:variable name="nblogisticChargeini"
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='M' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]))"/>
       <xsl:variable name="vATAmountBT117" select="xs:decimal(ram:CalculatedAmount)"/>
       <xsl:variable name="calculatedBT117"
                     select="xs:decimal(round($basisAmount * $rate div 100 * 100) div 100)"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))"/>
+         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))">
-               <xsl:attribute name="id">BR-FREXT-AG-08</xsl:attribute>
+                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))">
+               <xsl:attribute name="id">BR-FXEXT-AG-08</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>
-        [BR-FREXT-AG-08] - Code : <xsl:text/>
+        [BR-FXEXT-AG-08] - Code : <xsl:text/>
                   <xsl:value-of select="ram:CategoryCode"/>
                   <xsl:text/>, rate : <xsl:text/>
                   <xsl:value-of select="$rate"/>
@@ -2679,24 +2634,26 @@
                   <xsl:text/>, NBAllowChargesini : <xsl:text/>
                   <xsl:value-of select="$nbAllowancesOrChargesini"/>
                   <xsl:text/>, 
-        [BR-FREXT-AG-08] - Dans une ventilation TVA (BG-23) où le code de catégorie TVA (BT-118) est "M" (IPSI - taxe de Ceuta et Melilla), l’écart absolu entre le montant taxable (BT-116) et la somme des montants nets ligne (BT-131) + charges (BT-99) - remises (BT-92) doit être ≤ 0,01 € * nombre total d’éléments concernés.
+        [BR-FXEXT-AG-08] - In a VAT breakdown (BG-23) where VAT category code (BT-118) is equal to “M” ("Ceuta and Mellita tax"), Absolute Value of (VAT category taxable amount (BT-116) - ∑ Invoice line net amounts (BT-131) + Σ Document level allowance amounts (BT-92) - Σ Document level charge amounts (BT-99) - Σ Logistics Service fee amounts (BT-x-272)) &lt;= 0,01 * ((Number of line net amounts (BT-131) + Number of Document level allowance amounts (BT-92) + Number of Document level charge amounts (BT-99) + Number of Logistics Service fee amounts (BT-X-272)), where the VAT category code (BT-151, BT-95, BT-102, BT-X-273) is "Ceuta and Mellita tax" (M), but only for lines where the "Subtype of invoice item" (BT-X-8) has the value "DETAIL" or is not specified.          
+        or the same rule but also taking into account the exemption reasons in Text (BT-120) and Code (BT-121) in BG-23 and the exemption reasons on each line (BT-X-96 / BT-X-97), on Document level Allowances  (BT-173 / BT-174) and on Document Level Charges (BT-175 / BT-176) and on Service logistic charges (BT-X-591 / BT-X-592).
+        One of the two rules must be followed, bearing in mind that ultimately only the second one will have to be followed.
       </svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))"/>
+         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))">
-               <xsl:attribute name="id">BR-FREXT-AG-08ini</xsl:attribute>
+                                test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))">
+               <xsl:attribute name="id">BR-FXEXT-AG-08ini</xsl:attribute>
                <xsl:attribute name="flag">warning</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>
-        [BR-FREXT-AG-08ini] warning - Code : <xsl:text/>
+        [BR-FXEXT-AG-08ini] warning - Code : <xsl:text/>
                   <xsl:value-of select="ram:CategoryCode"/>
                   <xsl:text/>, rate : <xsl:text/>
                   <xsl:value-of select="$rate"/>
@@ -2718,24 +2675,24 @@
                   <xsl:text/>, NBAllowChargesini : <xsl:text/>
                   <xsl:value-of select="$nbAllowancesOrChargesini"/>
                   <xsl:text/>, 
-        [BR-FREXT-AG-08ini] - Sans raisons d'exemption - Dans une ventilation TVA (BG-23) où le code de catégorie TVA (BT-118) est "M" (Exonéré de TVA), l’écart absolu entre le montant taxable (BT-116) et la somme des montants nets ligne (BT-131) + charges (BT-99) - remises (BT-92) doit être ≤ 0,01 € * nombre total d’éléments concernés.    
+        [BR-FXEXT-AG-08ini] - Without Exemption reason EN16931_2017 - In a VAT breakdown (BG-23) where VAT category code (BT-118) is equal to “L” ("Canary Islands tax"), Absolute Value of (VAT category taxable amount (BT-116) - ∑ Invoice line net amounts (BT-131) + Σ Document level allowance amounts (BT-92) - Σ Document level charge amounts (BT-99) - Σ Logistics Service fee amounts (BT-x-272)) &lt;= 0,01 * ((Number of line net amounts (BT-131) + Number of Document level allowance amounts (BT-92) + Number of Document level charge amounts (BT-99) + Number of Logistics Service fee amounts (BT-X-272)), where the VAT category code (BT-151, BT-95, BT-102, BT-X-273) is "Ceuta and Mellita tax" (M), but only for lines where the "Subtype of invoice item" (BT-X-8) has the value "DETAIL" or is not specified.                                      
       </svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges))"/>
+         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges))">
-               <xsl:attribute name="id">BR-FREXT-AG-08rev</xsl:attribute>
+                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge))">
+               <xsl:attribute name="id">BR-FXEXT-AG-08rev</xsl:attribute>
                <xsl:attribute name="flag">warning</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>
-        [BR-FREXT-AG-08rev] warning - Code : <xsl:text/>
+        [BR-FXEXT-AG-08rev] warning - Code : <xsl:text/>
                   <xsl:value-of select="ram:CategoryCode"/>
                   <xsl:text/>, rate : <xsl:text/>
                   <xsl:value-of select="$rate"/>
@@ -2757,11 +2714,21 @@
                   <xsl:text/>, NBAllowCharges : <xsl:text/>
                   <xsl:value-of select="$nbAllowancesOrCharges"/>
                   <xsl:text/>, 
-        [BR-FREXT-AG-08rev] - Avec raisons d'exemption - Dans une ventilation TVA (BG-23) où le code de catégorie TVA (BT-118) est "M" (Exonéré de TVA), l’écart absolu entre le montant taxable (BT-116) et la somme des montants nets ligne (BT-131) + charges (BT-99) - remises (BT-92) doit être ≤ 0,01 € * nombre total d’éléments concernés.    
+        [BR-FXEXT-AG-08rev] - With Exemption reason EN16931_2026  - In a VAT breakdown (BG-23) where VAT category code (BT-118) is equal to “M” ("Canary Islands tax"), Absolute Value of (VAT category taxable amount (BT-116) - ∑ Invoice line net amounts (BT-131) + Σ Document level allowance amounts (BT-92) - Σ Document level charge amounts (BT-99) - Σ Logistics Service fee amounts (BT-x-272)) &lt;= 0,01 * ((Number of line net amounts (BT-131) + Number of Document level allowance amounts (BT-92) + Number of Document level charge amounts (BT-99) + Number of Logistics Service fee amounts (BT-X-272)), where the VAT category code (BT-151, BT-95, BT-102, BT-X-273) is "Canary Islands tax" (M),
+        and where applicable the VAT exemption reason and specification code (BT-195, BT-174 and BT-176 and BT-X-592) and the Exemption reason text (BT-194, BT-173 and BT-175 and BT-X-591) are identical with the VAT category VAT exemption reason and specification code (BT-121) and VAT exemption reason text (BT-120),
+        but only for lines where the "Subtype of invoice item" (BT-X-8) has the value "DETAIL" or is not specified.                        
       </svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
+      <xsl:apply-templates select="*" mode="M10"/>
+   </xsl:template>
+   <!--RULE -->
+   <xsl:template match="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'M'][upper-case(ram:TypeCode) = 'VAT']"
+                 priority="1032"
+                 mode="M10">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'M'][upper-case(ram:TypeCode) = 'VAT']"/>
       <!--ASSERT -->
       <xsl:choose>
          <xsl:when test="true()"/>
@@ -2776,26 +2743,11 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
-      <!--ASSERT -->
-      <xsl:choose>
-         <xsl:when test="not(ram:ExemptionReason) and not (ram:ExemptionReasonCode)"/>
-         <xsl:otherwise>
-            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="not(ram:ExemptionReason) and not (ram:ExemptionReasonCode)">
-               <xsl:attribute name="id">BR-AG-10</xsl:attribute>
-               <xsl:attribute name="flag">fatal</xsl:attribute>
-               <xsl:attribute name="location">
-                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
-               </xsl:attribute>
-               <svrl:text>[BR-AG-10]-A VAT Breakdown (BG-23) with VAT Category code (BT-118) "IPSI" shall not have a VAT exemption reason code (BT-121) or VAT exemption reason text (BT-120). </svrl:text>
-            </svrl:failed-assert>
-         </xsl:otherwise>
-      </xsl:choose>
       <xsl:apply-templates select="*" mode="M10"/>
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'M'][upper-case(ram:TypeCode) = 'VAT']"
-                 priority="1027"
+                 priority="1031"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'M'][upper-case(ram:TypeCode) = 'VAT']"/>
@@ -2833,7 +2785,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=false()]/ram:CategoryTradeTax[ram:CategoryCode = 'M'][upper-case(ram:TypeCode) = 'VAT']"
-                 priority="1026"
+                 priority="1030"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=false()]/ram:CategoryTradeTax[ram:CategoryCode = 'M'][upper-case(ram:TypeCode) = 'VAT']"/>
@@ -2871,7 +2823,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=true()]/ram:CategoryTradeTax[ram:CategoryCode = 'M'][upper-case(ram:TypeCode) = 'VAT']"
-                 priority="1025"
+                 priority="1029"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=true()]/ram:CategoryTradeTax[ram:CategoryCode = 'M'][upper-case(ram:TypeCode) = 'VAT']"/>
@@ -2908,20 +2860,20 @@
       <xsl:apply-templates select="*" mode="M10"/>
    </xsl:template>
    <!--RULE -->
-   <xsl:template match="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode[. = 'E'][upper-case(../ram:TypeCode) = 'VAT']"
-                 priority="1024"
+   <xsl:template match="//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='E'][upper-case(ram:TypeCode) = 'VAT']"
+                 priority="1028"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                       context="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode[. = 'E'][upper-case(../ram:TypeCode) = 'VAT']"/>
-      <xsl:variable name="rate" select="xs:decimal(../ram:RateApplicablePercent)"/>
-      <xsl:variable name="exempReasonText" select="normalize-space(../ram:ExemptionReason)"/>
+                       context="//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='E'][upper-case(ram:TypeCode) = 'VAT']"/>
+      <xsl:variable name="rate" select="xs:decimal(ram:RateApplicablePercent)"/>
+      <xsl:variable name="exempReasonText" select="normalize-space(ram:ExemptionReason)"/>
       <xsl:variable name="exempReasonCode"
-                    select="normalize-space(../ram:ExemptionReasonCode)"/>
-      <xsl:variable name="basisAmount" select="xs:decimal(../ram:BasisAmount)"/>
+                    select="normalize-space(ram:ExemptionReasonCode)"/>
+      <xsl:variable name="basisAmount" select="xs:decimal(ram:BasisAmount)"/>
       <xsl:variable name="calculatedAmountBT131"
-                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'E' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'E' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
       <xsl:variable name="calculatedAmountBT131ini"
-                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'E' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate ]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'E' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate ]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
       <xsl:variable name="allowancesAmountBT92"
                     select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=false() and ram:CategoryTradeTax/ram:CategoryCode='E' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:CategoryTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:CategoryTradeTax/ram:ExemptionReason) = $exempReasonText]/xs:decimal(ram:ActualAmount)) * 100) div 100)"/>
       <xsl:variable name="allowancesAmountBT92ini"
@@ -2931,27 +2883,35 @@
       <xsl:variable name="chargesAmountBT99ini"
                     select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=true() and ram:CategoryTradeTax/ram:CategoryCode='E' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]/xs:decimal(ram:ActualAmount)) * 100) div 100)"/>
       <xsl:variable name="nbLineItems"
-                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'E' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[(not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL') and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'E' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
       <xsl:variable name="nbLineItemsini"
-                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'E' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate]))"/>
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[(not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL') and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'E' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate]))"/>
       <xsl:variable name="nbAllowancesOrCharges"
                     select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:CategoryTradeTax/ram:CategoryCode='E' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate  and normalize-space(ram:CategoryTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:CategoryTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
       <xsl:variable name="nbAllowancesOrChargesini"
                     select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:CategoryTradeTax/ram:CategoryCode='E' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]))"/>
+      <xsl:variable name="logisticChargeAmount"
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='E' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:AppliedTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:AppliedTradeTax/ram:ExemptionReason) = $exempReasonText]/xs:decimal(ram:AppliedAmount)) * 100) div 100)"/>
+      <xsl:variable name="logisticChargeAmountini"
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='E' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]/xs:decimal(ram:AppliedAmount)) * 100) div 100)"/>
+      <xsl:variable name="nblogisticCharge"
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='E' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:AppliedTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:AppliedTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
+      <xsl:variable name="nblogisticChargeini"
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='E' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]))"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))"/>
+         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))">
-               <xsl:attribute name="id">BR-FREXT-E-08</xsl:attribute>
+                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))">
+               <xsl:attribute name="id">BR-FXEXT-E-08</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>
-        [BR-FREXT-E-08] - Code : <xsl:text/>
-                  <xsl:value-of select="../ram:CategoryCode"/>
+        [BR-FXEXT-E-08] - Code : <xsl:text/>
+                  <xsl:value-of select="ram:CategoryCode"/>
                   <xsl:text/>, rate : <xsl:text/>
                   <xsl:value-of select="$rate"/>
                   <xsl:text/>, ExemptText : <xsl:text/>
@@ -2983,25 +2943,27 @@
                   <xsl:text/>, NBAllowChargesini : <xsl:text/>
                   <xsl:value-of select="$nbAllowancesOrChargesini"/>
                   <xsl:text/>, 
-        [BR-FREXT-E-08] - Dans une ventilation TVA (BG-23) où le code de catégorie TVA (BT-118) est "E" (Exonéré de TVA), l’écart absolu entre le montant taxable (BT-116) et la somme des montants nets ligne (BT-131) + charges (BT-99) - remises (BT-92) doit être ≤ 0,01 € * nombre total d’éléments concernés.    
+        [BR-FXEXT-E-08] - In a VAT breakdown (BG-23) where VAT category code (BT-118) is equal to “E” ("Exempt from VAT"), Absolute Value of (VAT category taxable amount (BT-116) - ∑ Invoice line net amounts (BT-131) + Σ Document level allowance amounts (BT-92) - Σ Document level charge amounts (BT-99) - Σ Logistics Service fee amounts (BT-x-272)) &lt;= 0,01 * ((Number of line net amounts (BT-131) + Number of Document level allowance amounts (BT-92) + Number of Document level charge amounts (BT-99) + Number of Logistics Service fee amounts (BT-X-272)), where the VAT category code (BT-151, BT-95, BT-102, BT-X-273) is "Exempt from VAT" (E), but only for lines where the "Subtype of invoice item" (BT-X-8) has the value ""DETAIL" or is not specified.          
+        or the same rule but also taking into account the exemption reasons in Text (BT-120) and Code (BT-121) in BG-23 and the exemption reasons on each line (BT-X-96 / BT-X-97), on Document level Allowances  (BT-173 / BT-174) and on Document Level Charges (BT-175 / BT-176) and on Service logistic charges (BT-X-591 / BT-X-592).
+        One of the two rules must be followed, bearing in mind that ultimately only the second one will have to be followed.
       </svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))"/>
+         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))">
-               <xsl:attribute name="id">BR-FREXT-E-08ini</xsl:attribute>
+                                test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))">
+               <xsl:attribute name="id">BR-FXEXT-E-08ini</xsl:attribute>
                <xsl:attribute name="flag">warning</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>
-        [BR-FREXT-E-08ini] warning - Code : <xsl:text/>
-                  <xsl:value-of select="../ram:CategoryCode"/>
+        [BR-FXEXT-E-08ini] warning - Code : <xsl:text/>
+                  <xsl:value-of select="ram:CategoryCode"/>
                   <xsl:text/>, rate : <xsl:text/>
                   <xsl:value-of select="$rate"/>
                   <xsl:text/>, ExemptText : <xsl:text/>
@@ -3022,25 +2984,25 @@
                   <xsl:text/>, NBAllowChargesini : <xsl:text/>
                   <xsl:value-of select="$nbAllowancesOrChargesini"/>
                   <xsl:text/>, 
-        [BR-FREXT-E-08ini] - Sans raisons d'exemption - Dans une ventilation TVA (BG-23) où le code de catégorie TVA (BT-118) est "E" (Exonéré de TVA), l’écart absolu entre le montant taxable (BT-116) et la somme des montants nets ligne (BT-131) + charges (BT-99) - remises (BT-92) doit être ≤ 0,01 € * nombre total d’éléments concernés.    
+        [BR-FXEXT-E-08ini] - Without Exemption reason EN16931_2017 - In a VAT breakdown (BG-23) where VAT category code (BT-118) is equal to “E” ("Exempt from VAT"), Absolute Value of (VAT category taxable amount (BT-116) - ∑ Invoice line net amounts (BT-131) + Σ Document level allowance amounts (BT-92) - Σ Document level charge amounts (BT-99) - Σ Logistics Service fee amounts (BT-x-272)) &lt;= 0,01 * ((Number of line net amounts (BT-131) + Number of Document level allowance amounts (BT-92) + Number of Document level charge amounts (BT-99) + Number of Logistics Service fee amounts (BT-X-272)), where the VAT category code (BT-151, BT-95, BT-102, BT-X-273) is "Exempt from VAT" (E), but only for lines where the "Subtype of invoice item" (BT-X-8) has the value "DETAIL" or is not specified.        
       </svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges))"/>
+         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges))">
-               <xsl:attribute name="id">BR-FREXT-E-08rev</xsl:attribute>
+                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge))">
+               <xsl:attribute name="id">BR-FXEXT-E-08rev</xsl:attribute>
                <xsl:attribute name="flag">warning</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>
-        [BR-FREXT-E-08rev] - warning - Code : <xsl:text/>
-                  <xsl:value-of select="../ram:CategoryCode"/>
+        [BR-FXEXT-E-08rev] - warning - Code : <xsl:text/>
+                  <xsl:value-of select="ram:CategoryCode"/>
                   <xsl:text/>, rate : <xsl:text/>
                   <xsl:value-of select="$rate"/>
                   <xsl:text/>, ExemptText : <xsl:text/>
@@ -3061,11 +3023,21 @@
                   <xsl:text/>, NBAllowCharges : <xsl:text/>
                   <xsl:value-of select="$nbAllowancesOrCharges"/>
                   <xsl:text/>, 
-        [BR-FREXT-E-08rev] - Avec raisons d'exemption - Dans une ventilation TVA (BG-23) où le code de catégorie TVA (BT-118) est "E" (Exonéré de TVA), l’écart absolu entre le montant taxable (BT-116) et la somme des montants nets ligne (BT-131) + charges (BT-99) - remises (BT-92) doit être ≤ 0,01 € * nombre total d’éléments concernés.    
+        [BR-FXEXT-E-08rev] - With Exemption reason EN16931_2026  - In a VAT breakdown (BG-23) where VAT category code (BT-118) is equal to “E” ("Exempt from VAT"), Absolute Value of (VAT category taxable amount (BT-116) - ∑ Invoice line net amounts (BT-131) + Σ Document level allowance amounts (BT-92) - Σ Document level charge amounts (BT-99) - Σ Logistics Service fee amounts (BT-x-272)) &lt;= 0,01 * ((Number of line net amounts (BT-131) + Number of Document level allowance amounts (BT-92) + Number of Document level charge amounts (BT-99) + Number of Logistics Service fee amounts (BT-X-272)), where the VAT category code (BT-151, BT-95, BT-102, BT-X-273) is "Exempt from VAT" (E),
+        and where applicable the VAT exemption reason and specification code (BT-195, BT-174 and BT-176 and BT-X-592) and the Exemption reason text (BT-194, BT-173 and BT-175 and BT-X-591) are identical with the VAT category VAT exemption reason and specification code (BT-121) and VAT exemption reason text (BT-120),
+         but only for lines where the "Subtype of invoice item" (BT-X-8) has the value "DETAIL" or is not specified. 
       </svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
+      <xsl:apply-templates select="*" mode="M10"/>
+   </xsl:template>
+   <!--RULE -->
+   <xsl:template match="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode[. = 'E'][upper-case(../ram:TypeCode) = 'VAT']"
+                 priority="1027"
+                 mode="M10">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode[. = 'E'][upper-case(../ram:TypeCode) = 'VAT']"/>
       <!--ASSERT -->
       <xsl:choose>
          <xsl:when test="../ram:CalculatedAmount = 0"/>
@@ -3100,7 +3072,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=false()]/ram:CategoryTradeTax[ram:CategoryCode = 'E'][upper-case(ram:TypeCode) = 'VAT']"
-                 priority="1023"
+                 priority="1026"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=false()]/ram:CategoryTradeTax[ram:CategoryCode = 'E'][upper-case(ram:TypeCode) = 'VAT']"/>
@@ -3138,7 +3110,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=true()]/ram:CategoryTradeTax[ram:CategoryCode = 'E'][upper-case(ram:TypeCode) = 'VAT']"
-                 priority="1022"
+                 priority="1025"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=true()]/ram:CategoryTradeTax[ram:CategoryCode = 'E'][upper-case(ram:TypeCode) = 'VAT']"/>
@@ -3176,7 +3148,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'E'][upper-case(ram:TypeCode) = 'VAT']"
-                 priority="1021"
+                 priority="1024"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'E'][upper-case(ram:TypeCode) = 'VAT']"/>
@@ -3213,20 +3185,20 @@
       <xsl:apply-templates select="*" mode="M10"/>
    </xsl:template>
    <!--RULE -->
-   <xsl:template match="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode[. = 'G'][upper-case(../ram:TypeCode) = 'VAT']"
-                 priority="1020"
+   <xsl:template match="//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='G'][upper-case(ram:TypeCode) = 'VAT']"
+                 priority="1023"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                       context="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode[. = 'G'][upper-case(../ram:TypeCode) = 'VAT']"/>
-      <xsl:variable name="rate" select="xs:decimal(../ram:RateApplicablePercent)"/>
-      <xsl:variable name="exempReasonText" select="normalize-space(../ram:ExemptionReason)"/>
+                       context="//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='G'][upper-case(ram:TypeCode) = 'VAT']"/>
+      <xsl:variable name="rate" select="xs:decimal(ram:RateApplicablePercent)"/>
+      <xsl:variable name="exempReasonText" select="normalize-space(ram:ExemptionReason)"/>
       <xsl:variable name="exempReasonCode"
-                    select="normalize-space(../ram:ExemptionReasonCode)"/>
-      <xsl:variable name="basisAmount" select="xs:decimal(../ram:BasisAmount)"/>
+                    select="normalize-space(ram:ExemptionReasonCode)"/>
+      <xsl:variable name="basisAmount" select="xs:decimal(ram:BasisAmount)"/>
       <xsl:variable name="calculatedAmountBT131"
-                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'G' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'G' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
       <xsl:variable name="calculatedAmountBT131ini"
-                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'G' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate ]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'G' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate ]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
       <xsl:variable name="allowancesAmountBT92"
                     select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=false() and ram:CategoryTradeTax/ram:CategoryCode='G' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:CategoryTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:CategoryTradeTax/ram:ExemptionReason) = $exempReasonText]/xs:decimal(ram:ActualAmount)) * 100) div 100)"/>
       <xsl:variable name="allowancesAmountBT92ini"
@@ -3236,27 +3208,35 @@
       <xsl:variable name="chargesAmountBT99ini"
                     select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=true() and ram:CategoryTradeTax/ram:CategoryCode='G' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]/xs:decimal(ram:ActualAmount)) * 100) div 100)"/>
       <xsl:variable name="nbLineItems"
-                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'G' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[(not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL') and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'G' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
       <xsl:variable name="nbLineItemsini"
-                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'G' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate]))"/>
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[(not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL') and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'G' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate]))"/>
       <xsl:variable name="nbAllowancesOrCharges"
                     select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:CategoryTradeTax/ram:CategoryCode='G' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate  and normalize-space(ram:CategoryTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:CategoryTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
       <xsl:variable name="nbAllowancesOrChargesini"
                     select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:CategoryTradeTax/ram:CategoryCode='G' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]))"/>
+      <xsl:variable name="logisticChargeAmount"
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='G' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:AppliedTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:AppliedTradeTax/ram:ExemptionReason) = $exempReasonText]/xs:decimal(ram:AppliedAmount)) * 100) div 100)"/>
+      <xsl:variable name="logisticChargeAmountini"
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='G' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]/xs:decimal(ram:AppliedAmount)) * 100) div 100)"/>
+      <xsl:variable name="nblogisticCharge"
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='G' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:AppliedTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:AppliedTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
+      <xsl:variable name="nblogisticChargeini"
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='G' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]))"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))"/>
+         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))">
-               <xsl:attribute name="id">BR-FREXT-G-08</xsl:attribute>
+                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))">
+               <xsl:attribute name="id">BR-FXEXT-G-08</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>
-        [BR-FREXT-G-08] - Code : <xsl:text/>
-                  <xsl:value-of select="../ram:CategoryCode"/>
+        [BR-FXEXT-G-08] - Code : <xsl:text/>
+                  <xsl:value-of select="ram:CategoryCode"/>
                   <xsl:text/>, rate : <xsl:text/>
                   <xsl:value-of select="$rate"/>
                   <xsl:text/>, ExemptText : <xsl:text/>
@@ -3288,25 +3268,27 @@
                   <xsl:text/>, NBAllowChargesini : <xsl:text/>
                   <xsl:value-of select="$nbAllowancesOrChargesini"/>
                   <xsl:text/>, 
-        [BR-FREXT-G-08] - Dans une ventilation TVA (BG-23) où le code de catégorie TVA (BT-118) est "G" (Export hors UE), l’écart absolu entre le montant taxable (BT-116) et la somme des montants nets ligne (BT-131) + charges (BT-99) - remises (BT-92) doit être ≤ 0,01 € * nombre total d’éléments concernés.
+        [BR-FXEXT-G-08] - In a VAT breakdown (BG-23) where VAT category code (BT-118) is equal to “G” ("Export  outside  the EU"), Absolute Value of (VAT category taxable amount (BT-116) - ∑ Invoice line net amounts (BT-131) + Σ Document level allowance amounts (BT-92) - Σ Document level charge amounts (BT-99) - Σ Logistics Service fee amounts (BT-x-272)) &lt;= 0,01 * ((Number of line net amounts (BT-131) + Number of Document level allowance amounts (BT-92) + Number of Document level charge amounts (BT-99) + Number of Logistics Service fee amounts (BT-X-272)), where the VAT category code (BT-151, BT-95, BT-102, BT-X-273) is "Export  outside  the EU" (G), but only for lines where the "Subtype of invoice item" (BT-X-8) has the value "DETAIL" or is not specified.          
+        or the same rule but also taking into account the exemption reasons in Text (BT-120) and Code (BT-121) in BG-23 and the exemption reasons on each line (BT-X-96 / BT-X-97), on Document level Allowances  (BT-173 / BT-174) and on Document Level Charges (BT-175 / BT-176) and on Service logistic charges (BT-X-591 / BT-X-592).
+        One of the two rules must be followed, bearing in mind that ultimately only the second one will have to be followed.
       </svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))"/>
+         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))">
-               <xsl:attribute name="id">BR-FREXT-G-08ini</xsl:attribute>
+                                test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))">
+               <xsl:attribute name="id">BR-FXEXT-G-08ini</xsl:attribute>
                <xsl:attribute name="flag">warning</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>
-        [BR-FREXT-G-08ini] warning - Code : <xsl:text/>
-                  <xsl:value-of select="../ram:CategoryCode"/>
+        [BR-FXEXT-G-08ini] warning - Code : <xsl:text/>
+                  <xsl:value-of select="ram:CategoryCode"/>
                   <xsl:text/>, rate : <xsl:text/>
                   <xsl:value-of select="$rate"/>
                   <xsl:text/>, ExemptText : <xsl:text/>
@@ -3327,25 +3309,25 @@
                   <xsl:text/>, NBAllowChargesini : <xsl:text/>
                   <xsl:value-of select="$nbAllowancesOrChargesini"/>
                   <xsl:text/>, 
-        [BR-FREXT-G-08ini] - Sans raison d'exemption - Dans une ventilation TVA (BG-23) où le code de catégorie TVA (BT-118) est "G" (Exonéré de TVA), l’écart absolu entre le montant taxable (BT-116) et la somme des montants nets ligne (BT-131) + charges (BT-99) - remises (BT-92) doit être ≤ 0,01 € * nombre total d’éléments concernés.    
+        [BR-FXEXT-G-08ini] - Without Exemption reason EN16931_2017 - In a VAT breakdown (BG-23) where VAT category code (BT-118) is equal to “G” ("Export  outside  the EU"), Absolute Value of (VAT category taxable amount (BT-116) - ∑ Invoice line net amounts (BT-131) + Σ Document level allowance amounts (BT-92) - Σ Document level charge amounts (BT-99) - Σ Logistics Service fee amounts (BT-x-272)) &lt;= 0,01 * ((Number of line net amounts (BT-131) + Number of Document level allowance amounts (BT-92) + Number of Document level charge amounts (BT-99) + Number of Logistics Service fee amounts (BT-X-272)), where the VAT category code (BT-151, BT-95, BT-102, BT-X-273) is "Export  outside  the EU" (G), but only for lines where the "Subtype of invoice item" (BT-X-8) has the value "DETAIL" or is not specified.                
       </svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges))"/>
+         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges))">
-               <xsl:attribute name="id">BR-FREXT-G-08rev</xsl:attribute>
+                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge))">
+               <xsl:attribute name="id">BR-FXEXT-G-08rev</xsl:attribute>
                <xsl:attribute name="flag">warning</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>
-        [BR-FREXT-G-08rev] warning - Code : <xsl:text/>
-                  <xsl:value-of select="../ram:CategoryCode"/>
+        [BR-FXEXT-G-08rev] warning - Code : <xsl:text/>
+                  <xsl:value-of select="ram:CategoryCode"/>
                   <xsl:text/>, rate : <xsl:text/>
                   <xsl:value-of select="$rate"/>
                   <xsl:text/>, ExemptText : <xsl:text/>
@@ -3366,11 +3348,21 @@
                   <xsl:text/>, NBAllowCharges : <xsl:text/>
                   <xsl:value-of select="$nbAllowancesOrCharges"/>
                   <xsl:text/>, 
-        [BR-FREXT-G-08rev] - Avec raisons d'exemption - Dans une ventilation TVA (BG-23) où le code de catégorie TVA (BT-118) est "G" (Exonéré de TVA), l’écart absolu entre le montant taxable (BT-116) et la somme des montants nets ligne (BT-131) + charges (BT-99) - remises (BT-92) doit être ≤ 0,01 € * nombre total d’éléments concernés.    
+        [BR-FXEXT-G-08rev] - With Exemption reason EN16931_2026  - In a VAT breakdown (BG-23) where VAT category code (BT-118) is equal to “G” ("Export  outside  the EU"), Absolute Value of (VAT category taxable amount (BT-116) - ∑ Invoice line net amounts (BT-131) + Σ Document level allowance amounts (BT-92) - Σ Document level charge amounts (BT-99) - Σ Logistics Service fee amounts (BT-x-272)) &lt;= 0,01 * ((Number of line net amounts (BT-131) + Number of Document level allowance amounts (BT-92) + Number of Document level charge amounts (BT-99) + Number of Logistics Service fee amounts (BT-X-272)), where the VAT category code (BT-151, BT-95, BT-102, BT-X-273) is "Export  outside  the EU" (G),
+        and where applicable the VAT exemption reason and specification code (BT-195, BT-174 and BT-176 and BT-X-592) and the Exemption reason text (BT-194, BT-173 and BT-175 and BT-X-591) are identical with the VAT category VAT exemption reason and specification code (BT-121) and VAT exemption reason text (BT-120),
+         but only for lines where the "Subtype of invoice item" (BT-X-8) has the value "DETAIL" or is not specified.        
       </svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
+      <xsl:apply-templates select="*" mode="M10"/>
+   </xsl:template>
+   <!--RULE -->
+   <xsl:template match="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode[. = 'G'][upper-case(../ram:TypeCode) = 'VAT']"
+                 priority="1022"
+                 mode="M10">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode[. = 'G'][upper-case(../ram:TypeCode) = 'VAT']"/>
       <!--ASSERT -->
       <xsl:choose>
          <xsl:when test="../ram:CalculatedAmount = 0"/>
@@ -3405,7 +3397,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=false()]/ram:CategoryTradeTax[ram:CategoryCode = 'G'][upper-case(ram:TypeCode) = 'VAT']"
-                 priority="1019"
+                 priority="1021"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=false()]/ram:CategoryTradeTax[ram:CategoryCode = 'G'][upper-case(ram:TypeCode) = 'VAT']"/>
@@ -3443,7 +3435,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=true()]/ram:CategoryTradeTax[ram:CategoryCode = 'G'][upper-case(ram:TypeCode) = 'VAT']"
-                 priority="1018"
+                 priority="1020"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=true()]/ram:CategoryTradeTax[ram:CategoryCode = 'G'][upper-case(ram:TypeCode) = 'VAT']"/>
@@ -3481,7 +3473,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'G'][upper-case(ram:TypeCode) = 'VAT']"
-                 priority="1017"
+                 priority="1019"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'G'][upper-case(ram:TypeCode) = 'VAT']"/>
@@ -3518,20 +3510,20 @@
       <xsl:apply-templates select="*" mode="M10"/>
    </xsl:template>
    <!--RULE -->
-   <xsl:template match="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode[.= 'K'][upper-case(../ram:TypeCode) = 'VAT']"
-                 priority="1016"
+   <xsl:template match="//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='K'][upper-case(ram:TypeCode) = 'VAT']"
+                 priority="1018"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                       context="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode[.= 'K'][upper-case(../ram:TypeCode) = 'VAT']"/>
-      <xsl:variable name="rate" select="xs:decimal(../ram:RateApplicablePercent)"/>
-      <xsl:variable name="exempReasonText" select="normalize-space(../ram:ExemptionReason)"/>
+                       context="//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='K'][upper-case(ram:TypeCode) = 'VAT']"/>
+      <xsl:variable name="rate" select="xs:decimal(ram:RateApplicablePercent)"/>
+      <xsl:variable name="exempReasonText" select="normalize-space(ram:ExemptionReason)"/>
       <xsl:variable name="exempReasonCode"
-                    select="normalize-space(../ram:ExemptionReasonCode)"/>
-      <xsl:variable name="basisAmount" select="xs:decimal(../ram:BasisAmount)"/>
+                    select="normalize-space(ram:ExemptionReasonCode)"/>
+      <xsl:variable name="basisAmount" select="xs:decimal(ram:BasisAmount)"/>
       <xsl:variable name="calculatedAmountBT131"
-                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'K' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'K' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
       <xsl:variable name="calculatedAmountBT131ini"
-                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'K' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate ]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'K' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate ]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
       <xsl:variable name="allowancesAmountBT92"
                     select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=false() and ram:CategoryTradeTax/ram:CategoryCode='K' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:CategoryTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:CategoryTradeTax/ram:ExemptionReason) = $exempReasonText]/xs:decimal(ram:ActualAmount)) * 100) div 100)"/>
       <xsl:variable name="allowancesAmountBT92ini"
@@ -3541,27 +3533,35 @@
       <xsl:variable name="chargesAmountBT99ini"
                     select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=true() and ram:CategoryTradeTax/ram:CategoryCode='K' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]/xs:decimal(ram:ActualAmount)) * 100) div 100)"/>
       <xsl:variable name="nbLineItems"
-                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'K' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[(not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL') and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'K' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
       <xsl:variable name="nbLineItemsini"
-                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'K' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate]))"/>
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[(not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL') and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'K' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate]))"/>
       <xsl:variable name="nbAllowancesOrCharges"
                     select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:CategoryTradeTax/ram:CategoryCode='K' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate  and normalize-space(ram:CategoryTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:CategoryTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
       <xsl:variable name="nbAllowancesOrChargesini"
                     select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:CategoryTradeTax/ram:CategoryCode='K' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]))"/>
+      <xsl:variable name="logisticChargeAmount"
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='K' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:AppliedTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:AppliedTradeTax/ram:ExemptionReason) = $exempReasonText]/xs:decimal(ram:AppliedAmount)) * 100) div 100)"/>
+      <xsl:variable name="logisticChargeAmountini"
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='K' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]/xs:decimal(ram:AppliedAmount)) * 100) div 100)"/>
+      <xsl:variable name="nblogisticCharge"
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='K' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:AppliedTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:AppliedTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
+      <xsl:variable name="nblogisticChargeini"
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='K' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]))"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))"/>
+         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))">
-               <xsl:attribute name="id">BR-FREXT-IC-08</xsl:attribute>
+                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))">
+               <xsl:attribute name="id">BR-FXEXT-IC-08</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>
-        [BR-FREXT-IC-08] warning - Code : <xsl:text/>
-                  <xsl:value-of select="../ram:CategoryCode"/>
+        [BR-FXEXT-IC-08] warning - Code : <xsl:text/>
+                  <xsl:value-of select="ram:CategoryCode"/>
                   <xsl:text/>, rate : <xsl:text/>
                   <xsl:value-of select="$rate"/>
                   <xsl:text/>, ExemptText : <xsl:text/>
@@ -3593,25 +3593,27 @@
                   <xsl:text/>, NBAllowChargesini : <xsl:text/>
                   <xsl:value-of select="$nbAllowancesOrChargesini"/>
                   <xsl:text/>, 
-        [BR-FREXT-IC-08] - Dans une ventilation TVA (BG-23) où le code de catégorie TVA (BT-118) est "K" (Taux zéro), l’écart absolu entre le montant taxable (BT-116) et la somme des montants nets ligne (BT-131) + charges (BT-99) - remises (BT-92) doit être ≤ 0,01 € * nombre total d’éléments concernés.    
+        [BR-FXEXT-IC-08] - In a VAT breakdown (BG-23) where VAT category code (BT-118) is equal to “K” ("Intra-community supply"), Absolute Value of (VAT category taxable amount (BT-116) - ∑ Invoice line net amounts (BT-131) + Σ Document level allowance amounts (BT-92) - Σ Document level charge amounts (BT-99) - Σ Logistics Service fee amounts (BT-x-272)) &lt;= 0,01 * ((Number of line net amounts (BT-131) + Number of Document level allowance amounts (BT-92) + Number of Document level charge amounts (BT-99) + Number of Logistics Service fee amounts (BT-X-272)), where the VAT category code (BT-151, BT-95, BT-102, BT-X-273) is "Intra-community supply" (K), but only for lines where the "Subtype of invoice item" (BT-X-8) has the value "DETAIL" or is not specified.          
+        or the same rule but also taking into account the exemption reasons in Text (BT-120) and Code (BT-121) in BG-23 and the exemption reasons on each line (BT-X-96 / BT-X-97), on Document level Allowances  (BT-173 / BT-174) and on Document Level Charges (BT-175 / BT-176) and on Service logistic charges (BT-X-591 / BT-X-592).
+        One of the two rules must be followed, bearing in mind that ultimately only the second one will have to be followed.
       </svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))"/>
+         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))">
-               <xsl:attribute name="id">BR-FREXT-IC-08ini</xsl:attribute>
+                                test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))">
+               <xsl:attribute name="id">BR-FXEXT-IC-08ini</xsl:attribute>
                <xsl:attribute name="flag">warning</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>
-        [BR-FREXT-IC-08ini] warning - Code : <xsl:text/>
-                  <xsl:value-of select="../ram:CategoryCode"/>
+        [BR-FXEXT-IC-08ini] warning - Code : <xsl:text/>
+                  <xsl:value-of select="ram:CategoryCode"/>
                   <xsl:text/>, rate : <xsl:text/>
                   <xsl:value-of select="$rate"/>
                   <xsl:text/>, ExemptText : <xsl:text/>
@@ -3632,25 +3634,25 @@
                   <xsl:text/>, NBAllowChargesini : <xsl:text/>
                   <xsl:value-of select="$nbAllowancesOrChargesini"/>
                   <xsl:text/>, 
-        [BR-FREXT-IC-08ini] - Sans raisons d'exemption - Dans une ventilation TVA (BG-23) où le code de catégorie TVA (BT-118) est "K" (Exonéré de TVA), l’écart absolu entre le montant taxable (BT-116) et la somme des montants nets ligne (BT-131) + charges (BT-99) - remises (BT-92) doit être ≤ 0,01 € * nombre total d’éléments concernés.    
+        [BR-FXEXT-IC-08ini] - Without Exemption reason EN16931_2017 - In a VAT breakdown (BG-23) where VAT category code (BT-118) is equal to “K” ("Intra-community supply"), Absolute Value of (VAT category taxable amount (BT-116) - ∑ Invoice line net amounts (BT-131) + Σ Document level allowance amounts (BT-92) - Σ Document level charge amounts (BT-99) - Σ Logistics Service fee amounts (BT-x-272)) &lt;= 0,01 * ((Number of line net amounts (BT-131) + Number of Document level allowance amounts (BT-92) + Number of Document level charge amounts (BT-99) + Number of Logistics Service fee amounts (BT-X-272)), where the VAT category code (BT-151, BT-95, BT-102, BT-X-273) is "Intra-community supply" (K), but only for lines where the "Subtype of invoice item" (BT-X-8) has the value "DETAIL" or is not specified.                       
       </svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges))"/>
+         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges))">
-               <xsl:attribute name="id">BR-FREXT-IC-08rev</xsl:attribute>
+                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge))">
+               <xsl:attribute name="id">BR-FXEXT-IC-08rev</xsl:attribute>
                <xsl:attribute name="flag">warning</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>
-        [BR-FREXT-IC-08rev] warning - Code : <xsl:text/>
-                  <xsl:value-of select="../ram:CategoryCode"/>
+        [BR-FXEXT-IC-08rev] warning - Code : <xsl:text/>
+                  <xsl:value-of select="ram:CategoryCode"/>
                   <xsl:text/>, rate : <xsl:text/>
                   <xsl:value-of select="$rate"/>
                   <xsl:text/>, ExemptText : <xsl:text/>
@@ -3670,12 +3672,22 @@
                   <xsl:value-of select="$chargesAmountBT99"/>
                   <xsl:text/>, NBAllowCharges : <xsl:text/>
                   <xsl:value-of select="$nbAllowancesOrCharges"/>
-                  <xsl:text/>, 
-        [BR-FREXT-IC-08rev] - Avec raisons d'exemption - Dans une ventilation TVA (BG-23) où le code de catégorie TVA (BT-118) est "K" (Exonéré de TVA), l’écart absolu entre le montant taxable (BT-116) et la somme des montants nets ligne (BT-131) + charges (BT-99) - remises (BT-92) doit être ≤ 0,01 € * nombre total d’éléments concernés.    
+                  <xsl:text/>,       
+        [BR-FXEXT-IC-08rev] - With Exemption reason EN16931_2026  - In a VAT breakdown (BG-23) where VAT category code (BT-118) is equal to “K” ("Intra-community supply"), Absolute Value of (VAT category taxable amount (BT-116) - ∑ Invoice line net amounts (BT-131) + Σ Document level allowance amounts (BT-92) - Σ Document level charge amounts (BT-99) - Σ Logistics Service fee amounts (BT-x-272)) &lt;= 0,01 * ((Number of line net amounts (BT-131) + Number of Document level allowance amounts (BT-92) + Number of Document level charge amounts (BT-99) + Number of Logistics Service fee amounts (BT-X-272)), where the VAT category code (BT-151, BT-95, BT-102, BT-X-273) is "Intra-community supply" (K),
+        and where applicable the VAT exemption reason and specification code (BT-195, BT-174 and BT-176 and BT-X-592) and the Exemption reason text (BT-194, BT-173 and BT-175 and BT-X-591) are identical with the VAT category VAT exemption reason and specification code (BT-121) and VAT exemption reason text (BT-120),
+        but only for lines where the "Subtype of invoice item" (BT-X-8) has the value "DETAIL" or is not specified.        
       </svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
+      <xsl:apply-templates select="*" mode="M10"/>
+   </xsl:template>
+   <!--RULE -->
+   <xsl:template match="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode[.= 'K'][upper-case(../ram:TypeCode) = 'VAT']"
+                 priority="1017"
+                 mode="M10">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode[.= 'K'][upper-case(../ram:TypeCode) = 'VAT']"/>
       <!--ASSERT -->
       <xsl:choose>
          <xsl:when test="../ram:CalculatedAmount = 0"/>
@@ -3740,7 +3752,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=false()]/ram:CategoryTradeTax[ram:CategoryCode = 'K'][upper-case(ram:TypeCode) = 'VAT']"
-                 priority="1015"
+                 priority="1016"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=false()]/ram:CategoryTradeTax[ram:CategoryCode = 'K'][upper-case(ram:TypeCode) = 'VAT']"/>
@@ -3778,7 +3790,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=true()]/ram:CategoryTradeTax[ram:CategoryCode = 'K'][upper-case(ram:TypeCode) = 'VAT']"
-                 priority="1014"
+                 priority="1015"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=true()]/ram:CategoryTradeTax[ram:CategoryCode = 'K'][upper-case(ram:TypeCode) = 'VAT']"/>
@@ -3816,7 +3828,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'K'][upper-case(ram:TypeCode) = 'VAT']"
-                 priority="1013"
+                 priority="1014"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'K'][upper-case(ram:TypeCode) = 'VAT']"/>
@@ -3853,52 +3865,57 @@
       <xsl:apply-templates select="*" mode="M10"/>
    </xsl:template>
    <!--RULE -->
-   <xsl:template match="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'O'][upper-case(ram:TypeCode) = 'VAT']"
-                 priority="1012"
+   <xsl:template match="//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='O'][upper-case(ram:TypeCode) = 'VAT']"
+                 priority="1013"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                       context="//rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'O'][upper-case(ram:TypeCode) = 'VAT']"/>
-      <xsl:variable name="rate" select="xs:decimal(ram:RateApplicablePercent)"/>
+                       context="//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='O'][upper-case(ram:TypeCode) = 'VAT']"/>
       <xsl:variable name="exempReasonText" select="normalize-space(ram:ExemptionReason)"/>
       <xsl:variable name="exempReasonCode"
                     select="normalize-space(ram:ExemptionReasonCode)"/>
       <xsl:variable name="basisAmount" select="xs:decimal(ram:BasisAmount)"/>
       <xsl:variable name="calculatedAmountBT131"
-                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'O' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'O' and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
       <xsl:variable name="calculatedAmountBT131ini"
-                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'O' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate ]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'O']/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
       <xsl:variable name="allowancesAmountBT92"
-                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=false() and ram:CategoryTradeTax/ram:CategoryCode='O' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:CategoryTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:CategoryTradeTax/ram:ExemptionReason) = $exempReasonText]/xs:decimal(ram:ActualAmount)) * 100) div 100)"/>
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=false() and ram:CategoryTradeTax/ram:CategoryCode='O' and normalize-space(ram:CategoryTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:CategoryTradeTax/ram:ExemptionReason) = $exempReasonText]/xs:decimal(ram:ActualAmount)) * 100) div 100)"/>
       <xsl:variable name="allowancesAmountBT92ini"
-                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=false() and ram:CategoryTradeTax/ram:CategoryCode='O' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]/xs:decimal(ram:ActualAmount)) * 100) div 100)"/>
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=false() and ram:CategoryTradeTax/ram:CategoryCode='O']/xs:decimal(ram:ActualAmount)) * 100) div 100)"/>
       <xsl:variable name="chargesAmountBT99"
-                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=true() and ram:CategoryTradeTax/ram:CategoryCode='O' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:CategoryTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:CategoryTradeTax/ram:ExemptionReason) = $exempReasonText]/xs:decimal(ram:ActualAmount)) * 100) div 100)"/>
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=true() and ram:CategoryTradeTax/ram:CategoryCode='O' and normalize-space(ram:CategoryTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:CategoryTradeTax/ram:ExemptionReason) = $exempReasonText]/xs:decimal(ram:ActualAmount)) * 100) div 100)"/>
       <xsl:variable name="chargesAmountBT99ini"
-                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=true() and ram:CategoryTradeTax/ram:CategoryCode='O' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]/xs:decimal(ram:ActualAmount)) * 100) div 100)"/>
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=true() and ram:CategoryTradeTax/ram:CategoryCode='O']/xs:decimal(ram:ActualAmount)) * 100) div 100)"/>
       <xsl:variable name="nbLineItems"
-                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'O' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[(not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL') and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'O' and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
       <xsl:variable name="nbLineItemsini"
-                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'O' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate]))"/>
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[(not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL') and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'O']))"/>
       <xsl:variable name="nbAllowancesOrCharges"
-                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:CategoryTradeTax/ram:CategoryCode='O' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate  and normalize-space(ram:CategoryTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:CategoryTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:CategoryTradeTax/ram:CategoryCode='O' and normalize-space(ram:CategoryTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:CategoryTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
       <xsl:variable name="nbAllowancesOrChargesini"
-                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:CategoryTradeTax/ram:CategoryCode='O' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]))"/>
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:CategoryTradeTax/ram:CategoryCode='O']))"/>
+      <xsl:variable name="logisticChargeAmount"
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='O' and normalize-space(ram:AppliedTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:AppliedTradeTax/ram:ExemptionReason) = $exempReasonText]/xs:decimal(ram:AppliedAmount)) * 100) div 100)"/>
+      <xsl:variable name="logisticChargeAmountini"
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='O']/xs:decimal(ram:AppliedAmount)) * 100) div 100)"/>
+      <xsl:variable name="nblogisticCharge"
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='O' and normalize-space(ram:AppliedTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:AppliedTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
+      <xsl:variable name="nblogisticChargeini"
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='O']))"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))"/>
+         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))">
-               <xsl:attribute name="id">BR-FREXT-O-08</xsl:attribute>
+                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))">
+               <xsl:attribute name="id">BR-FXEXT-O-08</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>
-          [BR-FREXT-O-08] - Code : <xsl:text/>
+        [BR-FXEXT-O-08] - Code : <xsl:text/>
                   <xsl:value-of select="ram:CategoryCode"/>
-                  <xsl:text/>, rate : <xsl:text/>
-                  <xsl:value-of select="$rate"/>
                   <xsl:text/>, ExemptText : <xsl:text/>
                   <xsl:value-of select="$exempReasonText"/>
                   <xsl:text/>, Exemptcode : <xsl:text/>
@@ -3906,7 +3923,7 @@
                   <xsl:text/>, basisAmount : <xsl:text/>
                   <xsl:value-of select="$basisAmount"/>
                   <xsl:text/>, 
-          SumBT131 : <xsl:text/>
+        SumBT131 : <xsl:text/>
                   <xsl:value-of select="$calculatedAmountBT131"/>
                   <xsl:text/>, NBlines : <xsl:text/>
                   <xsl:value-of select="$nbLineItems"/>
@@ -3917,7 +3934,7 @@
                   <xsl:text/>, NBAllowCharges : <xsl:text/>
                   <xsl:value-of select="$nbAllowancesOrCharges"/>
                   <xsl:text/>, 
-          SumBT131ini : <xsl:text/>
+        SumBT131ini : <xsl:text/>
                   <xsl:value-of select="$calculatedAmountBT131ini"/>
                   <xsl:text/>, NBlinesini : <xsl:text/>
                   <xsl:value-of select="$nbLineItemsini"/>
@@ -3928,27 +3945,27 @@
                   <xsl:text/>, NBAllowChargesini : <xsl:text/>
                   <xsl:value-of select="$nbAllowancesOrChargesini"/>
                   <xsl:text/>, 
-          [BR-FREXT-O-08] - Dans une ventilation TVA (BG-23) où le code de catégorie TVA (BT-118) est "O" (Non soumis à TVA), l’écart absolu entre le montant taxable (BT-116) et la somme des montants nets ligne (BT-131) + charges (BT-99) - remises (BT-92) doit être ≤ 0,01 € * nombre total d’éléments concernés.
-        </svrl:text>
+        [BR-FXEXT-O-08] - In a VAT breakdown (BG-23) where VAT category code (BT-118) is equal to “O” ("Not subject to VAT"), Absolute Value of (VAT category taxable amount (BT-116) - ∑ Invoice line net amounts (BT-131) + Σ Document level allowance amounts (BT-92) - Σ Document level charge amounts (BT-99) - Σ Logistics Service fee amounts (BT-x-272)) &lt;= 0,01 * ((Number of line net amounts (BT-131) + Number of Document level allowance amounts (BT-92) + Number of Document level charge amounts (BT-99) + Number of Logistics Service fee amounts (BT-X-272)), where the VAT category code (BT-151, BT-95, BT-102, BT-X-273) is "Not subject to VAT" (O), but only for lines where the "Subtype of invoice item" (BT-X-8) has the value "DETAIL" or is not specified.          
+        or the same rule but also taking into account the exemption reasons in Text (BT-120) and Code (BT-121) in BG-23 and the exemption reasons on each line (BT-X-96 / BT-X-97), on Document level Allowances  (BT-173 / BT-174) and on Document Level Charges (BT-175 / BT-176) and on Service logistic charges (BT-X-591 / BT-X-592).
+        One of the two rules must be followed, bearing in mind that ultimately only the second one will have to be followed.
+      </svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))"/>
+         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))">
-               <xsl:attribute name="id">BR-FREXT-O-08ini</xsl:attribute>
+                                test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))">
+               <xsl:attribute name="id">BR-FXEXT-O-08ini</xsl:attribute>
                <xsl:attribute name="flag">warning</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>
-          [BR-FREXT-o-08ini] warning - Code : <xsl:text/>
+        [BR-FXEXT-O-08ini] warning - Code : <xsl:text/>
                   <xsl:value-of select="ram:CategoryCode"/>
-                  <xsl:text/>, rate : <xsl:text/>
-                  <xsl:value-of select="$rate"/>
                   <xsl:text/>, ExemptText : <xsl:text/>
                   <xsl:value-of select="$exempReasonText"/>
                   <xsl:text/>, Exemptcode : <xsl:text/>
@@ -3956,7 +3973,7 @@
                   <xsl:text/>, basisAmount : <xsl:text/>
                   <xsl:value-of select="$basisAmount"/>
                   <xsl:text/>, 
-          SumBT131ini : <xsl:text/>
+        SumBT131ini : <xsl:text/>
                   <xsl:value-of select="$calculatedAmountBT131ini"/>
                   <xsl:text/>, NBlinesini : <xsl:text/>
                   <xsl:value-of select="$nbLineItemsini"/>
@@ -3967,27 +3984,25 @@
                   <xsl:text/>, NBAllowChargesini : <xsl:text/>
                   <xsl:value-of select="$nbAllowancesOrChargesini"/>
                   <xsl:text/>, 
-          [BR-FREXT-O-08ini] - Sans raisons d'exemption - Dans une ventilation TVA (BG-23) où le code de catégorie TVA (BT-118) est "O" (Exonéré de TVA), l’écart absolu entre le montant taxable (BT-116) et la somme des montants nets ligne (BT-131) + charges (BT-99) - remises (BT-92) doit être ≤ 0,01 € * nombre total d’éléments concernés.    
-        </svrl:text>
+        [BR-FXEXT-O-08ini] - Without Exemption reason EN16931_2017 - In a VAT breakdown (BG-23) where VAT category code (BT-118) is equal to “O” ("Not subject to VAT"), Absolute Value of (VAT category taxable amount (BT-116) - ∑ Invoice line net amounts (BT-131) + Σ Document level allowance amounts (BT-92) - Σ Document level charge amounts (BT-99) - Σ Logistics Service fee amounts (BT-x-272)) &lt;= 0,01 * ((Number of line net amounts (BT-131) + Number of Document level allowance amounts (BT-92) + Number of Document level charge amounts (BT-99) + Number of Logistics Service fee amounts (BT-X-272)), where the VAT category code (BT-151, BT-95, BT-102, BT-X-273) is "Not subject to VAT" (O), but only for lines where the "Subtype of invoice item" (BT-X-8) has the value "DETAIL" or is not specified.                                      
+      </svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges))"/>
+         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges))">
-               <xsl:attribute name="id">BR-FREXT-O-08rev</xsl:attribute>
+                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge))">
+               <xsl:attribute name="id">BR-FXEXT-O-08rev</xsl:attribute>
                <xsl:attribute name="flag">warning</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>
-          [BR-FREXT-O-08rev] warning - Code : <xsl:text/>
+        [BR-FXEXT-O-08rev] warning - Code : <xsl:text/>
                   <xsl:value-of select="ram:CategoryCode"/>
-                  <xsl:text/>, rate : <xsl:text/>
-                  <xsl:value-of select="$rate"/>
                   <xsl:text/>, ExemptText : <xsl:text/>
                   <xsl:value-of select="$exempReasonText"/>
                   <xsl:text/>, Exemptcode : <xsl:text/>
@@ -3995,7 +4010,7 @@
                   <xsl:text/>, basisAmount : <xsl:text/>
                   <xsl:value-of select="$basisAmount"/>
                   <xsl:text/>, 
-          SumBT131 : <xsl:text/>
+        SumBT131 : <xsl:text/>
                   <xsl:value-of select="$calculatedAmountBT131"/>
                   <xsl:text/>, NBlines : <xsl:text/>
                   <xsl:value-of select="$nbLineItems"/>
@@ -4006,37 +4021,10 @@
                   <xsl:text/>, NBAllowCharges : <xsl:text/>
                   <xsl:value-of select="$nbAllowancesOrCharges"/>
                   <xsl:text/>, 
-          [BR-FREXT-O-08rev] - Avec raisons d'exemption - Dans une ventilation TVA (BG-23) où le code de catégorie TVA (BT-118) est "O" (Exonéré de TVA), l’écart absolu entre le montant taxable (BT-116) et la somme des montants nets ligne (BT-131) + charges (BT-99) - remises (BT-92) doit être ≤ 0,01 € * nombre total d’éléments concernés.    
-        </svrl:text>
-            </svrl:failed-assert>
-         </xsl:otherwise>
-      </xsl:choose>
-      <!--ASSERT -->
-      <xsl:choose>
-         <xsl:when test="ram:CalculatedAmount = 0"/>
-         <xsl:otherwise>
-            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl" test="ram:CalculatedAmount = 0">
-               <xsl:attribute name="id">BR-O-09</xsl:attribute>
-               <xsl:attribute name="flag">fatal</xsl:attribute>
-               <xsl:attribute name="location">
-                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
-               </xsl:attribute>
-               <svrl:text>[BR-O-09]-The VAT category tax amount (BT-117) in a VAT breakdown (BG-23) where the VAT category code (BT-118) is "Not subject to VAT" shall be 0 (zero).</svrl:text>
-            </svrl:failed-assert>
-         </xsl:otherwise>
-      </xsl:choose>
-      <!--ASSERT -->
-      <xsl:choose>
-         <xsl:when test="(ram:ExemptionReason) or (ram:ExemptionReasonCode)"/>
-         <xsl:otherwise>
-            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(ram:ExemptionReason) or (ram:ExemptionReasonCode)">
-               <xsl:attribute name="id">BR-O-10</xsl:attribute>
-               <xsl:attribute name="flag">fatal</xsl:attribute>
-               <xsl:attribute name="location">
-                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
-               </xsl:attribute>
-               <svrl:text>[BR-O-10]-A VAT Breakdown (BG-23) with VAT Category code (BT-118) " Not subject to VAT" shall have a VAT exemption reason code (BT-121), meaning " Not subject to VAT" or a VAT exemption reason text (BT-120) " Not subject to VAT" (or the equivalent standard text in another language).</svrl:text>
+        [BR-FXEXT-O-08rev] - With Exemption reason EN16931_2026  - In a VAT breakdown (BG-23) where VAT category code (BT-118) is equal to “O” ("Not subject to VAT"), Absolute Value of (VAT category taxable amount (BT-116) - ∑ Invoice line net amounts (BT-131) + Σ Document level allowance amounts (BT-92) - Σ Document level charge amounts (BT-99) - Σ Logistics Service fee amounts (BT-x-272)) &lt;= 0,01 * ((Number of line net amounts (BT-131) + Number of Document level allowance amounts (BT-92) + Number of Document level charge amounts (BT-99) + Number of Logistics Service fee amounts (BT-X-272)), where the VAT category code (BT-151, BT-95, BT-102, BT-X-273) is "Not subject to VAT" (O),
+        and where applicable the VAT exemption reason and specification code (BT-195, BT-174 and BT-176 and BT-X-592) and the Exemption reason text (BT-194, BT-173 and BT-175 and BT-X-591) are identical with the VAT category VAT exemption reason and specification code (BT-121) and VAT exemption reason text (BT-120),
+        but only for lines where the "Subtype of invoice item" (BT-X-8) has the value "DETAIL" or is not specified.                                
+      </svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -4044,7 +4032,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=false()]/ram:CategoryTradeTax[ram:CategoryCode = 'O'][upper-case(ram:TypeCode) = 'VAT']"
-                 priority="1011"
+                 priority="1012"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=false()]/ram:CategoryTradeTax[ram:CategoryCode = 'O'][upper-case(ram:TypeCode) = 'VAT']"/>
@@ -4067,7 +4055,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=true()]/ram:CategoryTradeTax[ram:CategoryCode = 'O'][upper-case(ram:TypeCode) = 'VAT']"
-                 priority="1010"
+                 priority="1011"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=true()]/ram:CategoryTradeTax[ram:CategoryCode = 'O'][upper-case(ram:TypeCode) = 'VAT']"/>
@@ -4090,7 +4078,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'O'][upper-case(ram:TypeCode) = 'VAT']"
-                 priority="1009"
+                 priority="1010"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'O'][upper-case(ram:TypeCode) = 'VAT']"/>
@@ -4113,7 +4101,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='S'][upper-case(ram:TypeCode) = 'VAT']"
-                 priority="1008"
+                 priority="1009"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='S'][upper-case(ram:TypeCode) = 'VAT']"/>
@@ -4123,9 +4111,9 @@
                     select="normalize-space(ram:ExemptionReasonCode)"/>
       <xsl:variable name="basisAmount" select="xs:decimal(ram:BasisAmount)"/>
       <xsl:variable name="calculatedAmountBT131"
-                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'S' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'S' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
       <xsl:variable name="calculatedAmountBT131ini"
-                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'S' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate ]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'S' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate ]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
       <xsl:variable name="allowancesAmountBT92"
                     select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=false() and ram:CategoryTradeTax/ram:CategoryCode='S' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:CategoryTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:CategoryTradeTax/ram:ExemptionReason) = $exempReasonText]/xs:decimal(ram:ActualAmount)) * 100) div 100)"/>
       <xsl:variable name="allowancesAmountBT92ini"
@@ -4135,29 +4123,56 @@
       <xsl:variable name="chargesAmountBT99ini"
                     select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=true() and ram:CategoryTradeTax/ram:CategoryCode='S' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]/xs:decimal(ram:ActualAmount)) * 100) div 100)"/>
       <xsl:variable name="nbLineItems"
-                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'S' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[(not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL') and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'S' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
       <xsl:variable name="nbLineItemsini"
-                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'S' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate]))"/>
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[(not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL') and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'S' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate]))"/>
       <xsl:variable name="nbAllowancesOrCharges"
                     select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:CategoryTradeTax/ram:CategoryCode='S' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate  and normalize-space(ram:CategoryTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:CategoryTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
       <xsl:variable name="nbAllowancesOrChargesini"
                     select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:CategoryTradeTax/ram:CategoryCode='S' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]))"/>
+      <xsl:variable name="logisticChargeAmount"
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='S' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:AppliedTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:AppliedTradeTax/ram:ExemptionReason) = $exempReasonText]/xs:decimal(ram:AppliedAmount)) * 100) div 100)"/>
+      <xsl:variable name="logisticChargeAmountini"
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='S' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]/xs:decimal(ram:AppliedAmount)) * 100) div 100)"/>
+      <xsl:variable name="nblogisticCharge"
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='S' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:AppliedTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:AppliedTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
+      <xsl:variable name="nblogisticChargeini"
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='S' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]))"/>
       <xsl:variable name="vATAmountBT117" select="xs:decimal(ram:CalculatedAmount)"/>
       <xsl:variable name="calculatedBT117"
                     select="xs:decimal(round($basisAmount * $rate div 100 * 100) div 100)"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini)  le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))"/>
+         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))">
-               <xsl:attribute name="id">BR-FREXT-S-08</xsl:attribute>
+                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))">
+               <xsl:attribute name="id">BR-FXEXT-S-08</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>
-        [BR-FREXT-S-08ini] - Code : <xsl:text/>
+          [BR-FXEXT-S-08] - In a VAT breakdown (BG-23), for each different value of VAT rate (BT-119), where VAT category code (BT-118) is equal to “S” ("Standard Rated"), Absolute Value of (VAT category taxable amount (BT-116) - ∑ Invoice line net amounts (BT-131) + Σ Document level allowance amounts (BT-92) - Σ Document level charge amounts (BT-99) - Σ Logistics Service fee amounts (BT-X-272)) &lt;= 0,01 * ((Number of line net amounts (BT-131) + Number of Document level allowance amounts (BT-92) + Number of Document level charge amounts (BT-99) + Number of Logistics Service fee amounts (BT-X-272)), where the VAT category code (BT-151, BT-95, BT-102, BT-X-273) is "Standard Rated" (S), but only for lines where the "Subtype of invoice item" (BT-X-8) has the value "DETAIL" or is not specified.   
+          or the same rule but also taking into account the exemption reasons in Text (BT-120) and Code (BT-121) in BG-23 and the exemption reasons on each line (BT-X-96 / BT-X-97), on Document level Allowances  (BT-173 / BT-174) and on Document Level Charges (BT-175 / BT-176) and on Service logistic charges (BT-X-591 / BT-X-592).
+          One of the two rules must be followed, bearing in mind that ultimately only the second one will have to be followed.
+        </svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))">
+               <xsl:attribute name="id">BR-FXEXT-S-08ini</xsl:attribute>
+               <xsl:attribute name="flag">warning</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>
+          [BR-FXEXT-S-08ini] warning - Code : <xsl:text/>
                   <xsl:value-of select="ram:CategoryCode"/>
                   <xsl:text/>, rate : <xsl:text/>
                   <xsl:value-of select="$rate"/>
@@ -4168,18 +4183,7 @@
                   <xsl:text/>, basisAmount : <xsl:text/>
                   <xsl:value-of select="$basisAmount"/>
                   <xsl:text/>, 
-        SumBT131 : <xsl:text/>
-                  <xsl:value-of select="$calculatedAmountBT131"/>
-                  <xsl:text/>, NBlines : <xsl:text/>
-                  <xsl:value-of select="$nbLineItems"/>
-                  <xsl:text/>, sumAllowBT-92 : <xsl:text/>
-                  <xsl:value-of select="$allowancesAmountBT92"/>
-                  <xsl:text/>, sumChargesBT-99 : <xsl:text/>
-                  <xsl:value-of select="$chargesAmountBT99"/>
-                  <xsl:text/>, NBAllowCharges : <xsl:text/>
-                  <xsl:value-of select="$nbAllowancesOrCharges"/>
-                  <xsl:text/>, 
-        SumBT131ini : <xsl:text/>
+          SumBT131ini : <xsl:text/>
                   <xsl:value-of select="$calculatedAmountBT131ini"/>
                   <xsl:text/>, NBlinesini : <xsl:text/>
                   <xsl:value-of select="$nbLineItemsini"/>
@@ -4190,24 +4194,24 @@
                   <xsl:text/>, NBAllowChargesini : <xsl:text/>
                   <xsl:value-of select="$nbAllowancesOrChargesini"/>
                   <xsl:text/>, 
-        [BR-FREXT-S-08] - Dans une ventilation TVA (BG-23), pour chaque taux de TVA (BT-119) où le code catégorie (BT-118) est "S" (Taux normal), l’écart absolu entre le montant taxable (BT-116) et la somme des montants nets ligne (BT-131) + charges (BT-99) - remises (BT-92) doit être ≤ 0,01 € * nombre total d’éléments concernés.    
-      </svrl:text>
+          [BR-FXEXT-S-08ini] - In a VAT breakdown (BG-23), for each different value of VAT rate (BT-119), where VAT category code (BT-118) is equal to “S” ("Standard Rated"), Absolute Value of (VAT category taxable amount (BT-116) - ∑ Invoice line net amounts (BT-131) + Σ Document level allowance amounts (BT-92) - Σ Document level charge amounts (BT-99) - Σ Logistics Service fee amounts (BT-x-272)) &lt;= 0,01 * ((Number of line net amounts (BT-131) + Number of Document level allowance amounts (BT-92) + Number of Document level charge amounts (BT-99) + Number of Logistics Service fee amounts (BT-X-272)), where the VAT category code (BT-151, BT-95, BT-102, BT-X-273) is "Standard Rated" (S), but only for lines where the "Subtype of invoice item" (BT-X-8) has the value "DETAIL" or is not specified.
+        </svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))"/>
+         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))">
-               <xsl:attribute name="id">BR-FREXT-S-08ini</xsl:attribute>
+                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge))">
+               <xsl:attribute name="id">BR-FXEXT-S-08rev</xsl:attribute>
                <xsl:attribute name="flag">warning</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>
-        [BR-FREXT-S-08ini] warning - Code : <xsl:text/>
+          [BR-FXEXT-S-08rev] warning - Code : <xsl:text/>
                   <xsl:value-of select="ram:CategoryCode"/>
                   <xsl:text/>, rate : <xsl:text/>
                   <xsl:value-of select="$rate"/>
@@ -4218,46 +4222,7 @@
                   <xsl:text/>, basisAmount : <xsl:text/>
                   <xsl:value-of select="$basisAmount"/>
                   <xsl:text/>, 
-        SumBT131ini : <xsl:text/>
-                  <xsl:value-of select="$calculatedAmountBT131ini"/>
-                  <xsl:text/>, NBlinesini : <xsl:text/>
-                  <xsl:value-of select="$nbLineItemsini"/>
-                  <xsl:text/>, sumAllowBT-92ini : <xsl:text/>
-                  <xsl:value-of select="$allowancesAmountBT92ini"/>
-                  <xsl:text/>, sumChargesBT-99ini : <xsl:text/>
-                  <xsl:value-of select="$chargesAmountBT99ini"/>
-                  <xsl:text/>, NBAllowChargesini : <xsl:text/>
-                  <xsl:value-of select="$nbAllowancesOrChargesini"/>
-                  <xsl:text/>, 
-        [BR-FREXT-S-08ini] - Sans raisons d'exemption - Dans une ventilation TVA (BG-23), pour chaque taux de TVA (BT-119) où le code de catégorie TVA (BT-118) est "S" (Exonéré de TVA), l’écart absolu entre le montant taxable (BT-116) et la somme des montants nets ligne (BT-131) + charges (BT-99) - remises (BT-92) doit être ≤ 0,01 € * nombre total d’éléments concernés.    
-      </svrl:text>
-            </svrl:failed-assert>
-         </xsl:otherwise>
-      </xsl:choose>
-      <!--ASSERT -->
-      <xsl:choose>
-         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges))"/>
-         <xsl:otherwise>
-            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges))">
-               <xsl:attribute name="id">BR-FREXT-S-08rev</xsl:attribute>
-               <xsl:attribute name="flag">warning</xsl:attribute>
-               <xsl:attribute name="location">
-                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
-               </xsl:attribute>
-               <svrl:text>
-        [BR-FREXT-S-08rev] warning - Code : <xsl:text/>
-                  <xsl:value-of select="ram:CategoryCode"/>
-                  <xsl:text/>, rate : <xsl:text/>
-                  <xsl:value-of select="$rate"/>
-                  <xsl:text/>, ExemptText : <xsl:text/>
-                  <xsl:value-of select="$exempReasonText"/>
-                  <xsl:text/>, Exemptcode : <xsl:text/>
-                  <xsl:value-of select="$exempReasonCode"/>
-                  <xsl:text/>, basisAmount : <xsl:text/>
-                  <xsl:value-of select="$basisAmount"/>
-                  <xsl:text/>, 
-        SumBT131 : <xsl:text/>
+          SumBT131 : <xsl:text/>
                   <xsl:value-of select="$calculatedAmountBT131"/>
                   <xsl:text/>, NBlines : <xsl:text/>
                   <xsl:value-of select="$nbLineItems"/>
@@ -4268,38 +4233,29 @@
                   <xsl:text/>, NBAllowCharges : <xsl:text/>
                   <xsl:value-of select="$nbAllowancesOrCharges"/>
                   <xsl:text/>, 
-        [BR-FREXT-S-08rev] - Avec raisons d'exemption - Dans une ventilation TVA (BG-23), pour chaque taux de TVA (BT-119) où le code de catégorie TVA (BT-118) est "S" (Exonéré de TVA), l’écart absolu entre le montant taxable (BT-116) et la somme des montants nets ligne (BT-131) + charges (BT-99) - remises (BT-92) doit être ≤ 0,01 € * nombre total d’éléments concernés.    
-      </svrl:text>
+          [BR-FXEXT-S-08rev] - In a VAT breakdown (BG-23), for each different value of VAT rate (BT-119), where VAT category code (BT-118) is equal to “S” ("Standard Rated"), Absolute Value of (VAT category taxable amount (BT-116) - ∑ Invoice line net amounts (BT-131) + Σ Document level allowance amounts (BT-92) - Σ Document level charge amounts (BT-99) - Σ Logistics Service fee amounts (BT-X-272)) &lt;= 0,01 * ((Number of line net amounts (BT-131) + Number of Document level allowance amounts (BT-92) + Number of Document level charge amounts (BT-99) + Number of Logistics Service fee amounts (BT-X-272)), where the VAT category code (BT-151, BT-95, BT-102, BT-X-273) is "Standard Rated" (S), 
+          and where applicable the VAT exemption reason and specification code (BT-195, BT-174 and BT-176 and BT-X-592) and the Exemption reason text (BT-194, BT-173 and BT-175 and BT-X-591) are identical with the VAT category VAT exemption reason and specification code (BT-121) and VAT exemption reason text (BT-120),
+          but only for lines where the "Subtype of invoice item" (BT-X-8) has the value "DETAIL" or is not specified.        
+        </svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="abs($vATAmountBT117 - $calculatedBT117) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges)"/>
+         <xsl:when test="(abs($vATAmountBT117 - $calculatedBT117) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge)) or (abs($vATAmountBT117 - $calculatedBT117) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="abs($vATAmountBT117 - $calculatedBT117) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges)">
-               <xsl:attribute name="id">BR-FREXT-S-09</xsl:attribute>
+                                test="(abs($vATAmountBT117 - $calculatedBT117) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge)) or (abs($vATAmountBT117 - $calculatedBT117) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))">
+               <xsl:attribute name="id">BR-FXEXT-S-09</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>
-        basisAmount : <xsl:text/>
-                  <xsl:value-of select="$basisAmount"/>
-                  <xsl:text/>, rate : <xsl:text/>
-                  <xsl:value-of select="$rate"/>
-                  <xsl:text/>, VATBT117 : <xsl:text/>
-                  <xsl:value-of select="$vATAmountBT117"/>
-                  <xsl:text/>, CalculatedBT-117 : <xsl:text/>
-                  <xsl:value-of select="$calculatedBT117"/>
-                  <xsl:text/>, NBlines : <xsl:text/>
-                  <xsl:value-of select="$nbLineItems"/>
-                  <xsl:text/>, NBAllowCharges : <xsl:text/>
-                  <xsl:value-of select="$nbAllowancesOrCharges"/>
-                  <xsl:text/> 
-        [BR-FREXT-S-09] - Dans une ventilation TVA (BG-23), pour chaque taux de TVA (BT-119) où le code catégorie (BT-118) est "S" (Taux normal), l’écart absolu entre le montant de TVA (BT-117) et le produit du montant taxable (BT-116) par le taux (BT-119) doit être ≤ 0,01 € * nombre total d’éléments concernés.
-      </svrl:text>
+          [BR-FXEXT-S-09] - For each different value of VAT rate (BT-119) where the VAT category code (BT-118) is equal to “S” ("Standard rated"), Absolute Value of (VAT  category  tax  amount  (BT-117) - VAT category taxable amount (BT-116) multiplied by the VAT category rate (BT-119)/100) &lt;= 0,01 * ((Number of line net amounts (BT-131) + Number of Document level allowance amounts (BT-92) + Number of Document level allowance amounts (BT-99) + Number of Logistics Service fee amounts (BT-X-272)), where the VAT category code (BT-151, BT-95, BT-102, BT-X-273) is " Standard rated " (S), and the VAT rate (BT-152, BT-96, BT-103, BT-X-274) equals the VAT category rate (BT-119), and only for lines where the "Subtype of invoice line item" (EXT-FR-FE-163 / BT-X-8) has the value "DETAIL" or is not specified
+          or the same rule but also taking into account the exemption reasons in Text (BT-120) and Code (BT-121) in BG-23 and the exemption reasons on each line (BT-X-96 / BT-X-97), on Document level Allowances  (BT-173 / BT-174) and on Document Level Charges (BT-175 / BT-176) and on Service logistic charges (BT-X-591 / BT-X-592).
+          One of the two rules must be followed, bearing in mind that ultimately only the second one will have to be followed.
+        </svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -4307,7 +4263,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'S'][upper-case(ram:TypeCode) = 'VAT']"
-                 priority="1007"
+                 priority="1008"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode = 'S'][upper-case(ram:TypeCode) = 'VAT']"/>
@@ -4345,7 +4301,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=false()]/ram:CategoryTradeTax[ram:CategoryCode = 'S'][upper-case(ram:TypeCode) = 'VAT']"
-                 priority="1006"
+                 priority="1007"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=false()]/ram:CategoryTradeTax[ram:CategoryCode = 'S'][upper-case(ram:TypeCode) = 'VAT']"/>
@@ -4383,7 +4339,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=true()]/ram:CategoryTradeTax[ram:CategoryCode = 'S'][upper-case(ram:TypeCode) = 'VAT']"
-                 priority="1005"
+                 priority="1006"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=true()]/ram:CategoryTradeTax[ram:CategoryCode = 'S'][upper-case(ram:TypeCode) = 'VAT']"/>
@@ -4420,20 +4376,20 @@
       <xsl:apply-templates select="*" mode="M10"/>
    </xsl:template>
    <!--RULE -->
-   <xsl:template match="//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode[. = 'Z']"
-                 priority="1004"
+   <xsl:template match="//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='Z'][upper-case(ram:TypeCode) = 'VAT']"
+                 priority="1005"
                  mode="M10">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                       context="//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode[. = 'Z']"/>
-      <xsl:variable name="rate" select="xs:decimal(../ram:RateApplicablePercent)"/>
-      <xsl:variable name="exempReasonText" select="normalize-space(../ram:ExemptionReason)"/>
+                       context="//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax[ram:CategoryCode='Z'][upper-case(ram:TypeCode) = 'VAT']"/>
+      <xsl:variable name="rate" select="xs:decimal(ram:RateApplicablePercent)"/>
+      <xsl:variable name="exempReasonText" select="normalize-space(ram:ExemptionReason)"/>
       <xsl:variable name="exempReasonCode"
-                    select="normalize-space(../ram:ExemptionReasonCode)"/>
-      <xsl:variable name="basisAmount" select="xs:decimal(../ram:BasisAmount)"/>
+                    select="normalize-space(ram:ExemptionReasonCode)"/>
+      <xsl:variable name="basisAmount" select="xs:decimal(ram:BasisAmount)"/>
       <xsl:variable name="calculatedAmountBT131"
-                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'Z' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'Z' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
       <xsl:variable name="calculatedAmountBT131ini"
-                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'Z' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate ]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL']/ram:SpecifiedLineTradeSettlement[ram:ApplicableTradeTax/ram:CategoryCode = 'Z' and ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate ]/ram:SpecifiedTradeSettlementLineMonetarySummation/xs:decimal(ram:LineTotalAmount)) * 100) div 100)"/>
       <xsl:variable name="allowancesAmountBT92"
                     select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=false() and ram:CategoryTradeTax/ram:CategoryCode='Z' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:CategoryTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:CategoryTradeTax/ram:ExemptionReason) = $exempReasonText]/xs:decimal(ram:ActualAmount)) * 100) div 100)"/>
       <xsl:variable name="allowancesAmountBT92ini"
@@ -4443,76 +4399,53 @@
       <xsl:variable name="chargesAmountBT99ini"
                     select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator=true() and ram:CategoryTradeTax/ram:CategoryCode='Z' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]/xs:decimal(ram:ActualAmount)) * 100) div 100)"/>
       <xsl:variable name="nbLineItems"
-                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'Z' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[(not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL') and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'Z' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
       <xsl:variable name="nbLineItemsini"
-                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'Z' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate]))"/>
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem[(not(ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode) or ram:AssociatedDocumentLineDocument/ram:LineStatusReasonCode = 'DETAIL') and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode = 'Z' and ram:SpecifiedLineTradeSettlement/ram:ApplicableTradeTax/xs:decimal(ram:RateApplicablePercent) =$rate]))"/>
       <xsl:variable name="nbAllowancesOrCharges"
                     select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:CategoryTradeTax/ram:CategoryCode='Z' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate  and normalize-space(ram:CategoryTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:CategoryTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
       <xsl:variable name="nbAllowancesOrChargesini"
                     select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedTradeAllowanceCharge[ram:CategoryTradeTax/ram:CategoryCode='Z' and ram:CategoryTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]))"/>
+      <xsl:variable name="logisticChargeAmount"
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='Z' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:AppliedTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:AppliedTradeTax/ram:ExemptionReason) = $exempReasonText]/xs:decimal(ram:AppliedAmount)) * 100) div 100)"/>
+      <xsl:variable name="logisticChargeAmountini"
+                    select="xs:decimal(round(sum(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='Z' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]/xs:decimal(ram:AppliedAmount)) * 100) div 100)"/>
+      <xsl:variable name="nblogisticCharge"
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='Z' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate and normalize-space(ram:AppliedTradeTax/ram:ExemptionReasonCode) = $exempReasonCode and normalize-space(ram:AppliedTradeTax/ram:ExemptionReason) = $exempReasonText]))"/>
+      <xsl:variable name="nblogisticChargeini"
+                    select="xs:decimal(count(/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:ApplicableHeaderTradeSettlement/ram:SpecifiedLogisticsServiceCharge[ram:AppliedTradeTax/ram:CategoryCode='Z' and ram:AppliedTradeTax/xs:decimal(ram:RateApplicablePercent)=$rate]))"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))"/>
+         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))">
-               <xsl:attribute name="id">BR-FREXT-Z-08</xsl:attribute>
+                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge)) or (abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))">
+               <xsl:attribute name="id">BR-FXEXT-Z-08</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>
-        [BR-FREXT-Z-08] - Code : <xsl:text/>
-                  <xsl:value-of select="ram:CategoryCode"/>
-                  <xsl:text/>, rate : <xsl:text/>
-                  <xsl:value-of select="$rate"/>
-                  <xsl:text/>, ExemptText : <xsl:text/>
-                  <xsl:value-of select="$exempReasonText"/>
-                  <xsl:text/>, Exemptcode : <xsl:text/>
-                  <xsl:value-of select="$exempReasonCode"/>
-                  <xsl:text/>, basisAmount : <xsl:text/>
-                  <xsl:value-of select="$basisAmount"/>
-                  <xsl:text/>, 
-        SumBT131 : <xsl:text/>
-                  <xsl:value-of select="$calculatedAmountBT131"/>
-                  <xsl:text/>, NBlines : <xsl:text/>
-                  <xsl:value-of select="$nbLineItems"/>
-                  <xsl:text/>, sumAllowBT-92 : <xsl:text/>
-                  <xsl:value-of select="$allowancesAmountBT92"/>
-                  <xsl:text/>, sumChargesBT-99 : <xsl:text/>
-                  <xsl:value-of select="$chargesAmountBT99"/>
-                  <xsl:text/>, NBAllowCharges : <xsl:text/>
-                  <xsl:value-of select="$nbAllowancesOrCharges"/>
-                  <xsl:text/>, 
-        SumBT131ini : <xsl:text/>
-                  <xsl:value-of select="$calculatedAmountBT131ini"/>
-                  <xsl:text/>, NBlinesini : <xsl:text/>
-                  <xsl:value-of select="$nbLineItemsini"/>
-                  <xsl:text/>, sumAllowBT-92ini : <xsl:text/>
-                  <xsl:value-of select="$allowancesAmountBT92ini"/>
-                  <xsl:text/>, sumChargesBT-99ini : <xsl:text/>
-                  <xsl:value-of select="$chargesAmountBT99ini"/>
-                  <xsl:text/>, NBAllowChargesini : <xsl:text/>
-                  <xsl:value-of select="$nbAllowancesOrChargesini"/>
-                  <xsl:text/>, 
-        [BR-FREXT-Z-08] - Dans une ventilation TVA (BG-23) où le code de catégorie TVA (BT-118) est "Z" (Taux zéro), l’écart absolu entre le montant taxable (BT-116) et la somme des montants nets ligne (BT-131) + charges (BT-99) - remises (BT-92) doit être ≤ 0,01 € * nombre total d’éléments concernés.    
+        [BR-FXEXT-Z-08] - In a VAT breakdown (BG-23) where VAT category code (BT-118) is equal to “Z” ("Zero Rated"), Absolute Value of (VAT category taxable amount (BT-116) - ∑ Invoice line net amounts (BT-131) + Σ Document level allowance amounts (BT-92) - Σ Document level charge amounts (BT-99) - Σ Logistics Service fee amounts (BT-x-272)) &lt;= 0,01 * ((Number of line net amounts (BT-131) + Number of Document level allowance amounts (BT-92) + Number of Document level charge amounts (BT-99) + Number of Logistics Service fee amounts (BT-X-272)), where the VAT category code (BT-151, BT-95, BT-102, BT-X-273) is "Zero Rated" (Z), but only for lines where the "Subtype of invoice item" (BT-X-8) has the value "DETAIL" or is not specified.   
+        or the same rule but also taking into account the exemption reasons in Text (BT-120) and Code (BT-121) in BG-23 and the exemption reasons on each line (BT-X-96 / BT-X-97), on Document level Allowances  (BT-173 / BT-174) and on Document Level Charges (BT-175 / BT-176) and on Service logistic charges (BT-X-591 / BT-X-592).
+        One of the two rules must be followed, bearing in mind that ultimately only the second one will have to be followed.
       </svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))"/>
+         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini))">
-               <xsl:attribute name="id">BR-FREXT-Z-08ini</xsl:attribute>
+                                test="(abs($basisAmount - $calculatedAmountBT131ini + $allowancesAmountBT92ini - $chargesAmountBT99ini - $logisticChargeAmountini) le 0.01 * ($nbLineItemsini + $nbAllowancesOrChargesini + $nblogisticChargeini))">
+               <xsl:attribute name="id">BR-FXEXT-Z-08ini</xsl:attribute>
                <xsl:attribute name="flag">warning</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>
-        [BR-FREXT-Z-08ini] warning - Code : <xsl:text/>
+        [BR-FXEXT-Z-08ini] warning - Code : <xsl:text/>
                   <xsl:value-of select="ram:CategoryCode"/>
                   <xsl:text/>, rate : <xsl:text/>
                   <xsl:value-of select="$rate"/>
@@ -4534,24 +4467,24 @@
                   <xsl:text/>, NBAllowChargesini : <xsl:text/>
                   <xsl:value-of select="$nbAllowancesOrChargesini"/>
                   <xsl:text/>, 
-        [BR-FREXT-Z-08ini] - Sans raisons d'exemption - Dans une ventilation TVA (BG-23) où le code de catégorie TVA (BT-118) est "Z" (Exonéré de TVA), l’écart absolu entre le montant taxable (BT-116) et la somme des montants nets ligne (BT-131) + charges (BT-99) - remises (BT-92) doit être ≤ 0,01 € * nombre total d’éléments concernés.    
+        [BR-FXEXT-Z-08ini] - Without Exemption reason EN16931_2017 - In a VAT breakdown (BG-23) where VAT category code (BT-118) is equal to “Z” ("Zero Rated"), Absolute Value of (VAT category taxable amount (BT-116) - ∑ Invoice line net amounts (BT-131) + Σ Document level allowance amounts (BT-92) - Σ Document level charge amounts (BT-99) - Σ Logistics Service fee amounts (BT-x-272)) &lt;= 0,01 * ((Number of line net amounts (BT-131) + Number of Document level allowance amounts (BT-92) + Number of Document level charge amounts (BT-99) + Number of Logistics Service fee amounts (BT-X-272)), where the VAT category code (BT-151, BT-95, BT-102, BT-X-273) is "Zero Rated" (Z), but only for lines where the "Subtype of invoice item" (BT-X-8) has the value "DETAIL" or is not specified.    
       </svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges))"/>
+         <xsl:when test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges))">
-               <xsl:attribute name="id">BR-FREXT-Z-08rev</xsl:attribute>
+                                test="(abs($basisAmount - $calculatedAmountBT131 + $allowancesAmountBT92 - $chargesAmountBT99 - $logisticChargeAmount) le 0.01 * ($nbLineItems + $nbAllowancesOrCharges + $nblogisticCharge))">
+               <xsl:attribute name="id">BR-FXEXT-Z-08rev</xsl:attribute>
                <xsl:attribute name="flag">warning</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>
-        [BR-FREXT-Z-08rev] warning - Code : <xsl:text/>
+        [BR-FXEXT-Z-08rev] warning - Code : <xsl:text/>
                   <xsl:value-of select="ram:CategoryCode"/>
                   <xsl:text/>, rate : <xsl:text/>
                   <xsl:value-of select="$rate"/>
@@ -4573,11 +4506,21 @@
                   <xsl:text/>, NBAllowCharges : <xsl:text/>
                   <xsl:value-of select="$nbAllowancesOrCharges"/>
                   <xsl:text/>, 
-        [BR-FREXT-Z-08rev] - Avec raisons d'exemption - Dans une ventilation TVA (BG-23) où le code de catégorie TVA (BT-118) est "Z" (Exonéré de TVA), l’écart absolu entre le montant taxable (BT-116) et la somme des montants nets ligne (BT-131) + charges (BT-99) - remises (BT-92) doit être ≤ 0,01 € * nombre total d’éléments concernés.    
+        [BR-FXEXT-Z-08rev] - With Exemption reason EN16931_2026  - In a VAT breakdown (BG-23) where VAT category code (BT-118) is equal to “Z” ("Zero Rated"), Absolute Value of (VAT category taxable amount (BT-116) - ∑ Invoice line net amounts (BT-131) + Σ Document level allowance amounts (BT-92) - Σ Document level charge amounts (BT-99) - Σ Logistics Service fee amounts (BT-x-272)) &lt;= 0,01 * ((Number of line net amounts (BT-131) + Number of Document level allowance amounts (BT-92) + Number of Document level charge amounts (BT-99) + Number of Logistics Service fee amounts (BT-X-272)), where the VAT category code (BT-151, BT-95, BT-102, BT-X-273) is "Zero Rated" (Z), 
+        and where applicable the VAT exemption reason and specification code (BT-195, BT-174 and BT-176 and BT-X-592) and the Exemption reason text (BT-194, BT-173 and BT-175 and BT-X-591) are identical with the VAT category VAT exemption reason and specification code (BT-121) and VAT exemption reason text (BT-120),
+        but only for lines where the "Subtype of invoice item" (BT-X-8) has the value "DETAIL" or is not specified   
       </svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
+      <xsl:apply-templates select="*" mode="M10"/>
+   </xsl:template>
+   <!--RULE -->
+   <xsl:template match="//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode[. = 'Z']"
+                 priority="1004"
+                 mode="M10">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="//ram:ApplicableHeaderTradeSettlement/ram:ApplicableTradeTax/ram:CategoryCode[. = 'Z']"/>
       <!--ASSERT -->
       <xsl:choose>
          <xsl:when test="../ram:CalculatedAmount = 0"/>
@@ -4590,21 +4533,6 @@
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>[BR-Z-09]-The VAT category tax amount (BT-117) in a VAT breakdown (BG-23) where VAT category code (BT-118) is "Zero rated" shall equal 0 (zero).</svrl:text>
-            </svrl:failed-assert>
-         </xsl:otherwise>
-      </xsl:choose>
-      <!--ASSERT -->
-      <xsl:choose>
-         <xsl:when test="not(../ram:ExemptionReason) and not (../ram:ExemptionReasonCode)"/>
-         <xsl:otherwise>
-            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="not(../ram:ExemptionReason) and not (../ram:ExemptionReasonCode)">
-               <xsl:attribute name="id">BR-Z-10</xsl:attribute>
-               <xsl:attribute name="flag">fatal</xsl:attribute>
-               <xsl:attribute name="location">
-                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
-               </xsl:attribute>
-               <svrl:text>[BR-Z-10]-A VAT Breakdown (BG-23) with VAT Category code (BT-118) "Zero rated" shall not have a VAT exemption reason code (BT-121) or VAT exemption reason text (BT-120).</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -4841,6 +4769,29 @@
    </xsl:template>
    <!--PATTERN EN16931-CII-Syntax-->
 
+   <!--RULE -->
+   <xsl:template match="//ram:SpecifiedTradeSettlementPaymentMeans"
+                 priority="1030"
+                 mode="M11">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="//ram:SpecifiedTradeSettlementPaymentMeans"/>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="not(ram:PayerSpecifiedDebtorFinancialInstitution)"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="not(ram:PayerSpecifiedDebtorFinancialInstitution)">
+               <xsl:attribute name="id">CII-SR-464</xsl:attribute>
+               <xsl:attribute name="flag">warning</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>[CII-SR-464] - PayerSpecifiedDebtorFincancialInstitution shall not be used.</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="*" mode="M11"/>
+   </xsl:template>
    <!--RULE -->
    <xsl:template match="/rsm:CrossIndustryInvoice/rsm:ExchangedDocumentContext"
                  priority="1029"
@@ -5763,36 +5714,6 @@
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="not(ram:ApplicableProductCharacteristic/ram:TypeCode)"/>
-         <xsl:otherwise>
-            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="not(ram:ApplicableProductCharacteristic/ram:TypeCode)">
-               <xsl:attribute name="id">CII-SR-068</xsl:attribute>
-               <xsl:attribute name="flag">warning</xsl:attribute>
-               <xsl:attribute name="location">
-                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
-               </xsl:attribute>
-               <svrl:text>[CII-SR-068] - TypeCode should not be present</svrl:text>
-            </svrl:failed-assert>
-         </xsl:otherwise>
-      </xsl:choose>
-      <!--ASSERT -->
-      <xsl:choose>
-         <xsl:when test="not(ram:ApplicableProductCharacteristic/ram:ValueMeasure)"/>
-         <xsl:otherwise>
-            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="not(ram:ApplicableProductCharacteristic/ram:ValueMeasure)">
-               <xsl:attribute name="id">CII-SR-070</xsl:attribute>
-               <xsl:attribute name="flag">warning</xsl:attribute>
-               <xsl:attribute name="location">
-                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
-               </xsl:attribute>
-               <svrl:text>[CII-SR-070] - ValueMeasure should not be present</svrl:text>
-            </svrl:failed-assert>
-         </xsl:otherwise>
-      </xsl:choose>
-      <!--ASSERT -->
-      <xsl:choose>
          <xsl:when test="not(ram:ApplicableProductCharacteristic/ram:MeasurementMethodCode)"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
@@ -6280,11 +6201,11 @@
                        context="/rsm:CrossIndustryInvoice/rsm:SupplyChainTradeTransaction/ram:IncludedSupplyChainTradeLineItem/ram:SpecifiedTradeProduct/ram:ApplicableProductCharacteristic"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(count(ram:Description) =1)"/>
+         <xsl:when test="(count(ram:Description) &lt;=1)"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="(count(ram:Description) =1)">
-               <xsl:attribute name="id">CII-SR-069</xsl:attribute>
+                                test="(count(ram:Description) &lt;=1)">
+               <xsl:attribute name="id">CII-FREXT-SR-069</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
@@ -6295,10 +6216,10 @@
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="(count(ram:Value) =1)"/>
+         <xsl:when test="(count(ram:Value) &lt;= 1)"/>
          <xsl:otherwise>
-            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl" test="(count(ram:Value) =1)">
-               <xsl:attribute name="id">CII-SR-072</xsl:attribute>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl" test="(count(ram:Value) &lt;= 1)">
+               <xsl:attribute name="id">CII-FREXT-SR-072</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
@@ -6346,16 +6267,16 @@
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="not(ram:ApplicableTradeDeliveryTerms)"/>
+         <xsl:when test="not(ram:ApplicableTradeDeliveryTerms) or (not(ram:ApplicableTradeDeliveryTerms/*[not(self::ram:DeliveryTypeCode or self::ram:RelevantTradeLocation)]) and not(ram:ApplicableTradeDeliveryTerms/ram:RelevantTradeLocation/*[not(self::ram:Name)]))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="not(ram:ApplicableTradeDeliveryTerms)">
-               <xsl:attribute name="id">CII-SR-106</xsl:attribute>
+                                test="not(ram:ApplicableTradeDeliveryTerms) or (not(ram:ApplicableTradeDeliveryTerms/*[not(self::ram:DeliveryTypeCode or self::ram:RelevantTradeLocation)]) and not(ram:ApplicableTradeDeliveryTerms/ram:RelevantTradeLocation/*[not(self::ram:Name)]))">
+               <xsl:attribute name="id">CII-FREXT-SR-106</xsl:attribute>
                <xsl:attribute name="flag">warning</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>[CII-SR-106] - ApplicableTradeDeliveryTerms should not be present</svrl:text>
+               <svrl:text>[CII-SR-106] - ApplicableTradeDeliveryTerms should not be present except for ram:DeliveryTypeCode for INCOTERMS line level and location on ram:ApplicableTradeDeliveryTerms/ram:RelevantTradeLocation/cbc:Name</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -6515,7 +6436,7 @@
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                 test="count(ram:NetPriceProductTradePrice/ram:ChargeAmount) le 1">
-               <xsl:attribute name="id">CII-SR-439</xsl:attribute>
+               <xsl:attribute name="id">CII-FREXT-SR-439</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
@@ -6641,36 +6562,6 @@
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>[CII-SR-126] - UnitBasisAmount should not be present</svrl:text>
-            </svrl:failed-assert>
-         </xsl:otherwise>
-      </xsl:choose>
-      <!--ASSERT -->
-      <xsl:choose>
-         <xsl:when test="not(ram:GrossPriceProductTradePrice/ram:AppliedTradeAllowanceCharge/ram:ReasonCode)"/>
-         <xsl:otherwise>
-            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="not(ram:GrossPriceProductTradePrice/ram:AppliedTradeAllowanceCharge/ram:ReasonCode)">
-               <xsl:attribute name="id">CII-SR-127</xsl:attribute>
-               <xsl:attribute name="flag">warning</xsl:attribute>
-               <xsl:attribute name="location">
-                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
-               </xsl:attribute>
-               <svrl:text>[CII-SR-127] - ReasonCode should not be present</svrl:text>
-            </svrl:failed-assert>
-         </xsl:otherwise>
-      </xsl:choose>
-      <!--ASSERT -->
-      <xsl:choose>
-         <xsl:when test="not(ram:GrossPriceProductTradePrice/ram:AppliedTradeAllowanceCharge/ram:Reason)"/>
-         <xsl:otherwise>
-            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="not(ram:GrossPriceProductTradePrice/ram:AppliedTradeAllowanceCharge/ram:Reason)">
-               <xsl:attribute name="id">CII-SR-128</xsl:attribute>
-               <xsl:attribute name="flag">warning</xsl:attribute>
-               <xsl:attribute name="location">
-                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
-               </xsl:attribute>
-               <svrl:text>[CII-SR-128] - Reason should not be present</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -7056,6 +6947,51 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="count(ram:RateApplicablePercent) &lt;= 1"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="count(ram:RateApplicablePercent) &lt;= 1">
+               <xsl:attribute name="id">CII-SR-471</xsl:attribute>
+               <xsl:attribute name="flag">fatal</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>[CII-SR-471]-Each Specified Trade Allowance Charge (BG-20)(BG-21) shall contain a VAT category code (BT-95).</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="count(ram:CategoryTradeTax) &lt;= 1"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="count(ram:CategoryTradeTax) &lt;= 1">
+               <xsl:attribute name="id">CII-SR-472</xsl:attribute>
+               <xsl:attribute name="flag">fatal</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>[CII-SR-472]-Each Specified Trade Allowance Charge (BG-20)(BG-21) should contain a VAT rate (BT-96).</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="count(ram:ActualAmount) &lt;= 1"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="count(ram:ActualAmount) &lt;= 1">
+               <xsl:attribute name="id">CII-SR-473</xsl:attribute>
+               <xsl:attribute name="flag">fatal</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>[CII-SR-473] - ActualAmount should exist maximum once</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
       <xsl:apply-templates select="*" mode="M11"/>
    </xsl:template>
    <!--RULE -->
@@ -7368,21 +7304,6 @@
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>[CII-SR-172] - AdditionalReferencedDocument should not be present</svrl:text>
-            </svrl:failed-assert>
-         </xsl:otherwise>
-      </xsl:choose>
-      <!--ASSERT -->
-      <xsl:choose>
-         <xsl:when test="not(ram:DeliveryNoteReferencedDocument)"/>
-         <xsl:otherwise>
-            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="not(ram:DeliveryNoteReferencedDocument)">
-               <xsl:attribute name="id">CII-SR-175</xsl:attribute>
-               <xsl:attribute name="flag">warning</xsl:attribute>
-               <xsl:attribute name="location">
-                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
-               </xsl:attribute>
-               <svrl:text>[CII-SR-175] - DeliveryNoteReferencedDocument should not be present</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -9368,21 +9289,6 @@
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="( count(ram:AdditionalReferencedDocument[ram:TypeCode='130'])  &lt;= 1)"/>
-         <xsl:otherwise>
-            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="( count(ram:AdditionalReferencedDocument[ram:TypeCode='130']) &lt;= 1)">
-               <xsl:attribute name="id">CII-SR-458</xsl:attribute>
-               <xsl:attribute name="flag">warning</xsl:attribute>
-               <xsl:attribute name="location">
-                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
-               </xsl:attribute>
-               <svrl:text>[CII-SR-458] - IssuerAssignedID with TypeCode 130 should exist maximum once</svrl:text>
-            </svrl:failed-assert>
-         </xsl:otherwise>
-      </xsl:choose>
-      <!--ASSERT -->
-      <xsl:choose>
          <xsl:when test="count(ram:SellerTradeParty/ram:URIUniversalCommunication) &lt;= 1"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
@@ -9438,6 +9344,36 @@
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>[CII-SR-466] - Only one BT-56 element is allowed on an invoice.</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="count(ram:AdditionalReferencedDocument[normalize-space(ram:TypeCode) = '916']/ram:Name) &lt;= 1"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="count(ram:AdditionalReferencedDocument[normalize-space(ram:TypeCode) = '916']/ram:Name) &lt;= 1">
+               <xsl:attribute name="id">CII-SR-475</xsl:attribute>
+               <xsl:attribute name="flag">warning</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>[CII-SR-475] - Only one AdditionalReferencedDocument Name BT-123 is allowed with TypeCode 916.</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="count(ram:AdditionalReferencedDocument[normalize-space(ram:TypeCode) = '916']/ram:AttachmentBinaryObject) &lt;= 1"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="count(ram:AdditionalReferencedDocument[normalize-space(ram:TypeCode) = '916']/ram:AttachmentBinaryObject) &lt;= 1">
+               <xsl:attribute name="id">CII-SR-476</xsl:attribute>
+               <xsl:attribute name="flag">warning</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>[CII-SR-476] - Only one AdditionalReferencedDocument AttachmentBinaryObject BT-125 is allowed with TypeCode 916.</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -9826,36 +9762,6 @@
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="not(ram:DespatchAdviceReferencedDocument/ram:LineID)"/>
-         <xsl:otherwise>
-            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="not(ram:DespatchAdviceReferencedDocument/ram:LineID)">
-               <xsl:attribute name="id">CII-SR-333</xsl:attribute>
-               <xsl:attribute name="flag">warning</xsl:attribute>
-               <xsl:attribute name="location">
-                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
-               </xsl:attribute>
-               <svrl:text>[CII-SR-333] - LineID should not be present</svrl:text>
-            </svrl:failed-assert>
-         </xsl:otherwise>
-      </xsl:choose>
-      <!--ASSERT -->
-      <xsl:choose>
-         <xsl:when test="not(ram:DespatchAdviceReferencedDocument/ram:LineID)"/>
-         <xsl:otherwise>
-            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="not(ram:DespatchAdviceReferencedDocument/ram:LineID)">
-               <xsl:attribute name="id">CII-SR-334</xsl:attribute>
-               <xsl:attribute name="flag">warning</xsl:attribute>
-               <xsl:attribute name="location">
-                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
-               </xsl:attribute>
-               <svrl:text>[CII-SR-334] - LineID should not be present</svrl:text>
-            </svrl:failed-assert>
-         </xsl:otherwise>
-      </xsl:choose>
-      <!--ASSERT -->
-      <xsl:choose>
          <xsl:when test="not(ram:DeliveryNoteReferencedDocument)"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
@@ -10087,16 +9993,46 @@
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="not(ram:TaxApplicableTradeCurrencyExchange)"/>
+         <xsl:when test="not(ram:PayeeTradeParty/ram:LogoAssociatedSpecifiedBinaryFile)"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="not(ram:TaxApplicableTradeCurrencyExchange)">
-               <xsl:attribute name="id">CII-SR-366</xsl:attribute>
+                                test="not(ram:PayeeTradeParty/ram:LogoAssociatedSpecifiedBinaryFile)">
+               <xsl:attribute name="id">CII-SR-364</xsl:attribute>
                <xsl:attribute name="flag">warning</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>[CII-SR-366] - TaxApplicableTradeCurrencyExchange should not be present</svrl:text>
+               <svrl:text>[CII-SR-364] - LogoAssociatedSpecifiedBinaryFile should not be present</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="(not(ram:PayeeTradeParty/ram:ID) and ram:PayeeTradeParty/ram:GlobalID) or (ram:PayeeTradeParty/ram:ID and not(ram:PayeeTradeParty/ram:GlobalID)) or (not(ram:PayeeTradeParty/ram:ID) and not(ram:PayeeTradeParty/ram:GlobalID))"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="(not(ram:PayeeTradeParty/ram:ID) and ram:PayeeTradeParty/ram:GlobalID) or (ram:PayeeTradeParty/ram:ID and not(ram:PayeeTradeParty/ram:GlobalID)) or (not(ram:PayeeTradeParty/ram:ID) and not(ram:PayeeTradeParty/ram:GlobalID))">
+               <xsl:attribute name="id">CII-SR-451</xsl:attribute>
+               <xsl:attribute name="flag">warning</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>[CII-SR-451] - Only one payee identifier should be present (either the ID or the Global ID)</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="not(ram:TaxApplicableTradeCurrencyExchange)         or (every $n in ram:TaxApplicableTradeCurrencyExchange/* satisfies (local-name($n) = ('SourceCurrencyCode', 'TargetCurrencyCode', 'ConversionRate', 'ConversionRateDateTime')))"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="not(ram:TaxApplicableTradeCurrencyExchange) or (every $n in ram:TaxApplicableTradeCurrencyExchange/* satisfies (local-name($n) = ('SourceCurrencyCode', 'TargetCurrencyCode', 'ConversionRate', 'ConversionRateDateTime')))">
+               <xsl:attribute name="id">CII-FREXT-SR-366</xsl:attribute>
+               <xsl:attribute name="flag">warning</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>[CII-FREXT-SR-366] - This value in TaxApplicableTradeCurrencyExchange should not be present</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -11173,6 +11109,276 @@
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="count(ram:LineTotalAmount) &lt;= 1"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="count(ram:LineTotalAmount) &lt;= 1">
+               <xsl:attribute name="id">CII-SR-477</xsl:attribute>
+               <xsl:attribute name="flag">fatal</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>[CII-SR-477] - LineTotalAmount shall occur at most once in SpecifiedTradeSettlementHeaderMonetarySummation.</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="count(ram:ChargeTotalAmount) &lt;= 1"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="count(ram:ChargeTotalAmount) &lt;= 1">
+               <xsl:attribute name="id">CII-SR-478</xsl:attribute>
+               <xsl:attribute name="flag">fatal</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>[CII-SR-478] - ChargeTotalAmount shall occur at most once in SpecifiedTradeSettlementHeaderMonetarySummation.</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="count(ram:AllowanceTotalAmount) &lt;= 1"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="count(ram:AllowanceTotalAmount) &lt;= 1">
+               <xsl:attribute name="id">CII-SR-479</xsl:attribute>
+               <xsl:attribute name="flag">fatal</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>[CII-SR-479] - AllowanceTotalAmount shall occur at most once in SpecifiedTradeSettlementHeaderMonetarySummation.</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="count(ram:TaxBasisTotalAmount) &lt;= 1"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="count(ram:TaxBasisTotalAmount) &lt;= 1">
+               <xsl:attribute name="id">CII-SR-480</xsl:attribute>
+               <xsl:attribute name="flag">fatal</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>[CII-SR-480] - TaxBasisTotalAmount shall occur at most once in SpecifiedTradeSettlementHeaderMonetarySummation.</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="count(ram:RoundingAmount) &lt;= 1"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="count(ram:RoundingAmount) &lt;= 1">
+               <xsl:attribute name="id">CII-SR-481</xsl:attribute>
+               <xsl:attribute name="flag">fatal</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>[CII-SR-481] - RoundingAmount shall occur at most once in SpecifiedTradeSettlementHeaderMonetarySummation.</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="count(ram:GrandTotalAmount) &lt;= 1"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="count(ram:GrandTotalAmount) &lt;= 1">
+               <xsl:attribute name="id">CII-SR-482</xsl:attribute>
+               <xsl:attribute name="flag">fatal</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>[CII-SR-482] - GrandTotalAmount shall occur at most once in SpecifiedTradeSettlementHeaderMonetarySummation.</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="count(ram:InformationAmount) &lt;= 1"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="count(ram:InformationAmount) &lt;= 1">
+               <xsl:attribute name="id">CII-SR-483</xsl:attribute>
+               <xsl:attribute name="flag">fatal</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>[CII-SR-483] - InformationAmount shall occur at most once in SpecifiedTradeSettlementHeaderMonetarySummation.</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="count(ram:TotalPrepaidAmount) &lt;= 1"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="count(ram:TotalPrepaidAmount) &lt;= 1">
+               <xsl:attribute name="id">CII-SR-484</xsl:attribute>
+               <xsl:attribute name="flag">fatal</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>[CII-SR-484] - TotalPrepaidAmount shall occur at most once in SpecifiedTradeSettlementHeaderMonetarySummation.</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="count(ram:TotalDiscountAmount) &lt;= 1"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="count(ram:TotalDiscountAmount) &lt;= 1">
+               <xsl:attribute name="id">CII-SR-485</xsl:attribute>
+               <xsl:attribute name="flag">fatal</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>[CII-SR-485] - TotalDiscountAmount shall occur at most once in SpecifiedTradeSettlementHeaderMonetarySummation.</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="count(ram:TotalAllowanceChargeAmount) &lt;= 1"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="count(ram:TotalAllowanceChargeAmount) &lt;= 1">
+               <xsl:attribute name="id">CII-SR-486</xsl:attribute>
+               <xsl:attribute name="flag">fatal</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>[CII-SR-486] - TotalAllowanceChargeAmount shall occur at most once in SpecifiedTradeSettlementHeaderMonetarySummation.</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="count(ram:DuePayableAmount) &lt;= 1"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="count(ram:DuePayableAmount) &lt;= 1">
+               <xsl:attribute name="id">CII-SR-487</xsl:attribute>
+               <xsl:attribute name="flag">fatal</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>[CII-SR-487] - DuePayableAmount shall occur at most once in SpecifiedTradeSettlementHeaderMonetarySummation.</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="count(ram:RetailValueExcludingTaxInformationAmount) &lt;= 1"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="count(ram:RetailValueExcludingTaxInformationAmount) &lt;= 1">
+               <xsl:attribute name="id">CII-SR-488</xsl:attribute>
+               <xsl:attribute name="flag">fatal</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>[CII-SR-488] - RetailValueExcludingTaxInformationAmount shall occur at most once in SpecifiedTradeSettlementHeaderMonetarySummation.</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="count(ram:TotalDepositFeeInformationAmount) &lt;= 1"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="count(ram:TotalDepositFeeInformationAmount) &lt;= 1">
+               <xsl:attribute name="id">CII-SR-489</xsl:attribute>
+               <xsl:attribute name="flag">fatal</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>[CII-SR-489] - TotalDepositFeeInformationAmount shall occur at most once in SpecifiedTradeSettlementHeaderMonetarySummation.</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="count(ram:ProductValueExcludingTobaccoTaxInformationAmount) &lt;= 1"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="count(ram:ProductValueExcludingTobaccoTaxInformationAmount) &lt;= 1">
+               <xsl:attribute name="id">CII-SR-490</xsl:attribute>
+               <xsl:attribute name="flag">fatal</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>[CII-SR-490] - ProductValueExcludingTobaccoTaxInformationAmount shall occur at most once in SpecifiedTradeSettlementHeaderMonetarySummation.</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="count(ram:TotalRetailValueInformationAmount) &lt;= 1"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="count(ram:TotalRetailValueInformationAmount) &lt;= 1">
+               <xsl:attribute name="id">CII-SR-491</xsl:attribute>
+               <xsl:attribute name="flag">fatal</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>[CII-SR-491] - TotalRetailValueInformationAmount shall occur at most once in SpecifiedTradeSettlementHeaderMonetarySummation.</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="count(ram:GrossLineTotalAmount) &lt;= 1"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="count(ram:GrossLineTotalAmount) &lt;= 1">
+               <xsl:attribute name="id">CII-SR-492</xsl:attribute>
+               <xsl:attribute name="flag">fatal</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>[CII-SR-492] - GrossLineTotalAmount shall occur at most once in SpecifiedTradeSettlementHeaderMonetarySummation.</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="count(ram:NetLineTotalAmount) &lt;= 1"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="count(ram:NetLineTotalAmount) &lt;= 1">
+               <xsl:attribute name="id">CII-SR-493</xsl:attribute>
+               <xsl:attribute name="flag">fatal</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>[CII-SR-493] - NetLineTotalAmount shall occur at most once in SpecifiedTradeSettlementHeaderMonetarySummation.</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="count(ram:NetIncludingTaxesLineTotalAmount) &lt;= 1"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="count(ram:NetIncludingTaxesLineTotalAmount) &lt;= 1">
+               <xsl:attribute name="id">CII-SR-494</xsl:attribute>
+               <xsl:attribute name="flag">fatal</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>[CII-SR-494] - NetIncludingTaxesLineTotalAmount shall occur at most once in SpecifiedTradeSettlementHeaderMonetarySummation.</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
       <xsl:apply-templates select="*" mode="M11"/>
    </xsl:template>
    <!--RULE -->
@@ -11219,6 +11425,51 @@
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
                <svrl:text>[CII-SR-438] - ValuationBreakdownStatement should not be present</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="count(//ram:SpecifiedTradeSettlementPaymentMeans/ram:TypeCode[normalize-space(.) != normalize-space((//ram:SpecifiedTradeSettlementPaymentMeans/ram:TypeCode)[1])]) = 0"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="count(//ram:SpecifiedTradeSettlementPaymentMeans/ram:TypeCode[normalize-space(.) != normalize-space((//ram:SpecifiedTradeSettlementPaymentMeans/ram:TypeCode)[1])]) = 0">
+               <xsl:attribute name="id">CII-SR-467</xsl:attribute>
+               <xsl:attribute name="flag">fatal</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>[CII-SR-467] - All Payment means type codes (BT-81) shall have the same value across all SpecifiedTradeSettlementPaymentMeans.</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="count(//ram:SpecifiedTradeSettlementPaymentMeans/ram:Information[normalize-space(.) != normalize-space((//ram:SpecifiedTradeSettlementPaymentMeans/ram:Information)[1])]) = 0"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="count(//ram:SpecifiedTradeSettlementPaymentMeans/ram:Information[normalize-space(.) != normalize-space((//ram:SpecifiedTradeSettlementPaymentMeans/ram:Information)[1])]) = 0">
+               <xsl:attribute name="id">CII-SR-468</xsl:attribute>
+               <xsl:attribute name="flag">fatal</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>[CII-SR-468] - All Payment means texts (BT-82) shall have the same value across all SpecifiedTradeSettlementPaymentMeans.</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="count(//ram:ApplicableHeaderTradeSettlement/ram:PaymentReference) &lt;= 1"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="count(//ram:ApplicableHeaderTradeSettlement/ram:PaymentReference) &lt;= 1">
+               <xsl:attribute name="id">CII-SR-469</xsl:attribute>
+               <xsl:attribute name="flag">fatal</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>[CII-SR-469] - Payment reference (BT-83) shall occur at most once in the document.</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -11631,12 +11882,12 @@
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                 test="not(ram:TypeCode) or (self::ram:AdditionalReferencedDocument) and (ram:TypeCode='50' or ram:TypeCode='130' or ram:TypeCode='916') or self::ram:InvoiceReferencedDocument">
-               <xsl:attribute name="id">CII-DT-018</xsl:attribute>
+               <xsl:attribute name="id">CII-EXT-DT-018</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>[CII-DT-018] - TypeCode should not be present</svrl:text>
+               <svrl:text>[CII-EXT-DT-018] - TypeCode should not be present</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -11718,12 +11969,12 @@
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                                 test="not(ram:ReferenceTypeCode) or (self::ram:AdditionalReferencedDocument and ram:TypeCode='130') or (self::ram:ContractReferencedDocument)">
-               <xsl:attribute name="id">CII-EXT-DT-024</xsl:attribute>
+               <xsl:attribute name="id">CII-FREXT-DT-024</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>[CII-EXT-DT-024] - ReferenceTypeCode should not be present</svrl:text>
+               <svrl:text>[CII-FREXT-DT-024] - ReferenceTypeCode should not be present</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -11758,16 +12009,16 @@
       </xsl:choose>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="not(ram:FormattedIssueDateTime) or self::ram:InvoiceReferencedDocument"/>
+         <xsl:when test="not(ram:FormattedIssueDateTime) or self::ram:InvoiceReferencedDocument or self::ram:ContractReferencedDocument or  self::ram:BuyerOrderReferencedDocument or  self::ram:DespatchAdviceReferencedDocument"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="not(ram:FormattedIssueDateTime) or self::ram:InvoiceReferencedDocument">
-               <xsl:attribute name="id">CII-DT-027</xsl:attribute>
+                                test="not(ram:FormattedIssueDateTime) or self::ram:InvoiceReferencedDocument or self::ram:ContractReferencedDocument or self::ram:BuyerOrderReferencedDocument or self::ram:DespatchAdviceReferencedDocument">
+               <xsl:attribute name="id">CII-FREXTDT-027</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>[CII-DT-027] - FormattedIssueDateTime should not be present</svrl:text>
+               <svrl:text>[CII-FREXT-DT-027] - FormattedIssueDateTime should not be present</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -12742,7 +12993,7 @@
 
    <!--RULE -->
    <xsl:template match="rsm:ExchangedDocument/ram:TypeCode"
-                 priority="1023"
+                 priority="1026"
                  mode="M12">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="rsm:ExchangedDocument/ram:TypeCode"/>
@@ -12764,15 +13015,15 @@
       <xsl:apply-templates select="*" mode="M12"/>
    </xsl:template>
    <!--RULE -->
-   <xsl:template match="ram:TaxTotalAmount[@currencyID]" priority="1022" mode="M12">
+   <xsl:template match="ram:TaxTotalAmount[@currencyID]" priority="1025" mode="M12">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="ram:TaxTotalAmount[@currencyID]"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="((not(contains(normalize-space(@currencyID), ' ')) and contains(' AED AFN ALL AMD ANG AOA ARS AUD AWG AZN BAM BBD BDT BGN BHD BIF BMD BND BOB BOV BRL BSD BTN BWP BYN BZD CAD CDF CHE CHF CHW CLF CLP CNH CNY COP COU CRC CUP CVE CZK DJF DKK DOP DZD EGP ERN ETB EUR FJD FKP GBP GEL GHS GIP GMD GNF GTQ GYD HKD HNL HTG HUF IDR ILS INR IQD IRR ISK JMD JOD JPY KES KGS KHR KMF KPW KRW KWD KYD KZT LAK LBP LKR LRD LSL LYD MAD MDL MGA MKD MMK MNT MOP MRU MUR MVR MWK MXN MXV MYR MZN NAD NGN NIO NOK NPR NZD OMR PAB PEN PGK PHP PKR PLN PYG QAR RON RSD RUB RWF SAR SBD SCR SDG SEK SGD SHP SLE SOS SRD SSP STD SVC SYP SZL THB TJS TMT TND TOP TRY TTD TWD TZS UAH UGX USD USN UYI UYU UYW UZS VES VED VND VUV WST XAF XAG XAU XBA XBB XBC XBD XCD XDR XOF XPD XPF XPT XSU XTS XUA XXX YER ZAR ZMW ZWG ', concat(' ', normalize-space(@currencyID), ' '))))"/>
+         <xsl:when test="((not(contains(normalize-space(@currencyID), ' ')) and contains(' AED AFN ALL AMD AOA ARS AUD AWG AZN BAM BBD BDT BHD BIF BMD BND BOB BOV BRL BSD BTN BWP BYN BZD CAD CDF CHE CHF CHW CLF CLP CNH CNY COP COU CRC CUP CVE CZK DJF DKK DOP DZD EGP ERN ETB EUR FJD FKP GBP GEL GHS GIP GMD GNF GTQ GYD HKD HNL HTG HUF IDR ILS INR IQD IRR ISK JMD JOD JPY KES KGS KHR KMF KPW KRW KWD KYD KZT LAK LBP LKR LRD LSL LYD MAD MDL MGA MKD MMK MNT MOP MRU MUR MVR MWK MXN MXV MYR MZN NAD NGN NIO NOK NPR NZD OMR PAB PEN PGK PHP PKR PLN PYG QAR RON RSD RUB RWF SAR SBD SCR SDG SEK SGD SHP SLE SOS SRD SSP STD SVC SYP SZL THB TJS TMT TND TOP TRY TTD TWD TZS UAH UGX USD USN UYI UYU UYW UZS VES VED VND VUV WST XAF XAG XAU XBA XBB XBC XBD XCD XCG XDR XOF XPD XPF XPT XSU XTS XUA XXX YER ZAR ZMW ZWG ', concat(' ', normalize-space(@currencyID), ' '))))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="((not(contains(normalize-space(@currencyID), ' ')) and contains(' AED AFN ALL AMD ANG AOA ARS AUD AWG AZN BAM BBD BDT BGN BHD BIF BMD BND BOB BOV BRL BSD BTN BWP BYN BZD CAD CDF CHE CHF CHW CLF CLP CNH CNY COP COU CRC CUP CVE CZK DJF DKK DOP DZD EGP ERN ETB EUR FJD FKP GBP GEL GHS GIP GMD GNF GTQ GYD HKD HNL HTG HUF IDR ILS INR IQD IRR ISK JMD JOD JPY KES KGS KHR KMF KPW KRW KWD KYD KZT LAK LBP LKR LRD LSL LYD MAD MDL MGA MKD MMK MNT MOP MRU MUR MVR MWK MXN MXV MYR MZN NAD NGN NIO NOK NPR NZD OMR PAB PEN PGK PHP PKR PLN PYG QAR RON RSD RUB RWF SAR SBD SCR SDG SEK SGD SHP SLE SOS SRD SSP STD SVC SYP SZL THB TJS TMT TND TOP TRY TTD TWD TZS UAH UGX USD USN UYI UYU UYW UZS VES VED VND VUV WST XAF XAG XAU XBA XBB XBC XBD XCD XDR XOF XPD XPF XPT XSU XTS XUA XXX YER ZAR ZMW ZWG ', concat(' ', normalize-space(@currencyID), ' '))))">
+                                test="((not(contains(normalize-space(@currencyID), ' ')) and contains(' AED AFN ALL AMD AOA ARS AUD AWG AZN BAM BBD BDT BHD BIF BMD BND BOB BOV BRL BSD BTN BWP BYN BZD CAD CDF CHE CHF CHW CLF CLP CNH CNY COP COU CRC CUP CVE CZK DJF DKK DOP DZD EGP ERN ETB EUR FJD FKP GBP GEL GHS GIP GMD GNF GTQ GYD HKD HNL HTG HUF IDR ILS INR IQD IRR ISK JMD JOD JPY KES KGS KHR KMF KPW KRW KWD KYD KZT LAK LBP LKR LRD LSL LYD MAD MDL MGA MKD MMK MNT MOP MRU MUR MVR MWK MXN MXV MYR MZN NAD NGN NIO NOK NPR NZD OMR PAB PEN PGK PHP PKR PLN PYG QAR RON RSD RUB RWF SAR SBD SCR SDG SEK SGD SHP SLE SOS SRD SSP STD SVC SYP SZL THB TJS TMT TND TOP TRY TTD TWD TZS UAH UGX USD USN UYI UYU UYW UZS VES VED VND VUV WST XAF XAG XAU XBA XBB XBC XBD XCD XCG XDR XOF XPD XPF XPT XSU XTS XUA XXX YER ZAR ZMW ZWG ', concat(' ', normalize-space(@currencyID), ' '))))">
                <xsl:attribute name="id">BR-CL-03</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
@@ -12785,15 +13036,15 @@
       <xsl:apply-templates select="*" mode="M12"/>
    </xsl:template>
    <!--RULE -->
-   <xsl:template match="ram:InvoiceCurrencyCode" priority="1021" mode="M12">
+   <xsl:template match="ram:InvoiceCurrencyCode" priority="1024" mode="M12">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="ram:InvoiceCurrencyCode"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="((not(contains(normalize-space(.), ' ')) and contains(' AED AFN ALL AMD ANG AOA ARS AUD AWG AZN BAM BBD BDT BGN BHD BIF BMD BND BOB BOV BRL BSD BTN BWP BYN BZD CAD CDF CHE CHF CHW CLF CLP CNH CNY COP COU CRC CUP CVE CZK DJF DKK DOP DZD EGP ERN ETB EUR FJD FKP GBP GEL GHS GIP GMD GNF GTQ GYD HKD HNL HTG HUF IDR ILS INR IQD IRR ISK JMD JOD JPY KES KGS KHR KMF KPW KRW KWD KYD KZT LAK LBP LKR LRD LSL LYD MAD MDL MGA MKD MMK MNT MOP MRU MUR MVR MWK MXN MXV MYR MZN NAD NGN NIO NOK NPR NZD OMR PAB PEN PGK PHP PKR PLN PYG QAR RON RSD RUB RWF SAR SBD SCR SDG SEK SGD SHP SLE SOS SRD SSP STD SVC SYP SZL THB TJS TMT TND TOP TRY TTD TWD TZS UAH UGX USD USN UYI UYU UYW UZS VES VED VND VUV WST XAF XAG XAU XBA XBB XBC XBD XCD XDR XOF XPD XPF XPT XSU XTS XUA XXX YER ZAR ZMW ZWG ', concat(' ', normalize-space(.), ' '))))"/>
+         <xsl:when test="((not(contains(normalize-space(.), ' ')) and contains(' AED AFN ALL AMD AOA ARS AUD AWG AZN BAM BBD BDT BHD BIF BMD BND BOB BOV BRL BSD BTN BWP BYN BZD CAD CDF CHE CHF CHW CLF CLP CNH CNY COP COU CRC CUP CVE CZK DJF DKK DOP DZD EGP ERN ETB EUR FJD FKP GBP GEL GHS GIP GMD GNF GTQ GYD HKD HNL HTG HUF IDR ILS INR IQD IRR ISK JMD JOD JPY KES KGS KHR KMF KPW KRW KWD KYD KZT LAK LBP LKR LRD LSL LYD MAD MDL MGA MKD MMK MNT MOP MRU MUR MVR MWK MXN MXV MYR MZN NAD NGN NIO NOK NPR NZD OMR PAB PEN PGK PHP PKR PLN PYG QAR RON RSD RUB RWF SAR SBD SCR SDG SEK SGD SHP SLE SOS SRD SSP STD SVC SYP SZL THB TJS TMT TND TOP TRY TTD TWD TZS UAH UGX USD USN UYI UYU UYW UZS VES VED VND VUV WST XAF XAG XAU XBA XBB XBC XBD XCD XCG XDR XOF XPD XPF XPT XSU XTS XUA XXX YER ZAR ZMW ZWG ', concat(' ', normalize-space(.), ' '))))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="((not(contains(normalize-space(.), ' ')) and contains(' AED AFN ALL AMD ANG AOA ARS AUD AWG AZN BAM BBD BDT BGN BHD BIF BMD BND BOB BOV BRL BSD BTN BWP BYN BZD CAD CDF CHE CHF CHW CLF CLP CNH CNY COP COU CRC CUP CVE CZK DJF DKK DOP DZD EGP ERN ETB EUR FJD FKP GBP GEL GHS GIP GMD GNF GTQ GYD HKD HNL HTG HUF IDR ILS INR IQD IRR ISK JMD JOD JPY KES KGS KHR KMF KPW KRW KWD KYD KZT LAK LBP LKR LRD LSL LYD MAD MDL MGA MKD MMK MNT MOP MRU MUR MVR MWK MXN MXV MYR MZN NAD NGN NIO NOK NPR NZD OMR PAB PEN PGK PHP PKR PLN PYG QAR RON RSD RUB RWF SAR SBD SCR SDG SEK SGD SHP SLE SOS SRD SSP STD SVC SYP SZL THB TJS TMT TND TOP TRY TTD TWD TZS UAH UGX USD USN UYI UYU UYW UZS VES VED VND VUV WST XAF XAG XAU XBA XBB XBC XBD XCD XDR XOF XPD XPF XPT XSU XTS XUA XXX YER ZAR ZMW ZWG ', concat(' ', normalize-space(.), ' '))))">
+                                test="((not(contains(normalize-space(.), ' ')) and contains(' AED AFN ALL AMD AOA ARS AUD AWG AZN BAM BBD BDT BHD BIF BMD BND BOB BOV BRL BSD BTN BWP BYN BZD CAD CDF CHE CHF CHW CLF CLP CNH CNY COP COU CRC CUP CVE CZK DJF DKK DOP DZD EGP ERN ETB EUR FJD FKP GBP GEL GHS GIP GMD GNF GTQ GYD HKD HNL HTG HUF IDR ILS INR IQD IRR ISK JMD JOD JPY KES KGS KHR KMF KPW KRW KWD KYD KZT LAK LBP LKR LRD LSL LYD MAD MDL MGA MKD MMK MNT MOP MRU MUR MVR MWK MXN MXV MYR MZN NAD NGN NIO NOK NPR NZD OMR PAB PEN PGK PHP PKR PLN PYG QAR RON RSD RUB RWF SAR SBD SCR SDG SEK SGD SHP SLE SOS SRD SSP STD SVC SYP SZL THB TJS TMT TND TOP TRY TTD TWD TZS UAH UGX USD USN UYI UYU UYW UZS VES VED VND VUV WST XAF XAG XAU XBA XBB XBC XBD XCD XCG XDR XOF XPD XPF XPT XSU XTS XUA XXX YER ZAR ZMW ZWG ', concat(' ', normalize-space(.), ' '))))">
                <xsl:attribute name="id">BR-CL-04</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
@@ -12806,14 +13057,14 @@
       <xsl:apply-templates select="*" mode="M12"/>
    </xsl:template>
    <!--RULE -->
-   <xsl:template match="ram:TaxCurrencyCode" priority="1020" mode="M12">
+   <xsl:template match="ram:TaxCurrencyCode" priority="1023" mode="M12">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="ram:TaxCurrencyCode"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="((not(contains(normalize-space(.), ' ')) and contains(' AED AFN ALL AMD ANG AOA ARS AUD AWG AZN BAM BBD BDT BGN BHD BIF BMD BND BOB BOV BRL BSD BTN BWP BYN BZD CAD CDF CHE CHF CHW CLF CLP CNH CNY COP COU CRC CUP CVE CZK DJF DKK DOP DZD EGP ERN ETB EUR FJD FKP GBP GEL GHS GIP GMD GNF GTQ GYD HKD HNL HTG HUF IDR ILS INR IQD IRR ISK JMD JOD JPY KES KGS KHR KMF KPW KRW KWD KYD KZT LAK LBP LKR LRD LSL LYD MAD MDL MGA MKD MMK MNT MOP MRU MUR MVR MWK MXN MXV MYR MZN NAD NGN NIO NOK NPR NZD OMR PAB PEN PGK PHP PKR PLN PYG QAR RON RSD RUB RWF SAR SBD SCR SDG SEK SGD SHP SLE SOS SRD SSP STD SVC SYP SZL THB TJS TMT TND TOP TRY TTD TWD TZS UAH UGX USD USN UYI UYU UYW UZS VES VED VND VUV WST XAF XAG XAU XBA XBB XBC XBD XCD XDR XOF XPD XPF XPT XSU XTS XUA XXX YER ZAR ZMW ZWG ', concat(' ', normalize-space(.), ' '))))"/>
+         <xsl:when test="((not(contains(normalize-space(.), ' ')) and contains(' AED AFN ALL AMD AOA ARS AUD AWG AZN BAM BBD BDT BHD BIF BMD BND BOB BOV BRL BSD BTN BWP BYN BZD CAD CDF CHE CHF CHW CLF CLP CNH CNY COP COU CRC CUP CVE CZK DJF DKK DOP DZD EGP ERN ETB EUR FJD FKP GBP GEL GHS GIP GMD GNF GTQ GYD HKD HNL HTG HUF IDR ILS INR IQD IRR ISK JMD JOD JPY KES KGS KHR KMF KPW KRW KWD KYD KZT LAK LBP LKR LRD LSL LYD MAD MDL MGA MKD MMK MNT MOP MRU MUR MVR MWK MXN MXV MYR MZN NAD NGN NIO NOK NPR NZD OMR PAB PEN PGK PHP PKR PLN PYG QAR RON RSD RUB RWF SAR SBD SCR SDG SEK SGD SHP SLE SOS SRD SSP STD SVC SYP SZL THB TJS TMT TND TOP TRY TTD TWD TZS UAH UGX USD USN UYI UYU UYW UZS VES VED VND VUV WST XAF XAG XAU XBA XBB XBC XBD XCD XCG XDR XOF XPD XPF XPT XSU XTS XUA XXX YER ZAR ZMW ZWG ', concat(' ', normalize-space(.), ' '))))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="((not(contains(normalize-space(.), ' ')) and contains(' AED AFN ALL AMD ANG AOA ARS AUD AWG AZN BAM BBD BDT BGN BHD BIF BMD BND BOB BOV BRL BSD BTN BWP BYN BZD CAD CDF CHE CHF CHW CLF CLP CNH CNY COP COU CRC CUP CVE CZK DJF DKK DOP DZD EGP ERN ETB EUR FJD FKP GBP GEL GHS GIP GMD GNF GTQ GYD HKD HNL HTG HUF IDR ILS INR IQD IRR ISK JMD JOD JPY KES KGS KHR KMF KPW KRW KWD KYD KZT LAK LBP LKR LRD LSL LYD MAD MDL MGA MKD MMK MNT MOP MRU MUR MVR MWK MXN MXV MYR MZN NAD NGN NIO NOK NPR NZD OMR PAB PEN PGK PHP PKR PLN PYG QAR RON RSD RUB RWF SAR SBD SCR SDG SEK SGD SHP SLE SOS SRD SSP STD SVC SYP SZL THB TJS TMT TND TOP TRY TTD TWD TZS UAH UGX USD USN UYI UYU UYW UZS VES VED VND VUV WST XAF XAG XAU XBA XBB XBC XBD XCD XDR XOF XPD XPF XPT XSU XTS XUA XXX YER ZAR ZMW ZWG ', concat(' ', normalize-space(.), ' '))))">
+                                test="((not(contains(normalize-space(.), ' ')) and contains(' AED AFN ALL AMD AOA ARS AUD AWG AZN BAM BBD BDT BHD BIF BMD BND BOB BOV BRL BSD BTN BWP BYN BZD CAD CDF CHE CHF CHW CLF CLP CNH CNY COP COU CRC CUP CVE CZK DJF DKK DOP DZD EGP ERN ETB EUR FJD FKP GBP GEL GHS GIP GMD GNF GTQ GYD HKD HNL HTG HUF IDR ILS INR IQD IRR ISK JMD JOD JPY KES KGS KHR KMF KPW KRW KWD KYD KZT LAK LBP LKR LRD LSL LYD MAD MDL MGA MKD MMK MNT MOP MRU MUR MVR MWK MXN MXV MYR MZN NAD NGN NIO NOK NPR NZD OMR PAB PEN PGK PHP PKR PLN PYG QAR RON RSD RUB RWF SAR SBD SCR SDG SEK SGD SHP SLE SOS SRD SSP STD SVC SYP SZL THB TJS TMT TND TOP TRY TTD TWD TZS UAH UGX USD USN UYI UYU UYW UZS VES VED VND VUV WST XAF XAG XAU XBA XBB XBC XBD XCD XCG XDR XOF XPD XPF XPT XSU XTS XUA XXX YER ZAR ZMW ZWG ', concat(' ', normalize-space(.), ' '))))">
                <xsl:attribute name="id">BR-CL-05</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
@@ -12826,7 +13077,7 @@
       <xsl:apply-templates select="*" mode="M12"/>
    </xsl:template>
    <!--RULE -->
-   <xsl:template match="ram:DueDateTypeCode" priority="1019" mode="M12">
+   <xsl:template match="ram:DueDateTypeCode" priority="1022" mode="M12">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="ram:DueDateTypeCode"/>
       <!--ASSERT -->
       <xsl:choose>
@@ -12846,7 +13097,7 @@
       <xsl:apply-templates select="*" mode="M12"/>
    </xsl:template>
    <!--RULE -->
-   <xsl:template match="ram:ReferenceTypeCode" priority="1018" mode="M12">
+   <xsl:template match="ram:ReferenceTypeCode" priority="1021" mode="M12">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="ram:ReferenceTypeCode"/>
       <!--ASSERT -->
       <xsl:choose>
@@ -12866,7 +13117,7 @@
       <xsl:apply-templates select="*" mode="M12"/>
    </xsl:template>
    <!--RULE -->
-   <xsl:template match="ram:SubjectCode" priority="1017" mode="M12">
+   <xsl:template match="ram:SubjectCode" priority="1020" mode="M12">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="ram:SubjectCode"/>
       <!--ASSERT -->
       <xsl:choose>
@@ -12887,22 +13138,22 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="//ram:GlobalID[@schemeID][not(ancestor::ram:SpecifiedTradeProduct) and not(ancestor::ram:ShipToTradeParty)]"
-                 priority="1016"
+                 priority="1019"
                  mode="M12">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="//ram:GlobalID[@schemeID][not(ancestor::ram:SpecifiedTradeProduct) and not(ancestor::ram:ShipToTradeParty)]"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="((not(contains(normalize-space(@schemeID), ' ')) and contains(' 0002 0003 0004 0005 0006 0007 0008 0009 0010 0011 0012 0013 0014 0015 0016 0017 0018 0019 0020 0021 0022 0023 0024 0025 0026 0027 0028 0029 0030 0031 0032 0033 0034 0035 0036 0037 0038 0039 0040 0041 0042 0043 0044 0045 0046 0047 0048 0049 0050 0051 0052 0053 0054 0055 0056 0057 0058 0059 0060 0061 0062 0063 0064 0065 0066 0067 0068 0069 0070 0071 0072 0073 0074 0075 0076 0077 0078 0079 0080 0081 0082 0083 0084 0085 0086 0087 0088 0089 0090 0091 0093 0094 0095 0096 0097 0098 0099 0100 0101 0102 0104 0105 0106 0107 0108 0109 0110 0111 0112 0113 0114 0115 0116 0117 0118 0119 0120 0121 0122 0123 0124 0125 0126 0127 0128 0129 0130 0131 0132 0133 0134 0135 0136 0137 0138 0139 0140 0141 0142 0143 0144 0145 0146 0147 0148 0149 0150 0151 0152 0153 0154 0155 0156 0157 0158 0159 0160 0161 0162 0163 0164 0165 0166 0167 0168 0169 0170 0171 0172 0173 0174 0175 0176 0177 0178 0179 0180 0183 0184 0185 0186 0187 0188 0189 0190 0191 0192 0193 0194 0195 0196 0197 0198 0199 0200 0201 0202 0203 0204 0205 0206 0207 0208 0209 0210 0211 0212 0213 0214 0215 0216 0217 0218 0219 0220 0221 0222 0223 0224 0225 0226 0227 0228 0229 0230 0231 0232 0233 0234 0235 0236 0237 0238 0239 0240 0241 0242 0243 0244', concat(' ', normalize-space(@schemeID), ' '))))"/>
+         <xsl:when test="((not(contains(normalize-space(@schemeID), ' ')) and contains(' BY SE 0002 0003 0004 0005 0006 0007 0008 0009 0010 0011 0012 0013 0014 0015 0016 0017 0018 0019 0020 0021 0022 0023 0024 0025 0026 0027 0028 0029 0030 0031 0032 0033 0034 0035 0036 0037 0038 0039 0040 0041 0042 0043 0044 0045 0046 0047 0048 0049 0050 0051 0052 0053 0054 0055 0056 0057 0058 0059 0060 0061 0062 0063 0064 0065 0066 0067 0068 0069 0070 0071 0072 0073 0074 0075 0076 0077 0078 0079 0080 0081 0082 0083 0084 0085 0086 0087 0088 0089 0090 0091 0093 0094 0095 0096 0097 0098 0099 0100 0101 0102 0104 0105 0106 0107 0108 0109 0110 0111 0112 0113 0114 0115 0116 0117 0118 0119 0120 0121 0122 0123 0124 0125 0126 0127 0128 0129 0130 0131 0132 0133 0134 0135 0136 0137 0138 0139 0140 0141 0142 0143 0144 0145 0146 0147 0148 0149 0150 0151 0152 0153 0154 0155 0156 0157 0158 0159 0160 0161 0162 0163 0164 0165 0166 0167 0168 0169 0170 0171 0172 0173 0174 0175 0176 0177 0178 0179 0180 0183 0184 0185 0186 0187 0188 0189 0190 0191 0192 0193 0194 0195 0196 0197 0198 0199 0200 0201 0202 0203 0204 0205 0206 0207 0208 0209 0210 0211 0212 0213 0214 0215 0216 0217 0218 0219 0220 0221 0222 0223 0224 0225 0226 0227 0228 0229 0230 0231 0232 0233 0234 0235 0236 0237 0238 0239 0240 0241 0242 0243 0244 0245 0246 0247 0248 ', concat(' ', normalize-space(@schemeID), ' '))))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="((not(contains(normalize-space(@schemeID), ' ')) and contains(' 0002 0003 0004 0005 0006 0007 0008 0009 0010 0011 0012 0013 0014 0015 0016 0017 0018 0019 0020 0021 0022 0023 0024 0025 0026 0027 0028 0029 0030 0031 0032 0033 0034 0035 0036 0037 0038 0039 0040 0041 0042 0043 0044 0045 0046 0047 0048 0049 0050 0051 0052 0053 0054 0055 0056 0057 0058 0059 0060 0061 0062 0063 0064 0065 0066 0067 0068 0069 0070 0071 0072 0073 0074 0075 0076 0077 0078 0079 0080 0081 0082 0083 0084 0085 0086 0087 0088 0089 0090 0091 0093 0094 0095 0096 0097 0098 0099 0100 0101 0102 0104 0105 0106 0107 0108 0109 0110 0111 0112 0113 0114 0115 0116 0117 0118 0119 0120 0121 0122 0123 0124 0125 0126 0127 0128 0129 0130 0131 0132 0133 0134 0135 0136 0137 0138 0139 0140 0141 0142 0143 0144 0145 0146 0147 0148 0149 0150 0151 0152 0153 0154 0155 0156 0157 0158 0159 0160 0161 0162 0163 0164 0165 0166 0167 0168 0169 0170 0171 0172 0173 0174 0175 0176 0177 0178 0179 0180 0183 0184 0185 0186 0187 0188 0189 0190 0191 0192 0193 0194 0195 0196 0197 0198 0199 0200 0201 0202 0203 0204 0205 0206 0207 0208 0209 0210 0211 0212 0213 0214 0215 0216 0217 0218 0219 0220 0221 0222 0223 0224 0225 0226 0227 0228 0229 0230 0231 0232 0233 0234 0235 0236 0237 0238 0239 0240 0241 0242 0243 0244', concat(' ', normalize-space(@schemeID), ' '))))">
-               <xsl:attribute name="id">BR-CL-10</xsl:attribute>
+                                test="((not(contains(normalize-space(@schemeID), ' ')) and contains(' BY SE 0002 0003 0004 0005 0006 0007 0008 0009 0010 0011 0012 0013 0014 0015 0016 0017 0018 0019 0020 0021 0022 0023 0024 0025 0026 0027 0028 0029 0030 0031 0032 0033 0034 0035 0036 0037 0038 0039 0040 0041 0042 0043 0044 0045 0046 0047 0048 0049 0050 0051 0052 0053 0054 0055 0056 0057 0058 0059 0060 0061 0062 0063 0064 0065 0066 0067 0068 0069 0070 0071 0072 0073 0074 0075 0076 0077 0078 0079 0080 0081 0082 0083 0084 0085 0086 0087 0088 0089 0090 0091 0093 0094 0095 0096 0097 0098 0099 0100 0101 0102 0104 0105 0106 0107 0108 0109 0110 0111 0112 0113 0114 0115 0116 0117 0118 0119 0120 0121 0122 0123 0124 0125 0126 0127 0128 0129 0130 0131 0132 0133 0134 0135 0136 0137 0138 0139 0140 0141 0142 0143 0144 0145 0146 0147 0148 0149 0150 0151 0152 0153 0154 0155 0156 0157 0158 0159 0160 0161 0162 0163 0164 0165 0166 0167 0168 0169 0170 0171 0172 0173 0174 0175 0176 0177 0178 0179 0180 0183 0184 0185 0186 0187 0188 0189 0190 0191 0192 0193 0194 0195 0196 0197 0198 0199 0200 0201 0202 0203 0204 0205 0206 0207 0208 0209 0210 0211 0212 0213 0214 0215 0216 0217 0218 0219 0220 0221 0222 0223 0224 0225 0226 0227 0228 0229 0230 0231 0232 0233 0234 0235 0236 0237 0238 0239 0240 0241 0242 0243 0244 0245 0246 0247 0248 ', concat(' ', normalize-space(@schemeID), ' '))))">
+               <xsl:attribute name="id">BR-FREXT-CL-10</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>[BR-CL-10]-Any identifier identification scheme identifier MUST be coded using one of the ISO 6523 ICD list.</svrl:text>
+               <svrl:text>[BR-FREXT-CL-10]-Any identifier identification scheme identifier MUST be coded using one of the ISO 6523 ICD list + BY and SE.</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -12910,16 +13161,16 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="ram:ID[@schemeID][not(ancestor::ram:SpecifiedTaxRegistration)]"
-                 priority="1015"
+                 priority="1018"
                  mode="M12">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="ram:ID[@schemeID][not(ancestor::ram:SpecifiedTaxRegistration)]"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="((not(contains(normalize-space(@schemeID), ' ')) and contains(' 0002 0003 0004 0005 0006 0007 0008 0009 0010 0011 0012 0013 0014 0015 0016 0017 0018 0019 0020 0021 0022 0023 0024 0025 0026 0027 0028 0029 0030 0031 0032 0033 0034 0035 0036 0037 0038 0039 0040 0041 0042 0043 0044 0045 0046 0047 0048 0049 0050 0051 0052 0053 0054 0055 0056 0057 0058 0059 0060 0061 0062 0063 0064 0065 0066 0067 0068 0069 0070 0071 0072 0073 0074 0075 0076 0077 0078 0079 0080 0081 0082 0083 0084 0085 0086 0087 0088 0089 0090 0091 0093 0094 0095 0096 0097 0098 0099 0100 0101 0102 0104 0105 0106 0107 0108 0109 0110 0111 0112 0113 0114 0115 0116 0117 0118 0119 0120 0121 0122 0123 0124 0125 0126 0127 0128 0129 0130 0131 0132 0133 0134 0135 0136 0137 0138 0139 0140 0141 0142 0143 0144 0145 0146 0147 0148 0149 0150 0151 0152 0153 0154 0155 0156 0157 0158 0159 0160 0161 0162 0163 0164 0165 0166 0167 0168 0169 0170 0171 0172 0173 0174 0175 0176 0177 0178 0179 0180 0183 0184 0185 0186 0187 0188 0189 0190 0191 0192 0193 0194 0195 0196 0197 0198 0199 0200 0201 0202 0203 0204 0205 0206 0207 0208 0209 0210 0211 0212 0213 0214 0215 0216 0217 0218 0219 0220 0221 0222 0223 0224 0225 0226 0227 0228 0229 0230 0231 0232 0233 0234 0235 0236 0237 0238 0239 0240 0241 0242 0243 0244', concat(' ', normalize-space(@schemeID), ' '))))"/>
+         <xsl:when test="((not(contains(normalize-space(@schemeID), ' ')) and contains(' 0002 0003 0004 0005 0006 0007 0008 0009 0010 0011 0012 0013 0014 0015 0016 0017 0018 0019 0020 0021 0022 0023 0024 0025 0026 0027 0028 0029 0030 0031 0032 0033 0034 0035 0036 0037 0038 0039 0040 0041 0042 0043 0044 0045 0046 0047 0048 0049 0050 0051 0052 0053 0054 0055 0056 0057 0058 0059 0060 0061 0062 0063 0064 0065 0066 0067 0068 0069 0070 0071 0072 0073 0074 0075 0076 0077 0078 0079 0080 0081 0082 0083 0084 0085 0086 0087 0088 0089 0090 0091 0093 0094 0095 0096 0097 0098 0099 0100 0101 0102 0104 0105 0106 0107 0108 0109 0110 0111 0112 0113 0114 0115 0116 0117 0118 0119 0120 0121 0122 0123 0124 0125 0126 0127 0128 0129 0130 0131 0132 0133 0134 0135 0136 0137 0138 0139 0140 0141 0142 0143 0144 0145 0146 0147 0148 0149 0150 0151 0152 0153 0154 0155 0156 0157 0158 0159 0160 0161 0162 0163 0164 0165 0166 0167 0168 0169 0170 0171 0172 0173 0174 0175 0176 0177 0178 0179 0180 0183 0184 0185 0186 0187 0188 0189 0190 0191 0192 0193 0194 0195 0196 0197 0198 0199 0200 0201 0202 0203 0204 0205 0206 0207 0208 0209 0210 0211 0212 0213 0214 0215 0216 0217 0218 0219 0220 0221 0222 0223 0224 0225 0226 0227 0228 0229 0230 0231 0232 0233 0234 0235 0236 0237 0238 0239 0240 0241 0242 0243 0244 0245 0246 0247 0248 ', concat(' ', normalize-space(@schemeID), ' '))))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="((not(contains(normalize-space(@schemeID), ' ')) and contains(' 0002 0003 0004 0005 0006 0007 0008 0009 0010 0011 0012 0013 0014 0015 0016 0017 0018 0019 0020 0021 0022 0023 0024 0025 0026 0027 0028 0029 0030 0031 0032 0033 0034 0035 0036 0037 0038 0039 0040 0041 0042 0043 0044 0045 0046 0047 0048 0049 0050 0051 0052 0053 0054 0055 0056 0057 0058 0059 0060 0061 0062 0063 0064 0065 0066 0067 0068 0069 0070 0071 0072 0073 0074 0075 0076 0077 0078 0079 0080 0081 0082 0083 0084 0085 0086 0087 0088 0089 0090 0091 0093 0094 0095 0096 0097 0098 0099 0100 0101 0102 0104 0105 0106 0107 0108 0109 0110 0111 0112 0113 0114 0115 0116 0117 0118 0119 0120 0121 0122 0123 0124 0125 0126 0127 0128 0129 0130 0131 0132 0133 0134 0135 0136 0137 0138 0139 0140 0141 0142 0143 0144 0145 0146 0147 0148 0149 0150 0151 0152 0153 0154 0155 0156 0157 0158 0159 0160 0161 0162 0163 0164 0165 0166 0167 0168 0169 0170 0171 0172 0173 0174 0175 0176 0177 0178 0179 0180 0183 0184 0185 0186 0187 0188 0189 0190 0191 0192 0193 0194 0195 0196 0197 0198 0199 0200 0201 0202 0203 0204 0205 0206 0207 0208 0209 0210 0211 0212 0213 0214 0215 0216 0217 0218 0219 0220 0221 0222 0223 0224 0225 0226 0227 0228 0229 0230 0231 0232 0233 0234 0235 0236 0237 0238 0239 0240 0241 0242 0243 0244', concat(' ', normalize-space(@schemeID), ' '))))">
+                                test="((not(contains(normalize-space(@schemeID), ' ')) and contains(' 0002 0003 0004 0005 0006 0007 0008 0009 0010 0011 0012 0013 0014 0015 0016 0017 0018 0019 0020 0021 0022 0023 0024 0025 0026 0027 0028 0029 0030 0031 0032 0033 0034 0035 0036 0037 0038 0039 0040 0041 0042 0043 0044 0045 0046 0047 0048 0049 0050 0051 0052 0053 0054 0055 0056 0057 0058 0059 0060 0061 0062 0063 0064 0065 0066 0067 0068 0069 0070 0071 0072 0073 0074 0075 0076 0077 0078 0079 0080 0081 0082 0083 0084 0085 0086 0087 0088 0089 0090 0091 0093 0094 0095 0096 0097 0098 0099 0100 0101 0102 0104 0105 0106 0107 0108 0109 0110 0111 0112 0113 0114 0115 0116 0117 0118 0119 0120 0121 0122 0123 0124 0125 0126 0127 0128 0129 0130 0131 0132 0133 0134 0135 0136 0137 0138 0139 0140 0141 0142 0143 0144 0145 0146 0147 0148 0149 0150 0151 0152 0153 0154 0155 0156 0157 0158 0159 0160 0161 0162 0163 0164 0165 0166 0167 0168 0169 0170 0171 0172 0173 0174 0175 0176 0177 0178 0179 0180 0183 0184 0185 0186 0187 0188 0189 0190 0191 0192 0193 0194 0195 0196 0197 0198 0199 0200 0201 0202 0203 0204 0205 0206 0207 0208 0209 0210 0211 0212 0213 0214 0215 0216 0217 0218 0219 0220 0221 0222 0223 0224 0225 0226 0227 0228 0229 0230 0231 0232 0233 0234 0235 0236 0237 0238 0239 0240 0241 0242 0243 0244 0245 0246 0247 0248 ', concat(' ', normalize-space(@schemeID), ' '))))">
                <xsl:attribute name="id">BR-CL-11</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
@@ -12932,7 +13183,7 @@
       <xsl:apply-templates select="*" mode="M12"/>
    </xsl:template>
    <!--RULE -->
-   <xsl:template match="ram:ClassCode[@listID]" priority="1014" mode="M12">
+   <xsl:template match="ram:ClassCode[@listID]" priority="1017" mode="M12">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="ram:ClassCode[@listID]"/>
       <!--ASSERT -->
@@ -12953,7 +13204,7 @@
       <xsl:apply-templates select="*" mode="M12"/>
    </xsl:template>
    <!--RULE -->
-   <xsl:template match="ram:CountryID" priority="1013" mode="M12">
+   <xsl:template match="ram:CountryID" priority="1016" mode="M12">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl" context="ram:CountryID"/>
       <!--ASSERT -->
       <xsl:choose>
@@ -12973,7 +13224,7 @@
       <xsl:apply-templates select="*" mode="M12"/>
    </xsl:template>
    <!--RULE -->
-   <xsl:template match="ram:OriginTradeCountry/ram:ID" priority="1012" mode="M12">
+   <xsl:template match="ram:OriginTradeCountry/ram:ID" priority="1015" mode="M12">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="ram:OriginTradeCountry/ram:ID"/>
       <!--ASSERT -->
@@ -12995,7 +13246,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="ram:SpecifiedTradeSettlementPaymentMeans/ram:TypeCode"
-                 priority="1011"
+                 priority="1014"
                  mode="M12">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="ram:SpecifiedTradeSettlementPaymentMeans/ram:TypeCode"/>
@@ -13018,7 +13269,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="ram:CategoryTradeTax/ram:CategoryCode"
-                 priority="1010"
+                 priority="1013"
                  mode="M12">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="ram:CategoryTradeTax/ram:CategoryCode"/>
@@ -13041,7 +13292,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="ram:ApplicableTradeTax/ram:CategoryCode"
-                 priority="1009"
+                 priority="1012"
                  mode="M12">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="ram:ApplicableTradeTax/ram:CategoryCode"/>
@@ -13064,7 +13315,7 @@
    </xsl:template>
    <!--RULE -->
    <xsl:template match="ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator = false()]/ram:ReasonCode"
-                 priority="1008"
+                 priority="1011"
                  mode="M12">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                        context="ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator = false()]/ram:ReasonCode"/>
@@ -13086,23 +13337,95 @@
       <xsl:apply-templates select="*" mode="M12"/>
    </xsl:template>
    <!--RULE -->
-   <xsl:template match="ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator = true()]/ram:ReasonCode"
-                 priority="1007"
+   <xsl:template match="ram:GrossPriceProductTradePrice/ram:AppliedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator = false()]/ram:ReasonCode"
+                 priority="1010"
                  mode="M12">
       <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                       context="ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator = true()]/ram:ReasonCode"/>
+                       context="ram:GrossPriceProductTradePrice/ram:AppliedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator = false()]/ram:ReasonCode"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="((not(contains(normalize-space(.), ' ')) and contains(' AA AAA AAC AAD AAE AAF AAH AAI AAS AAT AAV AAY AAZ ABA ABB ABC ABD ABF ABK ABL ABN ABR ABS ABT ABU ACF ACG ACH ACI ACJ ACK ACL ACM ACS ADC ADE ADJ ADK ADL ADM ADN ADO ADP ADQ ADR ADT ADW ADY ADZ AEA AEB AEC AED AEF AEH AEI AEJ AEK AEL AEM AEN AEO AEP AES AET AEU AEV AEW AEX AEY AEZ AJ AU CA CAB CAD CAE CAF CAI CAJ CAK CAL CAM CAN CAO CAP CAQ CAR CAS CAT CAU CAV CAW CAX CAY CAZ CD CG CS CT DAB DAD DAC DAF DAG DAH DAI DAJ DAK DAL DAM DAN DAO DAP DAQ DL EG EP ER FAA FAB FAC FC FH FI GAA HAA HD HH IAA IAB ID IF IR IS KO L1 LA LAA LAB LF MAE MI ML NAA OA PA PAA PC PL PRV RAB RAC RAD RAF RE RF RH RV SA SAA SAD SAE SAI SG SH SM SU TAB TAC TT TV V1 V2 WH XAA YY ZZZ ', concat(' ', normalize-space(.), ' '))))"/>
+         <xsl:when test="((not(contains(normalize-space(.), ' ')) and contains(' 41 42 60 62 63 64 65 66 67 68 70 71 88 95 100 102 103 104 105 ', concat(' ', normalize-space(.), ' '))))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="((not(contains(normalize-space(.), ' ')) and contains(' AA AAA AAC AAD AAE AAF AAH AAI AAS AAT AAV AAY AAZ ABA ABB ABC ABD ABF ABK ABL ABN ABR ABS ABT ABU ACF ACG ACH ACI ACJ ACK ACL ACM ACS ADC ADE ADJ ADK ADL ADM ADN ADO ADP ADQ ADR ADT ADW ADY ADZ AEA AEB AEC AED AEF AEH AEI AEJ AEK AEL AEM AEN AEO AEP AES AET AEU AEV AEW AEX AEY AEZ AJ AU CA CAB CAD CAE CAF CAI CAJ CAK CAL CAM CAN CAO CAP CAQ CAR CAS CAT CAU CAV CAW CAX CAY CAZ CD CG CS CT DAB DAD DAC DAF DAG DAH DAI DAJ DAK DAL DAM DAN DAO DAP DAQ DL EG EP ER FAA FAB FAC FC FH FI GAA HAA HD HH IAA IAB ID IF IR IS KO L1 LA LAA LAB LF MAE MI ML NAA OA PA PAA PC PL PRV RAB RAC RAD RAF RE RF RH RV SA SAA SAD SAE SAI SG SH SM SU TAB TAC TT TV V1 V2 WH XAA YY ZZZ ', concat(' ', normalize-space(.), ' '))))">
-               <xsl:attribute name="id">BR-CL-20</xsl:attribute>
+                                test="((not(contains(normalize-space(.), ' ')) and contains(' 41 42 60 62 63 64 65 66 67 68 70 71 88 95 100 102 103 104 105 ', concat(' ', normalize-space(.), ' '))))">
+               <xsl:attribute name="id">BR-FREXT-CL-19-GP</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
                   <xsl:apply-templates select="." mode="schematron-select-full-path"/>
                </xsl:attribute>
-               <svrl:text>[BR-CL-20]-Coded charge reasons MUST belong to the UNCL 7161 code list</svrl:text>
+               <svrl:text>[BR-FREXT-CL-19-GP]-Coded allowance reasons on Gross Price MUST belong to the UNCL 5189 code list</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="*" mode="M12"/>
+   </xsl:template>
+   <!--RULE -->
+   <xsl:template match="ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator = true()]/ram:ReasonCode[@listID='7161' or not(@listID) ]"
+                 priority="1009"
+                 mode="M12">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator = true()]/ram:ReasonCode[@listID='7161' or not(@listID) ]"/>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="((not(contains(normalize-space(.), ' '))           and contains(' AA AAA AAC AAD AAE AAF AAH AAI AAS AAT AAV AAY AAZ ABA ABB ABC ABD ABF ABK ABL ABN ABR ABS ABT ABU ACF ACG ACH ACI ACJ ACK ACL ACM ACS ADC ADE ADJ ADK ADL ADM ADN ADO ADP ADQ ADR ADT ADW ADY ADZ AEA AEB AEC AED AEF AEH AEI AEJ AEK AEL AEM AEN AEO AEP AES AET AEU AEV AEW AEX AEY AEZ AJ AU CA CAB CAD CAE CAF CAI CAJ CAK CAL CAM CAN CAO CAP CAQ CAR CAS CAT CAU CAV CAW CAX CAY CAZ CD CG CS CT DAB DAD DAC DAF DAG DAH DAI DAJ DAK DAL DAM DAN DAO DAP DAQ DL EG EP ER FAA FAB FAC FC FH FI GAA HAA HD HH IAA IAB ID IF IR IS KO L1 LA LAA LAB LF MAE MI ML NAA OA PA PAA PC PL PRV RAB RAC RAD RAF RE RF RH RV SA SAA SAD SAE SAI SG SH SM SU TAB TAC TT TV V1 V2 WH XAA YY ZZZ ', concat(' ', normalize-space(.), ' '))))"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="((not(contains(normalize-space(.), ' ')) and contains(' AA AAA AAC AAD AAE AAF AAH AAI AAS AAT AAV AAY AAZ ABA ABB ABC ABD ABF ABK ABL ABN ABR ABS ABT ABU ACF ACG ACH ACI ACJ ACK ACL ACM ACS ADC ADE ADJ ADK ADL ADM ADN ADO ADP ADQ ADR ADT ADW ADY ADZ AEA AEB AEC AED AEF AEH AEI AEJ AEK AEL AEM AEN AEO AEP AES AET AEU AEV AEW AEX AEY AEZ AJ AU CA CAB CAD CAE CAF CAI CAJ CAK CAL CAM CAN CAO CAP CAQ CAR CAS CAT CAU CAV CAW CAX CAY CAZ CD CG CS CT DAB DAD DAC DAF DAG DAH DAI DAJ DAK DAL DAM DAN DAO DAP DAQ DL EG EP ER FAA FAB FAC FC FH FI GAA HAA HD HH IAA IAB ID IF IR IS KO L1 LA LAA LAB LF MAE MI ML NAA OA PA PAA PC PL PRV RAB RAC RAD RAF RE RF RH RV SA SAA SAD SAE SAI SG SH SM SU TAB TAC TT TV V1 V2 WH XAA YY ZZZ ', concat(' ', normalize-space(.), ' '))))">
+               <xsl:attribute name="id">BR-FREXT-CL-20</xsl:attribute>
+               <xsl:attribute name="flag">fatal</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>
+          [BR-FREXT-CL-20]-Coded charge reasons MUST belong to the UNCL 7161 code list</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="*" mode="M12"/>
+   </xsl:template>
+   <!--RULE -->
+   <xsl:template match="ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator = true()]/ram:ReasonCode[@listID='5153']"
+                 priority="1008"
+                 mode="M12">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator = true()]/ram:ReasonCode[@listID='5153']"/>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="((not(contains(normalize-space(.), ' '))           and contains(' AAA AAB AAC AAD AAE AAF AAG AAH AAI AAJ AAK AAL AAM AAO AAP ADD BOL CAP CAR COC CST CUD CVD ENV EXC EXP FET FRE GCN GST ILL IMP IND LAC LCN LDP LOC LST MCA MCD OTH PDB PDC PRF SCN SSS STT SUP SUR SWT TAC TOT TOX TTA VAD ',concat(' ',normalize-space(.),' '))))"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="((not(contains(normalize-space(.), ' ')) and contains(' AAA AAB AAC AAD AAE AAF AAG AAH AAI AAJ AAK AAL AAM AAO AAP ADD BOL CAP CAR COC CST CUD CVD ENV EXC EXP FET FRE GCN GST ILL IMP IND LAC LCN LDP LOC LST MCA MCD OTH PDB PDC PRF SCN SSS STT SUP SUR SWT TAC TOT TOX TTA VAD ',concat(' ',normalize-space(.),' '))))">
+               <xsl:attribute name="id">BR-FREXT-CL-20-TAX</xsl:attribute>
+               <xsl:attribute name="flag">fatal</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>
+         [BR-FREXT-CL-20-TAX]-Coded charge reasons MUST belong to the UNCL 5153 except "VAT" code list</svrl:text>
+            </svrl:failed-assert>
+         </xsl:otherwise>
+      </xsl:choose>
+      <xsl:apply-templates select="*" mode="M12"/>
+   </xsl:template>
+   <!--RULE -->
+   <xsl:template match="ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator = true()]/ram:ReasonCode[@listID!='']"
+                 priority="1007"
+                 mode="M12">
+      <svrl:fired-rule xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                       context="ram:SpecifiedTradeAllowanceCharge[ram:ChargeIndicator/udt:Indicator = true()]/ram:ReasonCode[@listID!='']"/>
+      <!--ASSERT -->
+      <xsl:choose>
+         <xsl:when test="((not(contains(normalize-space(./@listID), ' '))           and contains(' 7161 5153 ', concat(' ', normalize-space(./@listID), ' '))))"/>
+         <xsl:otherwise>
+            <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
+                                test="((not(contains(normalize-space(./@listID), ' ')) and contains(' 7161 5153 ', concat(' ', normalize-space(./@listID), ' '))))">
+               <xsl:attribute name="id">BR-FREXT-CL-20-LISTID</xsl:attribute>
+               <xsl:attribute name="flag">fatal</xsl:attribute>
+               <xsl:attribute name="location">
+                  <xsl:apply-templates select="." mode="schematron-select-full-path"/>
+               </xsl:attribute>
+               <svrl:text>
+         [BR-FREXT-CL-20-LISTID]- ListID for Charges and Tax reason code, if present, SHALL be equal to 7161 or 5153</svrl:text>
             </svrl:failed-assert>
          </xsl:otherwise>
       </xsl:choose>
@@ -13116,10 +13439,10 @@
                        context="ram:SpecifiedTradeProduct/ram:GlobalID[@schemeID]"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="((not(contains(normalize-space(@schemeID), ' ')) and contains(' 0002 0003 0004 0005 0006 0007 0008 0009 0010 0011 0012 0013 0014 0015 0016 0017 0018 0019 0020 0021 0022 0023 0024 0025 0026 0027 0028 0029 0030 0031 0032 0033 0034 0035 0036 0037 0038 0039 0040 0041 0042 0043 0044 0045 0046 0047 0048 0049 0050 0051 0052 0053 0054 0055 0056 0057 0058 0059 0060 0061 0062 0063 0064 0065 0066 0067 0068 0069 0070 0071 0072 0073 0074 0075 0076 0077 0078 0079 0080 0081 0082 0083 0084 0085 0086 0087 0088 0089 0090 0091 0093 0094 0095 0096 0097 0098 0099 0100 0101 0102 0104 0105 0106 0107 0108 0109 0110 0111 0112 0113 0114 0115 0116 0117 0118 0119 0120 0121 0122 0123 0124 0125 0126 0127 0128 0129 0130 0131 0132 0133 0134 0135 0136 0137 0138 0139 0140 0141 0142 0143 0144 0145 0146 0147 0148 0149 0150 0151 0152 0153 0154 0155 0156 0157 0158 0159 0160 0161 0162 0163 0164 0165 0166 0167 0168 0169 0170 0171 0172 0173 0174 0175 0176 0177 0178 0179 0180 0183 0184 0185 0186 0187 0188 0189 0190 0191 0192 0193 0194 0195 0196 0197 0198 0199 0200 0201 0202 0203 0204 0205 0206 0207 0208 0209 0210 0211 0212 0213 0214 0215 0216 0217 0218 0219 0220 0221 0222 0223 0224 0225 0226 0227 0228 0229 0230 0231 0232 0233 0234 0235 0236 0237 0238 0239 0240 0241 0242 0243 0244', concat(' ', normalize-space(@schemeID), ' '))))"/>
+         <xsl:when test="((not(contains(normalize-space(@schemeID), ' ')) and contains(' 0002 0003 0004 0005 0006 0007 0008 0009 0010 0011 0012 0013 0014 0015 0016 0017 0018 0019 0020 0021 0022 0023 0024 0025 0026 0027 0028 0029 0030 0031 0032 0033 0034 0035 0036 0037 0038 0039 0040 0041 0042 0043 0044 0045 0046 0047 0048 0049 0050 0051 0052 0053 0054 0055 0056 0057 0058 0059 0060 0061 0062 0063 0064 0065 0066 0067 0068 0069 0070 0071 0072 0073 0074 0075 0076 0077 0078 0079 0080 0081 0082 0083 0084 0085 0086 0087 0088 0089 0090 0091 0093 0094 0095 0096 0097 0098 0099 0100 0101 0102 0104 0105 0106 0107 0108 0109 0110 0111 0112 0113 0114 0115 0116 0117 0118 0119 0120 0121 0122 0123 0124 0125 0126 0127 0128 0129 0130 0131 0132 0133 0134 0135 0136 0137 0138 0139 0140 0141 0142 0143 0144 0145 0146 0147 0148 0149 0150 0151 0152 0153 0154 0155 0156 0157 0158 0159 0160 0161 0162 0163 0164 0165 0166 0167 0168 0169 0170 0171 0172 0173 0174 0175 0176 0177 0178 0179 0180 0183 0184 0185 0186 0187 0188 0189 0190 0191 0192 0193 0194 0195 0196 0197 0198 0199 0200 0201 0202 0203 0204 0205 0206 0207 0208 0209 0210 0211 0212 0213 0214 0215 0216 0217 0218 0219 0220 0221 0222 0223 0224 0225 0226 0227 0228 0229 0230 0231 0232 0233 0234 0235 0236 0237 0238 0239 0240 0241 0242 0243 0244 0245 0246 0247 0248 ', concat(' ', normalize-space(@schemeID), ' '))))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="((not(contains(normalize-space(@schemeID), ' ')) and contains(' 0002 0003 0004 0005 0006 0007 0008 0009 0010 0011 0012 0013 0014 0015 0016 0017 0018 0019 0020 0021 0022 0023 0024 0025 0026 0027 0028 0029 0030 0031 0032 0033 0034 0035 0036 0037 0038 0039 0040 0041 0042 0043 0044 0045 0046 0047 0048 0049 0050 0051 0052 0053 0054 0055 0056 0057 0058 0059 0060 0061 0062 0063 0064 0065 0066 0067 0068 0069 0070 0071 0072 0073 0074 0075 0076 0077 0078 0079 0080 0081 0082 0083 0084 0085 0086 0087 0088 0089 0090 0091 0093 0094 0095 0096 0097 0098 0099 0100 0101 0102 0104 0105 0106 0107 0108 0109 0110 0111 0112 0113 0114 0115 0116 0117 0118 0119 0120 0121 0122 0123 0124 0125 0126 0127 0128 0129 0130 0131 0132 0133 0134 0135 0136 0137 0138 0139 0140 0141 0142 0143 0144 0145 0146 0147 0148 0149 0150 0151 0152 0153 0154 0155 0156 0157 0158 0159 0160 0161 0162 0163 0164 0165 0166 0167 0168 0169 0170 0171 0172 0173 0174 0175 0176 0177 0178 0179 0180 0183 0184 0185 0186 0187 0188 0189 0190 0191 0192 0193 0194 0195 0196 0197 0198 0199 0200 0201 0202 0203 0204 0205 0206 0207 0208 0209 0210 0211 0212 0213 0214 0215 0216 0217 0218 0219 0220 0221 0222 0223 0224 0225 0226 0227 0228 0229 0230 0231 0232 0233 0234 0235 0236 0237 0238 0239 0240 0241 0242 0243 0244', concat(' ', normalize-space(@schemeID), ' '))))">
+                                test="((not(contains(normalize-space(@schemeID), ' ')) and contains(' 0002 0003 0004 0005 0006 0007 0008 0009 0010 0011 0012 0013 0014 0015 0016 0017 0018 0019 0020 0021 0022 0023 0024 0025 0026 0027 0028 0029 0030 0031 0032 0033 0034 0035 0036 0037 0038 0039 0040 0041 0042 0043 0044 0045 0046 0047 0048 0049 0050 0051 0052 0053 0054 0055 0056 0057 0058 0059 0060 0061 0062 0063 0064 0065 0066 0067 0068 0069 0070 0071 0072 0073 0074 0075 0076 0077 0078 0079 0080 0081 0082 0083 0084 0085 0086 0087 0088 0089 0090 0091 0093 0094 0095 0096 0097 0098 0099 0100 0101 0102 0104 0105 0106 0107 0108 0109 0110 0111 0112 0113 0114 0115 0116 0117 0118 0119 0120 0121 0122 0123 0124 0125 0126 0127 0128 0129 0130 0131 0132 0133 0134 0135 0136 0137 0138 0139 0140 0141 0142 0143 0144 0145 0146 0147 0148 0149 0150 0151 0152 0153 0154 0155 0156 0157 0158 0159 0160 0161 0162 0163 0164 0165 0166 0167 0168 0169 0170 0171 0172 0173 0174 0175 0176 0177 0178 0179 0180 0183 0184 0185 0186 0187 0188 0189 0190 0191 0192 0193 0194 0195 0196 0197 0198 0199 0200 0201 0202 0203 0204 0205 0206 0207 0208 0209 0210 0211 0212 0213 0214 0215 0216 0217 0218 0219 0220 0221 0222 0223 0224 0225 0226 0227 0228 0229 0230 0231 0232 0233 0234 0235 0236 0237 0238 0239 0240 0241 0242 0243 0244 0245 0246 0247 0248 ', concat(' ', normalize-space(@schemeID), ' '))))">
                <xsl:attribute name="id">BR-CL-21</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
@@ -13207,10 +13530,10 @@
                        context="ram:URIUniversalCommunication/ram:URIID[@schemeID]"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="((not(contains(normalize-space(@schemeID), ' ')) and contains(' 0002 0007 0009 0037 0060 0088 0096 0097 0106 0130 0135 0142 0147 0151 0154 0158 0170 0177 0183 0184 0188 0190 0191 0192 0193 0194 0195 0196 0198 0199 0200 0201 0202 0203 0204 0205 0208 0209 0210 0211 0212 0213 0215 0216 0217 0218 0219 0220 0221 0225 0230 0235 0240 0244 9910 9913 9914 9915 9918 9919 9920 9922 9923 9924 9925 9926 9927 9928 9929 9930 9931 9932 9933 9934 9935 9936 9937 9938 9939 9940 9941 9942 9943 9944 9945 9946 9947 9948 9949 9950 9951 9952 9953 9957 9959 AN AQ AS AU EM ', concat(' ', normalize-space(@schemeID), ' '))))"/>
+         <xsl:when test="((not(contains(normalize-space(@schemeID), ' ')) and contains(' 0002 0007 0009 0037 0060 0088 0096 0097 0106 0130 0135 0142 0147 0151 0154 0158 0170 0177 0183 0184 0188 0190 0191 0192 0193 0194 0195 0196 0198 0199 0200 0201 0202 0203 0204 0205 0208 0209 0210 0211 0212 0213 0215 0216 0217 0218 0219 0220 0221 0225 0230 0235 0240 0244 0242 0245 0246 0248 9910 9913 9914 9915 9918 9919 9920 9922 9923 9924 9925 9926 9927 9928 9929 9930 9931 9932 9933 9934 9935 9936 9937 9938 9939 9940 9941 9942 9943 9944 9945 9946 9947 9948 9949 9950 9951 9952 9953 9957 9959 AN AQ AS AU EM ', concat(' ', normalize-space(@schemeID), ' '))))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="((not(contains(normalize-space(@schemeID), ' ')) and contains(' 0002 0007 0009 0037 0060 0088 0096 0097 0106 0130 0135 0142 0147 0151 0154 0158 0170 0177 0183 0184 0188 0190 0191 0192 0193 0194 0195 0196 0198 0199 0200 0201 0202 0203 0204 0205 0208 0209 0210 0211 0212 0213 0215 0216 0217 0218 0219 0220 0221 0225 0230 0235 0240 0244 9910 9913 9914 9915 9918 9919 9920 9922 9923 9924 9925 9926 9927 9928 9929 9930 9931 9932 9933 9934 9935 9936 9937 9938 9939 9940 9941 9942 9943 9944 9945 9946 9947 9948 9949 9950 9951 9952 9953 9957 9959 AN AQ AS AU EM ', concat(' ', normalize-space(@schemeID), ' '))))">
+                                test="((not(contains(normalize-space(@schemeID), ' ')) and contains(' 0002 0007 0009 0037 0060 0088 0096 0097 0106 0130 0135 0142 0147 0151 0154 0158 0170 0177 0183 0184 0188 0190 0191 0192 0193 0194 0195 0196 0198 0199 0200 0201 0202 0203 0204 0205 0208 0209 0210 0211 0212 0213 0215 0216 0217 0218 0219 0220 0221 0225 0230 0235 0240 0244 0242 0245 0246 0248 9910 9913 9914 9915 9918 9919 9920 9922 9923 9924 9925 9926 9927 9928 9929 9930 9931 9932 9933 9934 9935 9936 9937 9938 9939 9940 9941 9942 9943 9944 9945 9946 9947 9948 9949 9950 9951 9952 9953 9957 9959 AN AQ AS AU EM ', concat(' ', normalize-space(@schemeID), ' '))))">
                <xsl:attribute name="id">BR-CL-25</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
@@ -13230,10 +13553,10 @@
                        context="ram:ApplicableHeaderTradeDelivery/ram:ShipToTradeParty/ram:GlobalID[@schemeID]"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="((not(contains(normalize-space(@schemeID), ' ')) and contains(' 0002 0003 0004 0005 0006 0007 0008 0009 0010 0011 0012 0013 0014 0015 0016 0017 0018 0019 0020 0021 0022 0023 0024 0025 0026 0027 0028 0029 0030 0031 0032 0033 0034 0035 0036 0037 0038 0039 0040 0041 0042 0043 0044 0045 0046 0047 0048 0049 0050 0051 0052 0053 0054 0055 0056 0057 0058 0059 0060 0061 0062 0063 0064 0065 0066 0067 0068 0069 0070 0071 0072 0073 0074 0075 0076 0077 0078 0079 0080 0081 0082 0083 0084 0085 0086 0087 0088 0089 0090 0091 0093 0094 0095 0096 0097 0098 0099 0100 0101 0102 0104 0105 0106 0107 0108 0109 0110 0111 0112 0113 0114 0115 0116 0117 0118 0119 0120 0121 0122 0123 0124 0125 0126 0127 0128 0129 0130 0131 0132 0133 0134 0135 0136 0137 0138 0139 0140 0141 0142 0143 0144 0145 0146 0147 0148 0149 0150 0151 0152 0153 0154 0155 0156 0157 0158 0159 0160 0161 0162 0163 0164 0165 0166 0167 0168 0169 0170 0171 0172 0173 0174 0175 0176 0177 0178 0179 0180 0183 0184 0185 0186 0187 0188 0189 0190 0191 0192 0193 0194 0195 0196 0197 0198 0199 0200 0201 0202 0203 0204 0205 0206 0207 0208 0209 0210 0211 0212 0213 0214 0215 0216 0217 0218 0219 0220 0221 0222 0223 0224 0225 0226 0227 0228 0229 0230 0231 0232 0233 0234 0235 0236 0237 0238 0239 0240 0241 0242 0243 0244', concat(' ', normalize-space(@schemeID), ' '))))"/>
+         <xsl:when test="((not(contains(normalize-space(@schemeID), ' ')) and contains(' 0002 0003 0004 0005 0006 0007 0008 0009 0010 0011 0012 0013 0014 0015 0016 0017 0018 0019 0020 0021 0022 0023 0024 0025 0026 0027 0028 0029 0030 0031 0032 0033 0034 0035 0036 0037 0038 0039 0040 0041 0042 0043 0044 0045 0046 0047 0048 0049 0050 0051 0052 0053 0054 0055 0056 0057 0058 0059 0060 0061 0062 0063 0064 0065 0066 0067 0068 0069 0070 0071 0072 0073 0074 0075 0076 0077 0078 0079 0080 0081 0082 0083 0084 0085 0086 0087 0088 0089 0090 0091 0093 0094 0095 0096 0097 0098 0099 0100 0101 0102 0104 0105 0106 0107 0108 0109 0110 0111 0112 0113 0114 0115 0116 0117 0118 0119 0120 0121 0122 0123 0124 0125 0126 0127 0128 0129 0130 0131 0132 0133 0134 0135 0136 0137 0138 0139 0140 0141 0142 0143 0144 0145 0146 0147 0148 0149 0150 0151 0152 0153 0154 0155 0156 0157 0158 0159 0160 0161 0162 0163 0164 0165 0166 0167 0168 0169 0170 0171 0172 0173 0174 0175 0176 0177 0178 0179 0180 0183 0184 0185 0186 0187 0188 0189 0190 0191 0192 0193 0194 0195 0196 0197 0198 0199 0200 0201 0202 0203 0204 0205 0206 0207 0208 0209 0210 0211 0212 0213 0214 0215 0216 0217 0218 0219 0220 0221 0222 0223 0224 0225 0226 0227 0228 0229 0230 0231 0232 0233 0234 0235 0236 0237 0238 0239 0240 0241 0242 0243 0244 0245 0246 0247 0248 ', concat(' ', normalize-space(@schemeID), ' '))))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="((not(contains(normalize-space(@schemeID), ' ')) and contains(' 0002 0003 0004 0005 0006 0007 0008 0009 0010 0011 0012 0013 0014 0015 0016 0017 0018 0019 0020 0021 0022 0023 0024 0025 0026 0027 0028 0029 0030 0031 0032 0033 0034 0035 0036 0037 0038 0039 0040 0041 0042 0043 0044 0045 0046 0047 0048 0049 0050 0051 0052 0053 0054 0055 0056 0057 0058 0059 0060 0061 0062 0063 0064 0065 0066 0067 0068 0069 0070 0071 0072 0073 0074 0075 0076 0077 0078 0079 0080 0081 0082 0083 0084 0085 0086 0087 0088 0089 0090 0091 0093 0094 0095 0096 0097 0098 0099 0100 0101 0102 0104 0105 0106 0107 0108 0109 0110 0111 0112 0113 0114 0115 0116 0117 0118 0119 0120 0121 0122 0123 0124 0125 0126 0127 0128 0129 0130 0131 0132 0133 0134 0135 0136 0137 0138 0139 0140 0141 0142 0143 0144 0145 0146 0147 0148 0149 0150 0151 0152 0153 0154 0155 0156 0157 0158 0159 0160 0161 0162 0163 0164 0165 0166 0167 0168 0169 0170 0171 0172 0173 0174 0175 0176 0177 0178 0179 0180 0183 0184 0185 0186 0187 0188 0189 0190 0191 0192 0193 0194 0195 0196 0197 0198 0199 0200 0201 0202 0203 0204 0205 0206 0207 0208 0209 0210 0211 0212 0213 0214 0215 0216 0217 0218 0219 0220 0221 0222 0223 0224 0225 0226 0227 0228 0229 0230 0231 0232 0233 0234 0235 0236 0237 0238 0239 0240 0241 0242 0243 0244', concat(' ', normalize-space(@schemeID), ' '))))">
+                                test="((not(contains(normalize-space(@schemeID), ' ')) and contains(' 0002 0003 0004 0005 0006 0007 0008 0009 0010 0011 0012 0013 0014 0015 0016 0017 0018 0019 0020 0021 0022 0023 0024 0025 0026 0027 0028 0029 0030 0031 0032 0033 0034 0035 0036 0037 0038 0039 0040 0041 0042 0043 0044 0045 0046 0047 0048 0049 0050 0051 0052 0053 0054 0055 0056 0057 0058 0059 0060 0061 0062 0063 0064 0065 0066 0067 0068 0069 0070 0071 0072 0073 0074 0075 0076 0077 0078 0079 0080 0081 0082 0083 0084 0085 0086 0087 0088 0089 0090 0091 0093 0094 0095 0096 0097 0098 0099 0100 0101 0102 0104 0105 0106 0107 0108 0109 0110 0111 0112 0113 0114 0115 0116 0117 0118 0119 0120 0121 0122 0123 0124 0125 0126 0127 0128 0129 0130 0131 0132 0133 0134 0135 0136 0137 0138 0139 0140 0141 0142 0143 0144 0145 0146 0147 0148 0149 0150 0151 0152 0153 0154 0155 0156 0157 0158 0159 0160 0161 0162 0163 0164 0165 0166 0167 0168 0169 0170 0171 0172 0173 0174 0175 0176 0177 0178 0179 0180 0183 0184 0185 0186 0187 0188 0189 0190 0191 0192 0193 0194 0195 0196 0197 0198 0199 0200 0201 0202 0203 0204 0205 0206 0207 0208 0209 0210 0211 0212 0213 0214 0215 0216 0217 0218 0219 0220 0221 0222 0223 0224 0225 0226 0227 0228 0229 0230 0231 0232 0233 0234 0235 0236 0237 0238 0239 0240 0241 0242 0243 0244 0245 0246 0247 0248 ', concat(' ', normalize-space(@schemeID), ' '))))">
                <xsl:attribute name="id">BR-CL-26</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
@@ -13254,10 +13577,10 @@
                        context="ram:ApplicableTradeDeliveryTerms/ram:DeliveryTypeCode"/>
       <!--ASSERT -->
       <xsl:choose>
-         <xsl:when test="((not(contains(normalize-space(.), ' ')) and contains('  1 2 CFR CIF CIP CPT DAP DDP DPU EXW FAS FCA FOB', concat(' ', normalize-space(.), ' '))))"/>
+         <xsl:when test="((not(contains(normalize-space(.), ' ')) and contains('  1 2 CFR CIF CIP CPT DAP DDP DPU EXW FAS FCA FOB ', concat(' ', normalize-space(.), ' '))))"/>
          <xsl:otherwise>
             <svrl:failed-assert xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
-                                test="((not(contains(normalize-space(.), ' ')) and contains(' 1 2 CFR CIF CIP CPT DAP DDP DPU EXW FAS FCA FOB', concat(' ', normalize-space(.), ' '))))">
+                                test="((not(contains(normalize-space(.), ' ')) and contains(' 1 2 CFR CIF CIP CPT DAP DDP DPU EXW FAS FCA FOB ', concat(' ', normalize-space(.), ' '))))">
                <xsl:attribute name="id">BR-FREXT-CL-27</xsl:attribute>
                <xsl:attribute name="flag">fatal</xsl:attribute>
                <xsl:attribute name="location">
