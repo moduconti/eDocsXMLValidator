@@ -37,7 +37,10 @@ namespace eDocument_Validator.Validation
         public void Prepare(ValidationFormat format)
         {
             schematronValidator.Prepare(format.SchematronFiles());
-            xsdValidator.Prepare(format.SchemaFiles());
+            foreach (SchemaSet schemaSet in format.SchemaSets())
+            {
+                xsdValidator.Prepare(schemaSet.Files);
+            }
         }
 
         /// <summary>
@@ -59,10 +62,9 @@ namespace eDocument_Validator.Validation
                 groups.Add(RunSchematron(schematronFile, xmlDocumentPath));
             }
 
-            List<string> schemaFiles = format.SchemaFiles().ToList();
-            if (schemaFiles.Count > 0)
+            foreach (SchemaSet schemaSet in format.SchemaSets())
             {
-                groups.Add(RunSchemas(schemaFiles, xmlDocumentPath));
+                groups.Add(RunSchemas(schemaSet, xmlDocumentPath));
             }
 
             if (groups.Count == 0)
@@ -70,7 +72,7 @@ namespace eDocument_Validator.Validation
                 ValidationGroup empty = new ValidationGroup("Format " + format.Name);
                 empty.Warning("FORMAT-01",
                     "This format folder contains no Schematron or schema files, so nothing was checked. "
-                    + "Add .xsl, .xslt or .xsd files to the folder.");
+                    + "Add .xsl, .xslt or .xsd files to the folder, or a folder with an .xsd bundle.");
                 groups.Add(empty);
             }
 
@@ -161,11 +163,14 @@ namespace eDocument_Validator.Validation
             return group;
         }
 
-        private ValidationGroup RunSchemas(List<string> schemaFiles, string xmlDocumentPath)
+        private ValidationGroup RunSchemas(SchemaSet schemaSet, string xmlDocumentPath)
         {
-            ReportFileStarted("XSD schemas");
+            List<string> schemaFiles = schemaSet.Files;
+            string title = schemaSet.FolderName == null ? "XSD schema" : "XSD schema - " + schemaSet.FolderName;
 
-            ValidationGroup group = new ValidationGroup("XSD schema");
+            ReportFileStarted(schemaSet.FolderName == null ? "XSD schemas" : "XSD schemas in " + schemaSet.FolderName);
+
+            ValidationGroup group = new ValidationGroup(title);
             group.Subtitle = schemaFiles.Count == 1
                 ? "Schema " + Path.GetFileName(schemaFiles[0])
                 : schemaFiles.Count + " schema files used together";

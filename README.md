@@ -35,6 +35,18 @@ passed, which is useful as evidence that a document really was checked.
 **Dark colours** switches the window between the dark and light appearance. The
 choice, and the two filter boxes, are remembered for the next start.
 
+## XSD schema bundles
+
+Schemas usually come as a bundle: one root schema plus many files it imports.
+Put the `.xsd` files straight in the format folder, or put the whole bundle in a
+folder of its own inside the format folder (for example
+`schematron\France EXTENDED-CTC CII\1xsd-CII_D22B_uncoupled`). Folders inside
+that folder are searched as well.
+
+The loose `.xsd` files in the format folder are checked together as one set, and
+each subfolder is checked as a separate set with its own result section, so two
+bundles that define the same namespaces do not clash.
+
 ## Schematron source files (.sch)
 
 Some formats are published as `.sch` files, which are the rules as their author

@@ -18,16 +18,25 @@ namespace eDocument_Validator.Validation
     /// </para>
     /// <para>
     /// Loading and compiling a schema set is slow for formats with many files, so
-    /// the finished set is kept and reused until one of its files changes.
+    /// the finished set is kept and reused until one of its files changes. A
+    /// format can have several sets (see <see cref="ValidationFormat.SchemaSets"/>),
+    /// so each set is kept separately.
     /// </para>
     /// </summary>
     public class XsdValidator
     {
         private readonly object cacheLock = new object();
 
-        private string cacheKey;
-        private XmlSchemaSet cachedSchemas;
-        private List<ValidationMessage> cachedLoadMessages;
+        /// <summary>Loaded sets by their file list; see <see cref="CachedSet"/>.</summary>
+        private readonly Dictionary<string, CachedSet> cache = new Dictionary<string, CachedSet>();
+
+        private class CachedSet
+        {
+            /// <summary>File list plus write times, so an edited file forces a reload.</summary>
+            public string Key;
+            public XmlSchemaSet Schemas;
+            public List<ValidationMessage> LoadMessages;
+        }
 
         /// <summary>
         /// Loads the schema files ahead of time so that a later validation does not
@@ -99,14 +108,16 @@ namespace eDocument_Validator.Validation
 
         private XmlSchemaSet GetSchemas(List<string> files, out List<ValidationMessage> loadMessages)
         {
+            string identity = string.Join("|", files);
             string key = BuildKey(files);
 
             lock (cacheLock)
             {
-                if (cacheKey == key && cachedSchemas != null)
+                CachedSet cached;
+                if (cache.TryGetValue(identity, out cached) && cached.Key == key)
                 {
-                    loadMessages = cachedLoadMessages;
-                    return cachedSchemas;
+                    loadMessages = cached.LoadMessages;
+                    return cached.Schemas;
                 }
             }
 
@@ -152,9 +163,7 @@ namespace eDocument_Validator.Validation
 
             lock (cacheLock)
             {
-                cacheKey = key;
-                cachedSchemas = schemas;
-                cachedLoadMessages = messages;
+                cache[identity] = new CachedSet { Key = key, Schemas = schemas, LoadMessages = messages };
             }
 
             loadMessages = messages;

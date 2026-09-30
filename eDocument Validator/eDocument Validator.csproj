@@ -122,6 +122,7 @@
     <Compile Include="Validation\SchematronCompiler.cs" />
     <Compile Include="Validation\SchematronReportReader.cs" />
     <Compile Include="Validation\SchematronValidator.cs" />
+    <Compile Include="Validation\SchemaSet.cs" />
     <Compile Include="Validation\ValidationFormat.cs" />
     <Compile Include="Validation\ValidationGroup.cs" />
     <Compile Include="Validation\ValidationMessage.cs" />

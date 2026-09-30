@@ -39,10 +39,42 @@ namespace eDocument_Validator.Validation
             return FilesWithExtension(".sch").OrderBy(f => f);
         }
 
-        /// <summary>Schema files (.xsd), which are always used together as one set.</summary>
-        public IEnumerable<string> SchemaFiles()
+        /// <summary>
+        /// Schema files (.xsd), grouped into the sets they are used in.
+        /// <para>
+        /// Schemas are usually published as a bundle: one root schema plus many
+        /// files it imports. A bundle can be put straight in the format folder or
+        /// in a folder of its own inside it. The loose files in the format folder
+        /// form one set, and each subfolder forms another set from every schema
+        /// file anywhere below it. Bundles are kept apart because two of them often
+        /// define the same namespaces, for example two versions of one standard,
+        /// and loading both into one set would make them clash.
+        /// </para>
+        /// </summary>
+        public List<SchemaSet> SchemaSets()
         {
-            return FilesWithExtension(".xsd").OrderBy(f => f);
+            List<SchemaSet> sets = new List<SchemaSet>();
+            if (!Directory.Exists(FolderPath))
+            {
+                return sets;
+            }
+
+            List<string> looseFiles = FilesWithExtension(FolderPath, ".xsd", SearchOption.TopDirectoryOnly);
+            if (looseFiles.Count > 0)
+            {
+                sets.Add(new SchemaSet(null, looseFiles));
+            }
+
+            foreach (string subfolder in Directory.GetDirectories(FolderPath).OrderBy(f => f, StringComparer.OrdinalIgnoreCase))
+            {
+                List<string> bundleFiles = FilesWithExtension(subfolder, ".xsd", SearchOption.AllDirectories);
+                if (bundleFiles.Count > 0)
+                {
+                    sets.Add(new SchemaSet(Path.GetFileName(subfolder), bundleFiles));
+                }
+            }
+
+            return sets;
         }
 
         /// <summary>
@@ -65,8 +97,15 @@ namespace eDocument_Validator.Validation
                 return Enumerable.Empty<string>();
             }
 
-            return Directory.GetFiles(FolderPath)
-                .Where(file => string.Equals(Path.GetExtension(file), extension, StringComparison.OrdinalIgnoreCase));
+            return FilesWithExtension(FolderPath, extension, SearchOption.TopDirectoryOnly);
+        }
+
+        private static List<string> FilesWithExtension(string folderPath, string extension, SearchOption searchOption)
+        {
+            return Directory.GetFiles(folderPath, "*", searchOption)
+                .Where(file => string.Equals(Path.GetExtension(file), extension, StringComparison.OrdinalIgnoreCase))
+                .OrderBy(file => file, StringComparer.OrdinalIgnoreCase)
+                .ToList();
         }
 
         /// <summary>
